@@ -135,6 +135,26 @@ throw (rti1516e::RTIinternalError)
         stream << rtiaList[i] << ".exe -f " << newPipeFd;
 #endif
 
+        // Create stdin handle which is used in rtia.exe only to check if parent has crashed.
+        // Communication between RTIA and federate is done by socket In Windows
+        // so crashed federate is not noticed by RTIA until socket eventually timeouts.
+        // However stdin pipe will get closed on crash and can be noticed by RTIA.
+        HANDLE stdInRdHandle, stdInWrHandle;
+        
+        SECURITY_ATTRIBUTES stdInAttributes;
+           
+        ZeroMemory(&stdInAttributes,  sizeof(SECURITY_ATTRIBUTES));
+       
+        stdInAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
+        stdInAttributes.bInheritHandle = TRUE;
+        stdInAttributes.lpSecurityDescriptor = NULL;
+
+        CreatePipe(&stdInRdHandle, &stdInWrHandle, &stdInAttributes, 0);
+        SetHandleInformation(stdInWrHandle, HANDLE_FLAG_INHERIT, 0);
+
+        si.dwFlags |= STARTF_USESTDHANDLES;
+        si.hStdInput = stdInRdHandle;
+
         // Start the child process.
         if (CreateProcess( NULL, // No module name (use command line).
                 (char*)stream.str().c_str(),	// Command line.

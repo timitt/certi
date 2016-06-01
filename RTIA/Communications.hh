@@ -47,7 +47,11 @@ namespace rtia {
 class Communications
 {
 public:
+#ifndef _WIN32
     Communications(int RTIA_port, int RTIA_fd);
+#else
+    Communications(int RTIA_port, int RTIA_fd, int federate_alive_fd);
+#endif
     ~Communications();
 
     /**
@@ -104,6 +108,12 @@ protected:
 #endif
     SocketTCP *socketTCP;
     SocketUDP *socketUDP;
+    
+#ifdef _WIN32
+    int alive_fd;
+#endif
+
+    bool hasFederateCrashed;
 
 private:
 

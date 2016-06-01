@@ -27,6 +27,8 @@
 #include <math.h>
 #include <limits.h>
 
+#include "FederateCrashAlarmerWin32.hh"
+
 namespace certi {
 namespace rtia {
 
@@ -34,13 +36,23 @@ static PrettyDebug D("RTIA", "(RTIA) ");
 
 RTIA::RTIA(int RTIA_port, int RTIA_fd) {
 
+#ifdef _WIN32
+    SOCKET controllerFd = StartFederateCrashAlarmerWin32();
+    if (controllerFd < 0)
+        _exit(0);
+#endif
+
     clock = libhla::clock::Clock::getBestClock();
 
     // No SocketServer is passed to the RootObject (RTIA use case)
 	// socket server are passed to RootObject iff we are in RTIG.
     rootObject = new RootObject(NULL);
 
+#ifndef _WIN32
     comm   = new Communications(RTIA_port, RTIA_fd);
+#else
+    comm   = new Communications(RTIA_port, RTIA_fd, controllerFd);
+#endif
     queues = new Queues ;
     fm     = new FederationManagement(comm,&stat);
     om     = new ObjectManagement(comm, fm, rootObject);
@@ -57,22 +69,22 @@ RTIA::RTIA(int RTIA_port, int RTIA_fd) {
 
 
 RTIA::~RTIA() {
-    /* 
+    /*
      * FIXME Erk
      * this is may be a design issue
      * see  https://savannah.nongnu.org/patch/?6937
      */
     fm->resignFederationExecutionForTermination();
-     
+
      /* delete objects in reverse order just like generated destructor would have done */
     delete ddm ;
     delete tm ;
     delete dm ;
     delete owm ;
-    delete om ;    
+    delete om ;
     delete fm ;
     delete queues ;
-    delete comm ;    
+    delete comm ;
     delete rootObject ;
     delete clock ;
 } /* end of ~RTIA() */
@@ -95,9 +107,9 @@ RTIA::execute() {
     int n ;
 
     while (fm->_connection_state != FederationManagement::CONNECTION_FIN) {
-       
-        /* 
-         * readMessage call will allocate EITHER a Network Message or a Message 
+
+        /*
+         * readMessage call will allocate EITHER a Network Message or a Message
          *   Network Message will come from a virtual constructor call
          *   Message will come from a "simple" constructor call
          */
@@ -173,7 +185,7 @@ RTIA::execute() {
           default:
             assert(false);
         }
-    }   
+    }
 } /* end of execute() */
 
 }} // namespace certi/rtia

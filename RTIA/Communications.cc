@@ -83,11 +83,21 @@ NetworkMessage* Communications::waitMessage(
 
 // ----------------------------------------------------------------------------
 //! Communications.
+#ifndef _WIN32
 Communications::Communications(int RTIA_port, int RTIA_fd)
+#else
+Communications::Communications(int RTIA_port, int RTIA_fd, int federate_alive_fd)
+#endif
 {
     char nom_serveur_RTIG[200] ;
     const char *default_host = "localhost" ;
 
+    hasFederateCrashed = false;
+    
+#ifdef _WIN32
+    alive_fd = federate_alive_fd;
+#endif
+    
     socketUN = new SocketUN();
 #ifdef FEDERATION_USES_MULTICAST
     socketMC = new SocketMC();
@@ -144,8 +154,14 @@ Communications::~Communications()
     // Advertise RTIG that TCP link is being closed.
     G.Out(pdGendoc,"enter Communications::~Communications");
 
+    // RTIG thinks that federate has shut down correctly if we send closeMsg
+    // thats why we won't send it if federate has crashed
+    if (!hasFederateCrashed)
+    {
     NM_Close_Connexion closeMsg ;    
     closeMsg.send(socketTCP, NM_msgBufSend);
+    }
+    
     socketTCP->close();
 
     delete socketUN;
@@ -200,6 +216,11 @@ Communications::readMessage(int &n, NetworkMessage **msg_reseau, Message **msg,
     int max_fd = 0; // not used for _WIN32
     fd_set fdset ;
     FD_ZERO(&fdset);
+
+#ifdef _WIN32
+    if (alive_fd != -1)
+        FD_SET(alive_fd, &fdset);
+#endif
 
     if (msg_reseau) {
         FD_SET(tcp_fd, &fdset);
@@ -263,10 +284,21 @@ Communications::readMessage(int &n, NetworkMessage **msg_reseau, Message **msg,
                 throw NetworkSignal("EINTR on select");
                 }
 				else {
+                 hasFederateCrashed = true;
                  throw NetworkError("Unexpected errno on select");
 				}
         }
 
+#ifdef _WIN32
+        // This only triggers when thread notices that federate has
+        // crashed and then closes this socket
+        if (FD_ISSET(alive_fd, &fdset))
+        {
+            hasFederateCrashed = true;
+            throw NetworkError("Federate crashed");
+        }
+#endif
+        
         // At least one message has been received, read this message.
 
 #ifdef FEDERATION_USES_MULTICAST
