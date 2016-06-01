@@ -177,7 +177,7 @@ RTIA::chooseFederateProcessing(Message *req, Message* rep, TypeException &e)
 			// JOIN FAILED
 			switch (e)
 			{
-			case e_FederateAlreadyExecutionMember: 
+			case e_FederateAlreadyExecutionMember:
 				throw FederateAlreadyExecutionMember("Federate yet joined or same name");
 				break;
 			case e_FederationExecutionDoesNotExist:
@@ -202,7 +202,7 @@ RTIA::chooseFederateProcessing(Message *req, Message* rep, TypeException &e)
 		RFEq = static_cast<M_Resign_Federation_Execution *>(req);
 		D.Out(pdTrace,
 				"Receiving Message from Federate, type ResignFederation.");
-		
+
 		switch( RFEq->getResignAction() )
 		{
 		case RELEASE_ATTRIBUTES:
@@ -388,7 +388,7 @@ RTIA::chooseFederateProcessing(Message *req, Message* rep, TypeException &e)
 		M_Reserve_Object_Instance_Name *ROINq, *ROINr;
 		ROINq = static_cast<M_Reserve_Object_Instance_Name *>(req);
 		ROINr = static_cast<M_Reserve_Object_Instance_Name *>(rep);
-		
+
 		ROINr->setObjectName(ROINq->getObjectName());
 		om->reserveObjectName(ROINq->getObjectName(), e);
 		break;
@@ -406,8 +406,8 @@ RTIA::chooseFederateProcessing(Message *req, Message* rep, TypeException &e)
 
 		ROIr->setObject(om->registerObject(ROIq->getObjectClass(),
 										   ROIq->getObjectName(),
-										   date, 
-										   heure, 
+										   date,
+										   heure,
 										   e)
 						);
 		break ;
@@ -1317,7 +1317,16 @@ RTIA::processOngoingTick() {
 			 * try to evoke a single callback
 			 * the tm->tick(exc) will update _tick_state
 			 */
-			tm->_tick_result = tm->tick(exc);
+			try
+			{
+				tm->_tick_result = tm->tick(exc);
+			}
+			catch (ObjectNotKnown&)
+			{
+				// TIMI: It seems that CERTI does not handle situation well where
+				//       Object is just removed remotely, but user side haven't yet
+				//       heard about it (tick() not executed). This might negate that issue.
+			}
 			// if a callback has not been evoked
 			if (tm->_tick_state != TimeManagement::TICK_NEXT)
 				return; // keep waiting
@@ -1343,7 +1352,16 @@ RTIA::processOngoingTick() {
 			/* tick() waits until a federate callback finishes
 			 *   try to evoke a single callback
 			 */
-			tm->_tick_result = tm->tick(exc);
+			 try
+ 			{
+				tm->_tick_result = tm->tick(exc);
+			}
+			catch (ObjectNotKnown&)
+			{
+				// TIMI: It seems that CERTI does not handle situation well where
+				//       Object is just removed remotely, but user side haven't yet
+				//       heard about it (tick() not executed). This might negate that issue.
+			}
 			// if a callback has been evoked
 			if (tm->_tick_state == TimeManagement::TICK_NEXT)
 				break; // goto TICK_NEXT
@@ -1785,4 +1803,3 @@ RTIA::processFederateRequest(Message *req)
 
 } // namespace rtia
 } // namespace certi
-
