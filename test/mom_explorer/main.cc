@@ -84,16 +84,15 @@ int main(int argc, char** argv)
     }
 
     try {
-        auto amb_factory = make_unique<rti1516e::RTIambassadorFactory>();
+        auto amb_factory = std::make_unique<rti1516e::RTIambassadorFactory>();
 
         cout << "  create RTI Ambassador" << endl;
 
-        unique_ptr<rti1516e::RTIambassador> ambassador;
-        ambassador = amb_factory->createRTIambassador();
+        unique_ptr<rti1516e::RTIambassador> ambassador (amb_factory->createRTIambassador());
         cout << "* Ambassador created" << endl << endl;
 
         auto fed_ambassador
-            = make_unique<MOMFederateAmbassador>(*ambassador, federation_name, federate_name, is_auto, report_period, report_style);
+            = std::make_unique<MOMFederateAmbassador>(*ambassador, federation_name, federate_name, is_auto, report_period, report_style);
 
         fed_ambassador->connect();
 

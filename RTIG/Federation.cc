@@ -138,10 +138,10 @@ Federation::Federation(const string& federation_name,
     }
 
     // Initialize the Security Server.
-    my_server = make_unique<SecurityServer>(socket_server, audit_server, my_handle);
+    my_server = std::make_unique<SecurityServer>(socket_server, audit_server, my_handle);
 
     // Read FOM File to initialize Root Object.
-    my_root_object = make_unique<RootObject>(my_server.get());
+    my_root_object = std::make_unique<RootObject>(my_server.get());
 
     Debug(D, pdInit) << "New Federation <" << my_name << "> created with Handle <" << my_handle << ">, now reading FOM."
                      << endl;
@@ -285,7 +285,7 @@ std::pair<FederateHandle, Responses> Federation::add(const string& federate_name
 
     FederateHandle federate_handle = my_federate_handle_generator.provide();
     auto result = my_federates.insert(
-        std::make_pair(federate_handle, make_unique<Federate>(federate_name, federate_type, rti_version, federate_handle)));
+        std::make_pair(federate_handle, std::make_unique<Federate>(federate_name, federate_type, rti_version, federate_handle)));
 
     Federate& federate = *result.first->second;
 

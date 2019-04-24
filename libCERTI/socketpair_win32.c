@@ -21,8 +21,8 @@
 #include <string.h>
 
 #include <io.h>
-#include <windows.h>
 #include <winsock2.h>
+#include <windows.h>
 
 /* socketpair:
  *   If make_overlapped is nonzero, both sockets created will be usable for

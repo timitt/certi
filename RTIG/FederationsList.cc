@@ -108,9 +108,9 @@ std::unique_ptr<NM_Create_Federation_Execution> FederationsList::createFederatio
     try {
         auto federation
 #ifdef FEDERATION_USES_MULTICAST
-            = make_unique<Federation>(name, handle, socket_server, audit, fom_modules, mim_module, rti_version, multicastSocket, my_verbose_level);
+            = std::make_unique<Federation>(name, handle, socket_server, audit, fom_modules, mim_module, rti_version, multicastSocket, my_verbose_level);
 #else
-            = make_unique<Federation>(name, handle, socket_server, audit, fom_modules, mim_module, rti_version, my_verbose_level);
+            = std::make_unique<Federation>(name, handle, socket_server, audit, fom_modules, mim_module, rti_version, my_verbose_level);
 #endif
         Debug(D, pdDebug) << "new Federation created" << std::endl;
 
