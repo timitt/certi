@@ -60,6 +60,11 @@ set(RTI1516e_LIB_SRCS
     RTIHandleFactory.cpp
     RTIHandleFactory.h
     Typedefs.cpp
+    BasicDataElement.cpp
+    BasicDataElementImplementation.cpp
+    BasicDataElementImplementation.h
+    DataElement.cpp
+    EncodingExceptions.cpp
    )
 
 set(RTI1516e_LIB_INCLUDE
@@ -78,6 +83,9 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/SpecificConfig.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/Typedefs.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/VariableLengthData.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/BasicDataElements.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/DataElement.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingExceptions.h
 )
 
 add_library(RTI1516e ${RTI1516e_LIB_SRCS} ${RTI1516e_LIB_INCLUDE})
