@@ -31,7 +31,6 @@
 
 namespace rti1516e
 {
-    // 8 bit values
     DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAASCIIchar, char,
     size_t decodeFrom(std::vector<Octet> const & buffer, size_t index)
     {

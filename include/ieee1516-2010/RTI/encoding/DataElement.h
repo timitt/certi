@@ -40,24 +40,19 @@ namespace rti1516e
          throw (EncoderException) = 0;
 
       // Encode this element into an existing VariableLengthData
-      virtual void encode (
-         VariableLengthData& inData) const
+      virtual void encode (VariableLengthData& inData) const
          throw (EncoderException) = 0;
 
       // Encode this element and append it to a buffer
-      virtual void encodeInto (
-         std::vector<Octet>& buffer) const
+      virtual void encodeInto (std::vector<Octet>& buffer) const
          throw (EncoderException) = 0;
 
       // Decode this element from the RTI's VariableLengthData.
-      virtual void decode (
-         VariableLengthData const & inData)
+      virtual void decode (VariableLengthData const & inData)
          throw (EncoderException) = 0;
 
       // Decode this element starting at the index in the provided buffer
-      virtual size_t decodeFrom (
-         std::vector<Octet> const & buffer,
-         size_t index)
+      virtual size_t decodeFrom (std::vector<Octet> const & buffer, size_t index)
          throw (EncoderException) = 0;
 
       // Return the size in bytes of this element's encoding.

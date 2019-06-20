@@ -3,6 +3,7 @@ set(LIBHLA_EXPORTED_INCLUDES libhla.hh)
 set(LIBHLA_TYPES1516_SRCS
     HLAbuffer.hh HLAbuffer.cc
 )
+
 list(APPEND LIBHLA_EXPORTED_INCLUDES 
     HLAtypesIEEE1516.hh
     HLAbuffer.hh
