@@ -7,14 +7,12 @@ DataElement::~DataElement()
 {
 }
 
-bool
-DataElement::isSameTypeAs(DataElement const& inData) const
+bool DataElement::isSameTypeAs(DataElement const& inData) const
 {
   return false;
 }
 
-Integer64
-DataElement::hash() const
+Integer64 DataElement::hash() const
 {
   return -1;
 }

@@ -1,8 +1,6 @@
 #include <RTI/encoding/BasicDataElements.h>
 #include <RTI/VariableLengthData.h>
 #include <RTI/encoding/DataElement.h>
-//#include <RTI/encoding/EncodingConfig.h>
-//#include <RTI/encoding/EncodingExceptions.h>
 #include "BasicDataElementImplementation.h"
 #include <cstring>
 
@@ -25,7 +23,7 @@ EncodableDataType::EncodableDataType(SimpleDataType const& inData) :            
 EncodableDataType::EncodableDataType(SimpleDataType* inData) :                                                      \
   _impl(new EncodableDataType##Implementation(*inData))                                                             \
 {                                                                                                                   \
-  delete inData;                                                                                                    \
+    delete inData;                                                                                                    \
 }                                                                                                                   \
                                                                                                                     \
 EncodableDataType::EncodableDataType(EncodableDataType const& rhs) :                                                \
@@ -39,66 +37,65 @@ EncodableDataType::~EncodableDataType()                                         
                                                                                                                     \
 EncodableDataType& EncodableDataType::operator=(EncodableDataType const& rhs)                                       \
 {                                                                                                                   \
-  *_impl = *rhs._impl;                                                                                              \
-  return *this;                                                                                                     \
+    *_impl = *rhs._impl;                                                                                              \
+    return *this;                                                                                                     \
 }                                                                                                                   \
                                                                                                                     \
 std::auto_ptr<DataElement> EncodableDataType::clone() const                                                         \
 {                                                                                                                   \
-  return std::auto_ptr<DataElement>(new EncodableDataType(*this));                                                  \
+    return std::auto_ptr<DataElement>(new EncodableDataType(*this));                                                  \
 }                                                                                                                   \
                                                                                                                     \
 VariableLengthData EncodableDataType::encode() const                                                                \
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
-  VariableLengthData variableLengthData;                                                                            \
-  encode(variableLengthData);                                                                                       \
-  return variableLengthData;                                                                                        \
+    VariableLengthData variableLengthData;                                                                            \
+    encode(variableLengthData);                                                                                       \
+    return variableLengthData;                                                                                        \
 }                                                                                                                   \
                                                                                                                     \
 void EncodableDataType::encode(VariableLengthData& inData) const                                                    \
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
-  std::vector<Octet> buffer;                                                                                        \
-  buffer.reserve(getEncodedLength());                                                                               \
-  encodeInto(buffer);                                                                                               \
-  inData.setData(&buffer.front(), buffer.size());                                                                   \
+    std::vector<Octet> buffer;                                                                                      \
+    encodeInto(buffer);                                                                                             \
+    inData.setData(&buffer[0], buffer.size());                                                                 \
 }                                                                                                                   \
                                                                                                                     \
 void EncodableDataType::encodeInto(std::vector<Octet>& buffer) const                                                \
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
-  return _impl->encodeInto(buffer);                                                                                 \
+    return _impl->encodeInto(buffer);                                                                               \
 }                                                                                                                   \
                                                                                                                     \
 void EncodableDataType::decode(VariableLengthData const & inData)                                                   \
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
-  std::vector<Octet> buffer(inData.size());                                                                         \
-  std::memcpy(&buffer.front(), inData.data(), inData.size());                                                       \
-  decodeFrom(buffer, 0);                                                                                            \
+    std::vector<Octet> buffer(inData.size());                                                                       \
+    std::memcpy(&buffer[0], inData.data(), inData.size());                                                          \
+    decodeFrom(buffer, 0);                                                                                          \
 }                                                                                                                   \
                                                                                                                     \
 size_t EncodableDataType::decodeFrom(std::vector<Octet> const & buffer, size_t index)                               \
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
-  return _impl->decodeFrom(buffer, index);                                                                          \
+    return _impl->decodeFrom(buffer, index);                                                                          \
 }                                                                                                                   \
                                                                                                                     \
 size_t EncodableDataType::getEncodedLength() const                                                                  \
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
-  return _impl->getEncodedLength();                                                                                 \
+    return _impl->getEncodedLength();                                                                                 \
 }                                                                                                                   \
                                                                                                                     \
 unsigned int EncodableDataType::getOctetBoundary () const                                                           \
 {                                                                                                                   \
-  return _impl->getOctetBoundary();                                                                                 \
+    return _impl->getOctetBoundary();                                                                                 \
 }                                                                                                                   \
                                                                                                                     \
 Integer64 EncodableDataType::hash() const                                                                           \
 {                                                                                                                   \
-  return _impl->hash();                                                                                             \
+    return _impl->hash();                                                                                             \
 }                                                                                                                   \
                                                                                                                     \
 void EncodableDataType::setDataPointer(SimpleDataType* inData)                                                      \
@@ -108,23 +105,23 @@ void EncodableDataType::setDataPointer(SimpleDataType* inData)                  
                                                                                                                     \
 void EncodableDataType::set(SimpleDataType inData)                                                                  \
 {                                                                                                                   \
-  _impl->set(inData);                                                                                               \
+    _impl->set(inData);                                                                                               \
 }                                                                                                                   \
                                                                                                                     \
 SimpleDataType EncodableDataType::get() const                                                                       \
 {                                                                                                                   \
-  return _impl->get();                                                                                              \
+    return _impl->get();                                                                                              \
 }                                                                                                                   \
                                                                                                                     \
 EncodableDataType& EncodableDataType::operator=(SimpleDataType rhs)                                                 \
 {                                                                                                                   \
-  _impl->set(rhs);                                                                                                  \
-  return *this;                                                                                                     \
+    _impl->set(rhs);                                                                                                  \
+    return *this;                                                                                                     \
 }                                                                                                                   \
                                                                                                                     \
 EncodableDataType::operator SimpleDataType() const                                                                  \
 {                                                                                                                   \
-  return _impl->get();                                                                                              \
+    return _impl->get();                                                                                              \
 }
 
 DECLARE_ENCODING_HELPER_CLASS(HLAASCIIchar, char)

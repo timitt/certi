@@ -13,7 +13,7 @@ add_executable(TestRTI-IEEE1516-2010
                 )
 
 target_link_libraries(TestRTI-IEEE1516-2010
-                      RTI FedTime
+                      RTI RTI1516e
                       ${GTEST_BOTH_LIBRARIES}
                       ${CMAKE_THREAD_LIBS_INIT}
                       )

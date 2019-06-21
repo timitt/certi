@@ -1,8 +1,8 @@
-#include <RTI/encoding/BasicDataElements.h>
 #include "BasicDataElementImplementation.h"
 
 namespace rti1516e
 {
+
 #define DECLARE_ENCODING_HELPER_IMPLEMENTATION_CLASS(EncodableDataType, SimpleDataType)                             \
                                                                                                                     \
 EncodableDataType##Implementation::EncodableDataType##Implementation() : _value() {}                                \
@@ -32,16 +32,6 @@ const SimpleDataType& EncodableDataType##Implementation::get() const            
     return _value;                                                                                                  \
 }                                                                                                                   \
                                                                                                                     \
-size_t EncodableDataType##Implementation::align(size_t offset, size_t alignment) const                              \
-{                                                                                                                   \
-    return (offset + alignment - 1) & ~(alignment - 1);                                                             \
-}                                                                                                                   \
-                                                                                                                    \
-void EncodableDataType##Implementation::align(std::vector<Octet>& buffer, size_t alignment) const                   \
-{                                                                                                                   \
-    while (buffer.size() % alignment)                                                                               \
-        buffer.push_back(0);                                                                                        \
-}
 
 DECLARE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAASCIIchar, char)
 

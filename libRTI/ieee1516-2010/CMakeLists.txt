@@ -86,6 +86,7 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/BasicDataElements.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/DataElement.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingExceptions.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingConfig.h
 )
 
 add_library(RTI1516e ${RTI1516e_LIB_SRCS} ${RTI1516e_LIB_INCLUDE})

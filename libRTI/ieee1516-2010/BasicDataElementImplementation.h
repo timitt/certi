@@ -1,11 +1,12 @@
-//#include <RTI/encoding/BasicDataElements.h>
 #include <RTI/VariableLengthData.h>
-#include <RTI/encoding/DataElement.h>
+#include <RTI/encoding/EncodingConfig.h>
+#include <vector>
 #include <cstring>
 
 #define DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(EncodableDataType, SimpleDataType, encoder)                     \
                                                                                                                     \
-    class RTI_EXPORT EncodableDataType##Implementation {                                                            \
+    class RTI_EXPORT EncodableDataType##Implementation                                                              \
+    {                                                                                                               \
     public:                                                                                                         \
         EncodableDataType##Implementation();                                                                        \
         EncodableDataType##Implementation(const SimpleDataType& value);                                             \
@@ -14,48 +15,44 @@
                                                                                                                     \
         EncodableDataType##Implementation& operator=(const EncodableDataType##Implementation& rhs);                 \
                                                                                                                     \
-        encoder                                                                                                     \
-                                                                                                                    \
         void set(const SimpleDataType& inData);                                                                     \
                                                                                                                     \
         const SimpleDataType& get() const;                                                                          \
                                                                                                                     \
-        size_t align(size_t offset, size_t alignment) const;                                                        \
+        encoder                                                                                                     \
                                                                                                                     \
-        void align(std::vector<Octet>& buffer, size_t alignment) const;                                             \
-                                                                                                                    \
-        SimpleDataType _value;                                                                                        \
+    private:                                                                                                        \
+        SimpleDataType _value;                                                                                      \
     };                                                                                                              \
                                                                                                                     \
-
 
 namespace rti1516e
 {
     DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAASCIIchar, char,
-    size_t decodeFrom(std::vector<Octet> const & buffer, size_t index)
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     {
-      _value = buffer[index];
-      return index + 1;
+        _value = a_buffer[a_index];
+        return a_index + 1;
     }
 
-    void encodeInto(std::vector<Octet>& buffer) const
+    void encodeInto(std::vector<Octet>& a_buffer) const
     {
-      buffer.push_back(_value);
+        a_buffer.push_back(_value);
     }
 
     size_t getEncodedLength() const
     {
-      return 1;
+        return 1;
     }
 
     unsigned int getOctetBoundary() const
     {
-      return 1;
+        return 1;
     }
 
     Integer64 hash() const
     {
-      return Integer64(_value);
+        return Integer64(_value);
     }
     )
 }
