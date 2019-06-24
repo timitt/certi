@@ -125,5 +125,7 @@ EncodableDataType::operator SimpleDataType() const                              
 }
 
 DECLARE_ENCODING_HELPER_CLASS(HLAASCIIchar, char)
+DECLARE_ENCODING_HELPER_CLASS(HLAboolean, bool)
+DECLARE_ENCODING_HELPER_CLASS(HLAbyte, Octet)
 
 }

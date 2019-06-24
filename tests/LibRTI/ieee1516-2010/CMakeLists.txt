@@ -13,7 +13,7 @@ add_executable(TestRTI-IEEE1516-2010
                 )
 
 target_link_libraries(TestRTI-IEEE1516-2010
-                      RTI RTI1516e
+                      RTI RTI1516e HLA
                       ${GTEST_BOTH_LIBRARIES}
                       ${CMAKE_THREAD_LIBS_INIT}
                       )
