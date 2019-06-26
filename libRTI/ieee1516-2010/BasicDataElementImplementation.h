@@ -3,8 +3,9 @@
 #include <RTI/encoding/EncodingExceptions.h>
 #include <vector>
 #include <cstring>
-#include <HLAtypesIEEE1516.hh>
 #include <iostream>
+
+#include "HLAtypesIEEE1516.hh"
 
 #define DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(EncodableDataType, SimpleDataType, encoder)                     \
                                                                                                                     \

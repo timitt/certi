@@ -22,7 +22,8 @@
 #include <stdexcept>
 #include <utility>
 
-#include "libhla.hh"
+#include <libHLA/libhla.hh>
+//#include "libhla.hh"
 
 namespace libhla {
 

@@ -60,6 +60,15 @@ set(RTI1516e_LIB_SRCS
     RTIHandleFactory.cpp
     RTIHandleFactory.h
     Typedefs.cpp
+    HLAtypesIEEE1516.hh
+    HLAbuffer.hh
+    HLAbuffer.cc
+    HLAbasicType.hh
+    HLAenumeratedType.hh
+    HLAfixedArray.hh
+    HLAvariableArray.hh
+    HLAfixedRecord.hh
+    HLAvariantRecord.hh
     BasicDataElement.cpp
     BasicDataElementImplementation.cpp
     BasicDataElementImplementation.h

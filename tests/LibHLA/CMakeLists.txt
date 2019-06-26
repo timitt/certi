@@ -7,7 +7,6 @@ find_package(Threads REQUIRED)
 
 add_executable(TestHLA
                clock_test.cpp
-               hlatypes_test.cpp
                messagebuffer_test.cpp
                msgbuffer_test.cpp
                ../main.cpp

@@ -5,7 +5,7 @@
 #include <RTI/encoding/BasicDataElements.h>
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/VariableLengthData.h>
-#include <libHLA/HLAtypesIEEE1516.hh>
+#include <libRTI/ieee1516-2010/HLAtypesIEEE1516.hh>
 
 using ::std::cout;
 using ::std::endl;

@@ -9,11 +9,12 @@ find_package(Threads REQUIRED)
 
 add_executable(TestRTI-IEEE1516-2010
                 simpletypeencoding_test.cpp
+                hlatypes_test.cpp
                 ../../main.cpp
                 )
 
 target_link_libraries(TestRTI-IEEE1516-2010
-                      RTI RTI1516e HLA
+                      RTI RTI1516e
                       ${GTEST_BOTH_LIBRARIES}
                       ${CMAKE_THREAD_LIBS_INIT}
                       )
@@ -36,4 +37,3 @@ if (COMPILE_WITH_COVERAGE)
 endif()
 
 add_test(AllTests TestRTI-IEEE1516-2010)
-
