@@ -103,6 +103,7 @@ Integer64 EncodableDataType::hash() const                                       
 void EncodableDataType::setDataPointer(SimpleDataType* inData)                                                      \
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
+    _impl->set(*inData);                                                                                             \
 }                                                                                                                   \
                                                                                                                     \
 void EncodableDataType::set(SimpleDataType inData)                                                                  \
@@ -129,5 +130,9 @@ EncodableDataType::operator SimpleDataType() const                              
 DECLARE_ENCODING_HELPER_CLASS(HLAASCIIchar, char)
 DECLARE_ENCODING_HELPER_CLASS(HLAboolean, bool)
 DECLARE_ENCODING_HELPER_CLASS(HLAbyte, Octet)
-
+DECLARE_ENCODING_HELPER_CLASS(HLAfloat32BE, float)
+DECLARE_ENCODING_HELPER_CLASS(HLAfloat32LE, float)
+DECLARE_ENCODING_HELPER_CLASS(HLAfloat64BE, double)
+DECLARE_ENCODING_HELPER_CLASS(HLAfloat64LE, double)
+//DECLARE_ENCODING_HELPER_CLASS(HLAinteger16LE, Integer16)
 }
