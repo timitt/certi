@@ -330,8 +330,6 @@ namespace rti1516e
     throw (EncoderException)
     {
         encode<uint32_t>(a_buffer, Endian::big);
-//        Encoding<float> encoding(_data, 4);
-//        encoding.encode<uint32_t>(a_buffer, Endian::big);
     }
 
     size_t getEncodedLength() const
@@ -762,8 +760,6 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-//        size_t s = decode<uint16_t>(a_buffer, a_index, Endian::big, 2);
-//        return s;
         union {
             uint16_t intValue;
             uint32_t int32Value;
@@ -781,7 +777,7 @@ namespace rti1516e
         Swap<uint16_t>(val.intValue, Endian::big);
         info16.reshow(Encode::decode_after_swap);
         info32.reshow(Encode::decode_after_swap);
-        if(sizeof(wchar_t) > 4) {
+        if(sizeof(wchar_t) == 4) {
             if(!g_isBigEndian)
                 val.int32Value = val.int32Value & 0x0000ffff;
             else
@@ -797,7 +793,6 @@ namespace rti1516e
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-//        encode<uint16_t>(a_buffer, Endian::big, 2);
         union {
             uint16_t intValue;
             uint32_t int32Value;
@@ -806,12 +801,18 @@ namespace rti1516e
             char char4Value[4];
         } val;
         val.value = _data;
-        if(sizeof(wchar_t) == 4) {
+        if(sizeof(wchar_t) == 4)
+        {
             if(!g_isBigEndian)
                 val.int32Value = val.int32Value & 0x0000ffff;
             else
                 val.int32Value = val.int32Value & 0xffff0000;
         }
+        else if(sizeof(wchar_t) != 2)
+        {
+            throw EncoderException(L"SimpleDataType have to be on 16 bits or on 32 bits");
+        }
+
         PrintInfo16 info16(Encode::encode_before_swap, val.intValue, val.charValue, 2, val.value);
         PrintInfo32 info32(Encode::encode_before_swap, val.int32Value, val.char4Value, 4, val.value);
         Swap<uint16_t>(val.intValue, Endian::big);
@@ -835,7 +836,12 @@ namespace rti1516e
 
     Integer64 hash() const
     {
-        return Integer64(_data);
+        union {
+            Integer64 intValue;
+            wchar_t value;
+        } val;
+        val.value = _data;
+        return Integer64(val.intValue);
     }
     )
 }

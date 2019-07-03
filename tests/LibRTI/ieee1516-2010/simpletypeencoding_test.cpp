@@ -385,7 +385,7 @@ TEST(HLATypesTest, TestHLAunicodeChar)
     {
         VariableLengthData variableLengthData = hlaUnicodeTestEncode.encode();
         size_t size = variableLengthData.size();
-//        ASSERT_EQ(hlaUnicodeTestEncode.getEncodedLength(), size);
+        ASSERT_EQ(hlaUnicodeTestEncode.getEncodedLength(), size);
 #ifdef HOST_IS_BIG_ENDIAN
         const rti1516e::Integer8 *data = static_cast<const rti1516e::Integer8*>(variableLengthData.data());
         ASSERT_EQ(hlaoctetPairBETestEncode.get().first, data[0]);
