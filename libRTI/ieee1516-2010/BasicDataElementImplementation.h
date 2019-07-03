@@ -24,6 +24,8 @@
 enum class Encode { encode_before_swap, encode_after_swap, decode_before_swap, decode_after_swap };
 enum class Endian { little, big };
 
+
+
 template<typename I>
 class Swap
 {
@@ -34,7 +36,11 @@ public:
         if((g_isBigEndian && a_endianRepresentation == Endian::little)
                 || (!g_isBigEndian && a_endianRepresentation == Endian::big))
         {
-            if(sizeof(I) == 4)
+            if(sizeof(I) == 2)
+            {
+                swap2Bytes();
+            }
+            else if(sizeof(I) == 4)
             {
                 swap4Bytes();
             }
@@ -44,8 +50,15 @@ public:
             }
         }
     }
+    virtual ~Swap(){}
 
 private:
+
+    void swap2Bytes()
+    {
+        _intValue = (_intValue << 8 | _intValue >> 8);
+    }
+
     void swap4Bytes()
     {
         _intValue = (_intValue << 24 | _intValue >> 24 | (_intValue & 0x0000ff00UL) << 8 | (_intValue & 0x00ff0000UL) >> 8);
@@ -96,12 +109,18 @@ public:
             else if(a_encode == Encode::decode_after_swap)
                 std::cout << "-------------------------------------DECODE AFTER SWAP---------------------------------------" << std::endl;
 
-            std::cout << "value : " << _value << std::endl;
+            std::cout << "value : " << std::dec << _value << std::endl;
             std::cout << "hex : " << std::hex << _intValue << std::endl;
             std::cout << "bits : ";
-            for(uint i=0; i < _nbOctets; i++)
+            if(!g_isBigEndian)
             {
-                std::cout << std::bitset<8>(_octets[i]) << " ";
+                for(int i=static_cast<int>(_nbOctets-1); i>=0; i--)
+                    std::cout << std::bitset<8>(_octets[i]) << " ";
+            }
+            else
+            {
+                for(int i=0; i < static_cast<int>(_nbOctets); i++)
+                    std::cout << std::bitset<8>(_octets[i]) << " ";
             }
             std::cout << std::endl;
         }
@@ -114,9 +133,8 @@ private:
     const uint &_nbOctets;
 };
 
-typedef PrintInfo<uint64_t, double> PrintUint64Double;
-typedef PrintInfo<uint32_t, float> PrintUint32Float;
-typedef PrintInfo<uint16_t, Integer16> PrintUint16Int;
+typedef PrintInfo<uint16_t, wchar_t> PrintInfo16;
+typedef PrintInfo<uint32_t, wchar_t> PrintInfo32;
 
 #define DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(EncodableDataType, SimpleDataType, encoder)                     \
                                                                                                                     \
@@ -137,6 +155,51 @@ typedef PrintInfo<uint16_t, Integer16> PrintUint16Int;
         encoder                                                                                                     \
                                                                                                                     \
     private:                                                                                                        \
+        template<typename I>                                                                                        \
+        size_t decode(std::vector<Octet> const & a_buffer, size_t a_index, Endian a_endianRepresentation            \
+            , const uint a_nbOctet = sizeof(_data))                                                                 \
+        {                                                                                                           \
+            union {                                                                                                 \
+                I intValue;                                                                                         \
+                SimpleDataType value;                                                                               \
+                char charValue[8];                                                                                  \
+            } val;                                                                                                  \
+                                                                                                                    \
+            for(uint i=0; i<a_nbOctet; i++)                                                                         \
+            {                                                                                                       \
+                val.charValue[i] = a_buffer[a_index + i];                                                           \
+            }                                                                                                       \
+            typedef PrintInfo<I, SimpleDataType> PrintInfo;                                                         \
+            PrintInfo info(Encode::decode_before_swap, val.intValue, val.charValue, a_nbOctet, val.value);          \
+            Swap<I>(val.intValue, a_endianRepresentation);                                                          \
+            info.reshow(Encode::decode_after_swap);                                                                 \
+            _data = val.value;                                                                                      \
+                                                                                                                    \
+            return a_index + a_nbOctet;                                                                             \
+        }                                                                                                           \
+                                                                                                                    \
+        template<typename I>                                                                                        \
+        void encode(std::vector<Octet>& a_buffer, Endian a_endianRepresentation                                     \
+                , const uint a_nbOctet = sizeof(_data)) const                                                       \
+        {                                                                                                           \
+            union {                                                                                                 \
+                I intValue;                                                                                         \
+                SimpleDataType value;                                                                               \
+                char charValue[8];                                                                                  \
+            } val;                                                                                                  \
+            val.value = _data;                                                                                      \
+            typedef PrintInfo<I, SimpleDataType> PrintInfo;                                                         \
+            PrintInfo info(Encode::encode_before_swap, val.intValue, val.charValue, a_nbOctet, val.value);          \
+            Swap<I>(val.intValue, a_endianRepresentation);                                                          \
+            info.reshow(Encode::encode_after_swap);                                                                 \
+            for(uint i=0; i < a_nbOctet; i++)                                                                       \
+            {                                                                                                       \
+                a_buffer.push_back(val.charValue[i]);                                                               \
+            }                                                                                                       \
+        }                                                                                                           \
+                                                                                                                    \
+                                                                                                                    \
+    private:                                                                                                        \
         SimpleDataType _data;                                                                                       \
                                                                                                                     \
     };                                                                                                              \
@@ -148,10 +211,6 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        if(int(a_buffer[a_index]) < 0 || int(a_buffer[a_index]) > 127)
-        {
-            throw EncoderException(L"This is not a Standard ASCII character(see ANSI X3.4-1986).");
-        }
         _data = a_buffer[a_index];
         return a_index + 1;
     }
@@ -230,10 +289,6 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        if(a_buffer[a_index] < -128 || a_buffer[a_index] > 127)
-        {
-            throw EncoderException(L"This is not an uninterpreted 8-bit byte.");
-        }
         _data = a_buffer[a_index];
         return a_index + 1;
     }
@@ -268,56 +323,15 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-
-        union {
-            uint32_t intValue;
-            float floatValue;
-            char charValue[nbOctet];
-        } val;
-
-        for(uint i=0; i<nbOctet; i++)
-        {
-            val.charValue[i] = a_buffer[a_index + i];
-        }
-
-        PrintUint32Float info(Encode::decode_before_swap, val.intValue, val.charValue, nbOctet, val.floatValue);
-
-        //We translate to the host system if necessary
-        Swap<uint32_t>(val.intValue, Endian::big);
-
-        info.reshow(Encode::decode_after_swap);
-
-        _data = val.floatValue;
-        return a_index + nbOctet;
+        return decode<uint32_t>(a_buffer, a_index, Endian::big);
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-        union {
-            uint32_t intValue;
-            float floatValue;
-            char charValue[nbOctet];
-        } val;
-
-        val.floatValue = _data;
-
-
-        PrintUint32Float info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet, val.floatValue);
-
-
-        //We translate from the host system if necessary
-        Swap<uint32_t>(val.intValue, Endian::big);
-
-        info.reshow(Encode::encode_after_swap);
-
-        for(uint i=0; i < nbOctet; i++)
-        {
-            a_buffer.push_back(val.charValue[i]);
-        }
-
+        encode<uint32_t>(a_buffer, Endian::big);
+//        Encoding<float> encoding(_data, 4);
+//        encoding.encode<uint32_t>(a_buffer, Endian::big);
     }
 
     size_t getEncodedLength() const
@@ -340,51 +354,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-        union {
-            uint32_t intValue;
-            float floatValue;
-            char charValue[nbOctet];
-        } val;
-        for(uint i=0; i<nbOctet; i++)
-        {
-            val.charValue[i] = a_buffer[a_index + i];
-        }
-
-        PrintUint32Float info(Encode::decode_before_swap, val.intValue, val.charValue, nbOctet, val.floatValue);
-
-        //We translate to the host system if necessary
-        Swap<uint32_t>(val.intValue, Endian::little);
-
-        info.reshow(Encode::decode_after_swap);
-
-        _data = val.floatValue;
-        return a_index + nbOctet;
+        return decode<uint32_t>(a_buffer, a_index, Endian::little);
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-        union {
-            uint32_t intValue;
-            float floatValue;
-            char charValue[nbOctet];
-        } val;
-
-        val.floatValue = _data;
-
-        PrintUint32Float info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet, val.floatValue);
-
-        //We translate from the host system if necessary
-        Swap<uint32_t>(val.intValue, Endian::little);
-
-        info.reshow(Encode::encode_after_swap);
-
-        for(uint i=0; i < nbOctet; i++)
-        {
-            a_buffer.push_back(val.charValue[i]);
-        }
+        encode<uint32_t>(a_buffer, Endian::little);
     }
 
     size_t getEncodedLength() const
@@ -412,52 +388,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-        union {
-            uint64_t intValue;
-            double doubleValue;
-            char charValue[nbOctet];
-        } val;
-        for(uint i=0; i<nbOctet; i++)
-        {
-            val.charValue[i] = a_buffer[a_index + i];
-        }
-
-        PrintUint64Double info(Encode::decode_before_swap, val.intValue, val.charValue, nbOctet, val.doubleValue);
-
-        //We translate to the host system if necessary
-        Swap<uint64_t>(val.intValue, Endian::big);
-
-        info.reshow(Encode::decode_after_swap);
-
-        _data = val.doubleValue;
-        return a_index + nbOctet;
+        return decode<uint64_t>(a_buffer, a_index, Endian::big);
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-        union {
-            uint64_t intValue;
-            double doubleValue;
-            char charValue[nbOctet];
-        } val;
-
-        val.doubleValue = _data;
-
-        PrintUint64Double info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet, val.doubleValue);
-
-        //We translate from the host system if necessary
-        Swap<uint64_t>(val.intValue, Endian::big);
-
-        info.reshow(Encode::encode_after_swap);
-
-        for(uint i=0; i < nbOctet; i++)
-        {
-            a_buffer.push_back(val.charValue[i]);
-        }
-
+        encode<uint64_t>(a_buffer, Endian::big);
     }
 
     size_t getEncodedLength() const
@@ -485,54 +422,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-
-        union {
-            uint64_t intValue;
-            double doubleValue;
-            char charValue[nbOctet];
-        } val;
-
-        for(uint i=0; i<nbOctet; i++)
-        {
-            val.charValue[i] = a_buffer[a_index + i];
-        }
-
-        PrintUint64Double info(Encode::decode_before_swap, val.intValue, val.charValue, nbOctet, val.doubleValue);
-
-        //We translate to the host system if necessary
-        Swap<uint64_t>(val.intValue, Endian::little);
-
-        info.reshow(Encode::decode_after_swap);
-
-        _data = val.doubleValue;
-        return a_index + nbOctet;
+        return decode<uint64_t>(a_buffer, a_index, Endian::little);
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        const uint nbOctet = sizeof(_data);
-        union {
-            uint64_t intValue;
-            double doubleValue;
-            char charValue[nbOctet];
-        } val;
-
-        val.doubleValue = _data;
-
-        PrintUint64Double info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet, val.doubleValue);
-
-        //We translate from the host system if necessary
-        Swap<uint64_t>(val.intValue, Endian::little);
-
-        info.reshow(Encode::encode_after_swap);
-
-        for(uint i=0; i < nbOctet; i++)
-        {
-            a_buffer.push_back(val.charValue[i]);
-        }
-
+        encode<uint64_t>(a_buffer, Endian::little);
     }
 
     size_t getEncodedLength() const
@@ -556,73 +452,390 @@ namespace rti1516e
     }
     )
 
-//    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAinteger16LE, Integer16,
-//    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
-//    throw (EncoderException)
-//    {
-//        const uint nbOctet = sizeof(_data);
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAinteger16LE, Integer16,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        return decode<uint16_t>(a_buffer, a_index, Endian::little);
+    }
 
-//        union {
-//            uint16_t intValue;
-//            double doubleValue;
-//            char charValue[nbOctet];
-//        } val;
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        encode<uint16_t>(a_buffer, Endian::little);
+    }
 
-//        for(uint i=0; i<nbOctet; i++)
-//        {
-//            val.charValue[i] = a_buffer[a_index + i];
-//        }
+    size_t getEncodedLength() const
+    {
+        return 2;
+    }
 
-//        PrintUint16Int info(Encode::decode_before_swap, val.intValue, val.charValue, nbOctet, val.doubleValue);
+    unsigned int getOctetBoundary() const
+    {
+        return 2;
+    }
 
-//        //We translate to the host system if necessary
-//        Swap<uint16_t>(val.intValue, Endian::little);
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
 
-//        info.reshow(Encode::decode_after_swap);
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAinteger16BE, Integer16,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        return decode<uint16_t>(a_buffer, a_index, Endian::big);
+    }
 
-//        _data = val.doubleValue;
-//        return a_index + nbOctet;
-//    }
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        encode<uint16_t>(a_buffer, Endian::big);
+    }
 
-//    void encodeInto(std::vector<Octet>& a_buffer) const
-//    throw (EncoderException)
-//    {
-//        const uint nbOctet = sizeof(_data);
-//        union {
-//            uint16_t intValue;
-//            double doubleValue;
-//            char charValue[nbOctet];
-//        } val;
+    size_t getEncodedLength() const
+    {
+        return 2;
+    }
 
-//        val.doubleValue = _data;
+    unsigned int getOctetBoundary() const
+    {
+        return 2;
+    }
 
-//        PrintUint16Int info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet, val.doubleValue);
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
 
-//        //We translate from the host system if necessary
-//        Swap<uint16_t>(val.intValue, Endian::little);
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAinteger32LE, Integer32,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        return decode<uint32_t>(a_buffer, a_index, Endian::little);
+    }
 
-//        info.reshow(Encode::encode_after_swap);
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        encode<uint32_t>(a_buffer, Endian::little);
+    }
 
-//        for(uint i=0; i < nbOctet; i++)
-//        {
-//            a_buffer.push_back(val.charValue[i]);
-//        }
+    size_t getEncodedLength() const
+    {
+        return 4;
+    }
 
-//    }
+    unsigned int getOctetBoundary() const
+    {
+        return 4;
+    }
 
-//    size_t getEncodedLength() const
-//    {
-//        return 8;
-//    }
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
 
-//    unsigned int getOctetBoundary() const
-//    {
-//        return 8;
-//    }
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAinteger32BE, Integer32,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        return decode<uint32_t>(a_buffer, a_index, Endian::big);
+    }
 
-//    Integer64 hash() const
-//    {
-//        return Integer64(_data);
-//    }
-//    )
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        encode<uint32_t>(a_buffer, Endian::big);
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 4;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 4;
+    }
+
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
+
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAinteger64LE, Integer64,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        return decode<uint64_t>(a_buffer, a_index, Endian::little);
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        encode<uint64_t>(a_buffer, Endian::little);
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 8;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 8;
+    }
+
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
+
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAinteger64BE, Integer64,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        return decode<uint64_t>(a_buffer, a_index, Endian::big);
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        encode<uint64_t>(a_buffer, Endian::big);
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 8;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 8;
+    }
+
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
+
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAoctetPairLE, OctetPair,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        const uint16_t nbOctet = 2;
+        union {
+            uint16_t intValue;
+            char charValue[nbOctet];
+        } val;
+
+        for(uint i=0; i<nbOctet; i++)
+        {
+            val.charValue[i] = a_buffer[a_index + i];
+        }
+        typedef PrintInfo<uint16_t> PrintInfo;
+        PrintInfo info(Encode::decode_before_swap, val.intValue, val.charValue, nbOctet);
+        Swap<uint16_t>(val.intValue, Endian::little);
+        info.reshow(Encode::decode_after_swap);
+        _data.first = val.charValue[0];
+        _data.second = val.charValue[1];
+
+        return a_index + nbOctet;
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        const uint nbOctet = 2;
+        union {
+            uint16_t intValue;
+            char charValue[nbOctet];
+        } val;
+        val.charValue[0] = _data.first;
+        val.charValue[1] = _data.second;
+        typedef PrintInfo<uint16_t> PrintInfo;
+        PrintInfo info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet);
+        Swap<uint16_t>(val.intValue, Endian::little);
+        info.reshow(Encode::encode_after_swap);
+        for(uint i=0; i < nbOctet; i++)
+        {
+            a_buffer.push_back(val.charValue[i]);
+        }
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 2;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 2;
+    }
+
+    Integer64 hash() const
+    {
+        union {
+            Integer64 intValue;
+            char charValue[2];
+        } val;
+        val.charValue[0] = _data.first;
+        val.charValue[1] = _data.second;
+        return val.intValue;
+    }
+    )
+
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAoctetPairBE, OctetPair,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        const uint nbOctet = 2;
+        union {
+            uint16_t intValue;
+            char charValue[nbOctet];
+        } val;
+
+        for(uint i=0; i<nbOctet; i++)
+        {
+            val.charValue[i] = a_buffer[a_index + i];
+        }
+        typedef PrintInfo<uint16_t> PrintInfo;
+        PrintInfo info(Encode::decode_before_swap, val.intValue, val.charValue, nbOctet);
+        Swap<uint16_t>(val.intValue, Endian::big);
+        info.reshow(Encode::decode_after_swap);
+        _data.first = val.charValue[0];
+        _data.second = val.charValue[1];
+
+        return a_index + nbOctet;
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        const uint nbOctet = 2;
+        union {
+            uint16_t intValue;
+            char charValue[nbOctet];
+        } val;
+        val.charValue[0] = _data.first;
+        val.charValue[1] = _data.second;
+        typedef PrintInfo<uint16_t> PrintInfo;
+        PrintInfo info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet);
+        Swap<uint16_t>(val.intValue, Endian::big);
+        info.reshow(Encode::encode_after_swap);
+        for(uint i=0; i < nbOctet; i++)
+        {
+            a_buffer.push_back(val.charValue[i]);
+        }
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 2;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 2;
+    }
+
+    Integer64 hash() const
+    {
+        union {
+            Integer64 intValue;
+            char charValue[2];
+        } val;
+        val.charValue[0] = _data.first;
+        val.charValue[1] = _data.second;
+        return val.intValue;
+    }
+    )
+
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAunicodeChar, wchar_t,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+//        size_t s = decode<uint16_t>(a_buffer, a_index, Endian::big, 2);
+//        return s;
+        union {
+            uint16_t intValue;
+            uint32_t int32Value;
+            wchar_t value;
+            char charValue[2];
+            char char4Value[4];
+        } val;
+
+        for(uint i=0; i<2; i++)
+        {
+            val.charValue[i] = a_buffer[a_index + i];
+        }
+        PrintInfo16 info16(Encode::decode_before_swap, val.intValue, val.charValue, 2, val.value);
+        PrintInfo32 info32(Encode::decode_before_swap, val.int32Value, val.char4Value, 4, val.value);
+        Swap<uint16_t>(val.intValue, Endian::big);
+        info16.reshow(Encode::decode_after_swap);
+        info32.reshow(Encode::decode_after_swap);
+        if(sizeof(wchar_t) > 4) {
+            if(!g_isBigEndian)
+                val.int32Value = val.int32Value & 0x0000ffff;
+            else
+                val.int32Value = val.int32Value & 0xffff0000;
+        }
+        info16.reshow(Encode::decode_after_swap);
+        info32.reshow(Encode::decode_after_swap);
+        _data = val.value;
+
+        return a_index + 2;
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+//        encode<uint16_t>(a_buffer, Endian::big, 2);
+        union {
+            uint16_t intValue;
+            uint32_t int32Value;
+            wchar_t value;
+            char charValue[2];
+            char char4Value[4];
+        } val;
+        val.value = _data;
+        if(sizeof(wchar_t) == 4) {
+            if(!g_isBigEndian)
+                val.int32Value = val.int32Value & 0x0000ffff;
+            else
+                val.int32Value = val.int32Value & 0xffff0000;
+        }
+        PrintInfo16 info16(Encode::encode_before_swap, val.intValue, val.charValue, 2, val.value);
+        PrintInfo32 info32(Encode::encode_before_swap, val.int32Value, val.char4Value, 4, val.value);
+        Swap<uint16_t>(val.intValue, Endian::big);
+        info16.reshow(Encode::encode_after_swap);
+        info32.reshow(Encode::encode_after_swap);
+        for(uint i=0; i < 2; i++)
+        {
+            a_buffer.push_back(val.charValue[i]);
+        }
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 2;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 2;
+    }
+
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
 }

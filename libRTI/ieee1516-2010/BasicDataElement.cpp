@@ -58,7 +58,8 @@ void EncodableDataType::encode(VariableLengthData& inData) const                
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
     std::vector<Octet> buffer;                                                                                      \
-    encodeInto(buffer);                                                                                             \
+    encodeInto(buffer);\
+    std::cout << "buffer size : " << buffer.size() << std::endl;\
     inData.setData(&buffer[0], buffer.size());                                                                      \
 }                                                                                                                   \
                                                                                                                     \
@@ -134,5 +135,13 @@ DECLARE_ENCODING_HELPER_CLASS(HLAfloat32BE, float)
 DECLARE_ENCODING_HELPER_CLASS(HLAfloat32LE, float)
 DECLARE_ENCODING_HELPER_CLASS(HLAfloat64BE, double)
 DECLARE_ENCODING_HELPER_CLASS(HLAfloat64LE, double)
-//DECLARE_ENCODING_HELPER_CLASS(HLAinteger16LE, Integer16)
+DECLARE_ENCODING_HELPER_CLASS(HLAinteger16LE, Integer16)
+DECLARE_ENCODING_HELPER_CLASS(HLAinteger16BE, Integer16)
+DECLARE_ENCODING_HELPER_CLASS(HLAinteger32LE, Integer32)
+DECLARE_ENCODING_HELPER_CLASS(HLAinteger32BE, Integer32)
+DECLARE_ENCODING_HELPER_CLASS(HLAinteger64LE, Integer64)
+DECLARE_ENCODING_HELPER_CLASS(HLAinteger64BE, Integer64)
+DECLARE_ENCODING_HELPER_CLASS(HLAoctetPairLE, OctetPair)
+DECLARE_ENCODING_HELPER_CLASS(HLAoctetPairBE, OctetPair)
+DECLARE_ENCODING_HELPER_CLASS(HLAunicodeChar, wchar_t)
 }

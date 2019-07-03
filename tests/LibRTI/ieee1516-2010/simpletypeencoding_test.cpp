@@ -6,6 +6,7 @@
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/VariableLengthData.h>
 #include <libRTI/ieee1516-2010/HLAtypesIEEE1516.hh>
+#include <bitset>
 
 using ::std::cout;
 using ::std::endl;
@@ -17,6 +18,15 @@ using ::rti1516e::HLAfloat32BE;
 using ::rti1516e::HLAfloat32LE;
 using ::rti1516e::HLAfloat64BE;
 using ::rti1516e::HLAfloat64LE;
+using ::rti1516e::HLAinteger16LE;
+using ::rti1516e::HLAinteger16BE;
+using ::rti1516e::HLAinteger32LE;
+using ::rti1516e::HLAinteger32BE;
+using ::rti1516e::HLAinteger64LE;
+using ::rti1516e::HLAinteger64BE;
+using ::rti1516e::HLAoctetPairLE;
+using ::rti1516e::HLAoctetPairBE;
+using ::rti1516e::HLAunicodeChar;
 using ::rti1516e::VariableLengthData;
 
 TEST(HLATypesTest, TestHLASCIIchar)
@@ -173,6 +183,217 @@ TEST(HLATypesTest, TestHLAfloat64LE)
         HLAfloat64LE hlaFloat64LETestDecode;
         hlaFloat64LETestDecode.decode(variableLengthData);
         ASSERT_EQ(hlaFloat64LETestEncode.get(), hlaFloat64LETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAinteger16LE)
+{
+    HLAinteger16LE hlaInteger16LETestEncode;
+    hlaInteger16LETestEncode = 32000;
+    try
+    {
+        VariableLengthData variableLengthData = hlaInteger16LETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaInteger16LETestEncode.getEncodedLength(), size);
+#ifndef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer16 data = *static_cast<const rti1516e::Integer16*>(variableLengthData.data());
+        ASSERT_EQ(hlaInteger16LETestEncode.get(), data);
+#endif
+        HLAinteger16LE hlaInteger16LETestDecode;
+        hlaInteger16LETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaInteger16LETestEncode.get(), hlaInteger16LETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAinteger16BE)
+{
+    HLAinteger16BE hlaInteger16BETestEncode;
+    hlaInteger16BETestEncode = 32000;
+    try
+    {
+        VariableLengthData variableLengthData = hlaInteger16BETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaInteger16BETestEncode.getEncodedLength(), size);
+#ifdef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer16 data = *static_cast<const rti1516e::Integer16*>(variableLengthData.data());
+        ASSERT_EQ(hlaInteger16BETestEncode.get(), data);
+#endif
+        HLAinteger16BE hlaInteger16BETestDecode;
+        hlaInteger16BETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaInteger16BETestEncode.get(), hlaInteger16BETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAinteger32LE)
+{
+    HLAinteger32LE hlaInteger32LETestEncode;
+    hlaInteger32LETestEncode = 1250000;
+    try
+    {
+        VariableLengthData variableLengthData = hlaInteger32LETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaInteger32LETestEncode.getEncodedLength(), size);
+#ifndef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer32 data = *static_cast<const rti1516e::Integer32*>(variableLengthData.data());
+        ASSERT_EQ(hlaInteger32LETestEncode.get(), data);
+#endif
+        HLAinteger32LE hlaInteger32LETestDecode;
+        hlaInteger32LETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaInteger32LETestEncode.get(), hlaInteger32LETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAinteger32BE)
+{
+    HLAinteger32BE hlaInteger32BETestEncode;
+    hlaInteger32BETestEncode = 1250000;
+    try
+    {
+        VariableLengthData variableLengthData = hlaInteger32BETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaInteger32BETestEncode.getEncodedLength(), size);
+#ifdef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer32 data = *static_cast<const rti1516e::Integer32*>(variableLengthData.data());
+        ASSERT_EQ(hlaInteger32BETestEncode.get(), data);
+#endif
+        HLAinteger32BE hlaInteger32BETestDecode;
+        hlaInteger32BETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaInteger32BETestEncode.get(), hlaInteger32BETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAinteger64LE)
+{
+    HLAinteger64LE hlaInteger64LETestEncode;
+    hlaInteger64LETestEncode = 1250000256;
+    try
+    {
+        VariableLengthData variableLengthData = hlaInteger64LETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaInteger64LETestEncode.getEncodedLength(), size);
+#ifndef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer64 data = *static_cast<const rti1516e::Integer64*>(variableLengthData.data());
+        ASSERT_EQ(hlaInteger64LETestEncode.get(), data);
+#endif
+        HLAinteger64LE hlaInteger64LETestDecode;
+        hlaInteger64LETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaInteger64LETestEncode.get(), hlaInteger64LETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAinteger64BE)
+{
+    HLAinteger64BE hlaInteger64BETestEncode;
+    hlaInteger64BETestEncode = 1250000256;
+    try
+    {
+        VariableLengthData variableLengthData = hlaInteger64BETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaInteger64BETestEncode.getEncodedLength(), size);
+#ifdef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer64 data = *static_cast<const rti1516e::Integer64*>(variableLengthData.data());
+        ASSERT_EQ(hlaInteger64BETestEncode.get(), data);
+#endif
+        HLAinteger64BE hlaInteger64BETestDecode;
+        hlaInteger64BETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaInteger64BETestEncode.get(), hlaInteger64BETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAoctetPairLE)
+{
+    HLAoctetPairLE hlaoctetPairLETestEncode;
+    hlaoctetPairLETestEncode = {8, 7};
+    try
+    {
+        VariableLengthData variableLengthData = hlaoctetPairLETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaoctetPairLETestEncode.getEncodedLength(), size);
+#ifndef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer8 *data = static_cast<const rti1516e::Integer8*>(variableLengthData.data());
+        ASSERT_EQ(hlaoctetPairLETestEncode.get().first, data[0]);
+        ASSERT_EQ(hlaoctetPairLETestEncode.get().second, data[1]);
+#endif
+        HLAoctetPairLE hlaoctetPairLETestDecode;
+        hlaoctetPairLETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaoctetPairLETestEncode.get(), hlaoctetPairLETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAoctetPairBE)
+{
+    HLAoctetPairBE hlaoctetPairBETestEncode;
+    hlaoctetPairBETestEncode = {8, 7};
+    try
+    {
+        VariableLengthData variableLengthData = hlaoctetPairBETestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaoctetPairBETestEncode.getEncodedLength(), size);
+#ifdef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer8 *data = static_cast<const rti1516e::Integer8*>(variableLengthData.data());
+        ASSERT_EQ(hlaoctetPairBETestEncode.get().first, data[0]);
+        ASSERT_EQ(hlaoctetPairBETestEncode.get().first, data[1]);
+#endif
+        HLAoctetPairBE hlaoctetPairBETestDecode;
+        hlaoctetPairBETestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaoctetPairBETestEncode.get(), hlaoctetPairBETestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAunicodeChar)
+{
+    std::cout << "sizeof(wchar_t)" << sizeof(wchar_t) << std::endl;
+    HLAunicodeChar hlaUnicodeTestEncode;
+    hlaUnicodeTestEncode = 1023;
+    try
+    {
+        VariableLengthData variableLengthData = hlaUnicodeTestEncode.encode();
+        size_t size = variableLengthData.size();
+//        ASSERT_EQ(hlaUnicodeTestEncode.getEncodedLength(), size);
+#ifdef HOST_IS_BIG_ENDIAN
+        const rti1516e::Integer8 *data = static_cast<const rti1516e::Integer8*>(variableLengthData.data());
+        ASSERT_EQ(hlaoctetPairBETestEncode.get().first, data[0]);
+        ASSERT_EQ(hlaoctetPairBETestEncode.get().first, data[1]);
+#endif
+        HLAunicodeChar hlaUnicodeTestDecode;
+        hlaUnicodeTestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaUnicodeTestEncode.get(), hlaUnicodeTestDecode.get());
     }
     catch(rti1516e::EncoderException& e)
     {
