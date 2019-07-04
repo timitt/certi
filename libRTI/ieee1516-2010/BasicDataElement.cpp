@@ -59,7 +59,6 @@ void EncodableDataType::encode(VariableLengthData& inData) const                
 {                                                                                                                   \
     std::vector<Octet> buffer;                                                                                      \
     encodeInto(buffer);\
-    std::cout << "buffer size : " << buffer.size() << std::endl;\
     inData.setData(&buffer[0], buffer.size());                                                                      \
 }                                                                                                                   \
                                                                                                                     \

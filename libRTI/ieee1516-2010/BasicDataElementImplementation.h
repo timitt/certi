@@ -110,18 +110,22 @@ public:
                 std::cout << "-------------------------------------DECODE AFTER SWAP---------------------------------------" << std::endl;
 
             std::cout << "value : " << std::dec << _value << std::endl;
-            std::cout << "hex : " << std::hex << _intValue << std::endl;
+//            std::cout << "hex : " << std::hex << _intValue << std::endl;
+//            std::cout << "hex : ";
+//            for(int i=0; i < static_cast<int>(_nbOctets); i++)
+//                std::cout << std::hex << _octets[i] << " ";
+//            std::cout << std::endl;
             std::cout << "bits : ";
-            if(!g_isBigEndian)
-            {
-                for(int i=static_cast<int>(_nbOctets-1); i>=0; i--)
-                    std::cout << std::bitset<8>(_octets[i]) << " ";
-            }
-            else
-            {
+//            if(!g_isBigEndian)
+//            {
+//                for(int i=static_cast<int>(_nbOctets-1); i>=0; i--)
+//                    std::cout << std::bitset<8>(_octets[i]) << " ";
+//            }
+//            else
+//            {
                 for(int i=0; i < static_cast<int>(_nbOctets); i++)
                     std::cout << std::bitset<8>(_octets[i]) << " ";
-            }
+//            }
             std::cout << std::endl;
         }
     }
@@ -777,7 +781,8 @@ namespace rti1516e
         Swap<uint16_t>(val.intValue, Endian::big);
         info16.reshow(Encode::decode_after_swap);
         info32.reshow(Encode::decode_after_swap);
-        if(sizeof(wchar_t) == 4) {
+        if(sizeof(wchar_t) == 4)
+        {
             if(!g_isBigEndian)
                 val.int32Value = val.int32Value & 0x0000ffff;
             else
@@ -805,8 +810,10 @@ namespace rti1516e
         {
             if(!g_isBigEndian)
                 val.int32Value = val.int32Value & 0x0000ffff;
-            else
+            else {
                 val.int32Value = val.int32Value & 0xffff0000;
+                val.int32Value = val.int32Value >> 16;
+            }
         }
         else if(sizeof(wchar_t) != 2)
         {
