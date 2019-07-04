@@ -100,12 +100,11 @@ TEST(HLATypesTest, TestHLAbyte)
 
 TEST(HLATypesTest, TestHLAfloat32BE)
 {
-    HLAfloat32BE hlaFloat32BETestEncode;
-    hlaFloat32BETestEncode = 12.56;
+    HLAfloat32BE hlaFloat32BETestEncode(12.56);
     try
     {
         VariableLengthData variableLengthData = hlaFloat32BETestEncode.encode();
-        size_t size = variableLengthData. size();
+        size_t size = variableLengthData.size();
         ASSERT_EQ(hlaFloat32BETestEncode.getEncodedLength(), size);
 #ifdef HOST_IS_BIG_ENDIAN
         const float data = *static_cast<const float*>(variableLengthData.data());
@@ -123,8 +122,7 @@ TEST(HLATypesTest, TestHLAfloat32BE)
 
 TEST(HLATypesTest, TestHLAfloat32LE)
 {
-    HLAfloat32LE hlaFloat32LETestEncode;
-    hlaFloat32LETestEncode = 12.56;
+    HLAfloat32LE hlaFloat32LETestEncode(12.56);
     try
     {
         VariableLengthData variableLengthData = hlaFloat32LETestEncode.encode();
@@ -193,7 +191,7 @@ TEST(HLATypesTest, TestHLAfloat64LE)
 TEST(HLATypesTest, TestHLAinteger16LE)
 {
     HLAinteger16LE hlaInteger16LETestEncode;
-    hlaInteger16LETestEncode = 32000;
+    hlaInteger16LETestEncode = 258;
     try
     {
         VariableLengthData variableLengthData = hlaInteger16LETestEncode.encode();
@@ -216,7 +214,7 @@ TEST(HLATypesTest, TestHLAinteger16LE)
 TEST(HLATypesTest, TestHLAinteger16BE)
 {
     HLAinteger16BE hlaInteger16BETestEncode;
-    hlaInteger16BETestEncode = 32000;
+    hlaInteger16BETestEncode = 258;
     try
     {
         VariableLengthData variableLengthData = hlaInteger16BETestEncode.encode();
