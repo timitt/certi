@@ -25,6 +25,13 @@ EncodableDataType##Implementation& EncodableDataType##Implementation            
     return *this;                                                                                                   \
 }                                                                                                                   \
                                                                                                                     \
+EncodableDataType##Implementation& EncodableDataType##Implementation                                                \
+::operator=(const SimpleDataType& data)                                                                             \
+{                                                                                                                   \
+    _data = data;                                                                                                   \
+    return *this;                                                                                                   \
+}                                                                                                                   \
+                                                                                                                    \
 void EncodableDataType##Implementation::set(const SimpleDataType& inData)                                           \
 {                                                                                                                   \
     _data = inData;                                                                                                 \

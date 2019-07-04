@@ -110,22 +110,10 @@ public:
                 std::cout << "-------------------------------------DECODE AFTER SWAP---------------------------------------" << std::endl;
 
             std::cout << "value : " << std::dec << _value << std::endl;
-//            std::cout << "hex : " << std::hex << _intValue << std::endl;
-//            std::cout << "hex : ";
-//            for(int i=0; i < static_cast<int>(_nbOctets); i++)
-//                std::cout << std::hex << _octets[i] << " ";
-//            std::cout << std::endl;
             std::cout << "bits : ";
-//            if(!g_isBigEndian)
-//            {
-//                for(int i=static_cast<int>(_nbOctets-1); i>=0; i--)
-//                    std::cout << std::bitset<8>(_octets[i]) << " ";
-//            }
-//            else
-//            {
-                for(int i=0; i < static_cast<int>(_nbOctets); i++)
-                    std::cout << std::bitset<8>(_octets[i]) << " ";
-//            }
+            for(int i=0; i < static_cast<int>(_nbOctets); i++)
+                std::cout << std::bitset<8>(_octets[i]) << " ";
+
             std::cout << std::endl;
         }
     }
@@ -151,6 +139,7 @@ typedef PrintInfo<uint32_t, wchar_t> PrintInfo32;
         virtual ~EncodableDataType##Implementation();                                                               \
                                                                                                                     \
         EncodableDataType##Implementation& operator=(const EncodableDataType##Implementation& rhs);                 \
+        EncodableDataType##Implementation& operator=(const SimpleDataType& data);                                   \
                                                                                                                     \
         void set(const SimpleDataType& inData);                                                                     \
                                                                                                                     \
