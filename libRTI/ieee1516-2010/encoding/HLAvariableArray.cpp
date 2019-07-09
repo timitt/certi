@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include <RTI/encoding/HLAvariableArray.h>
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/VariableLengthData.h>
@@ -55,13 +57,15 @@ void HLAvariableArray::encodeInto(std::vector<Octet> &buffer) const
 void HLAvariableArray::decode(const VariableLengthData &inData)
   throw (EncoderException)
 {
-
+    std::vector<Octet> buffer(inData.size());
+    std::memcpy(&buffer[0], inData.data(), inData.size());
+    decodeFrom(buffer, 0);
 }
 
 size_t HLAvariableArray::decodeFrom(const std::vector<Octet> &buffer, size_t index)
   throw (EncoderException)
 {
-
+    return _impl->decodeFrom(buffer, index);
 }
 
 size_t HLAvariableArray::getEncodedLength() const

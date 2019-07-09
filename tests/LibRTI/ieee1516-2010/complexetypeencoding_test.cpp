@@ -59,18 +59,29 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
         SUCCEED() << e.what();
     }
 
+    try
+    {
+        HLAfloat64BE float64BE_1_encode(1.0);
+        HLAfloat64BE float64BE_2_encode(2.0);
+        HLAvariableArray hlaVariableArrayEncode(float64BE_1_encode);
+        hlaVariableArrayEncode.addElement(float64BE_1_encode);
+        hlaVariableArrayEncode.addElement(float64BE_2_encode);
+        VariableLengthData vld = hlaVariableArrayEncode.encode();
 
-//    int P = 0;
-//    int V = 8;
-//    int R = (4+P)%V;
-//    std::cout << "Reste : " << R << std::endl;
-//    P += R == 0 ? 0:(V-R);
-//    std::cout << "P : " << P << std::endl;
-//    R = (4+P)%V;
-//    std::cout << "Reste : " << R << std::endl;
+        HLAvariableArray hlaVariableArrayDecode(float64BE_1_encode);
+        hlaVariableArrayDecode.decode(vld);
+        HLAfloat64BE float64BE_1_decode(*static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(0).clone().release()));
+        HLAfloat64BE float64BE_2_decode(0.0);
+        double val = static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(1).clone().release())->get();
+        float64BE_2_decode.set(val);
 
-//    HLAfloat64BE float64BE_1(1.0);
-//    HLAfloat64BE float64BE_2(2.0);
+        ASSERT_EQ(float64BE_1_encode.get(), float64BE_1_decode.get());
+        ASSERT_EQ(float64BE_2_encode.get(), float64BE_2_decode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
 ////    float64BE_1.encode();
 //    HLA3Byte hla3Byte_1(16);
 //    HLA3Byte hla3Byte_2(32);

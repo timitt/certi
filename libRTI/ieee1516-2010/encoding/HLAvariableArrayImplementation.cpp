@@ -43,11 +43,14 @@ void HLAvariableArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) co
     HLAinteger32BE nbElements(Integer32(this->size()));
     nbElements.encodeInto(a_buffer);
 
-    uint P = 0;
-    uint V = std::max(this->get(0).getOctetBoundary(), 4u);
-    uint R = (4+P)%V;
-    P += R == 0 ? 0:(V-R);
-    R = (4+P)%V;
+//    //Calcul padding after nbElements indication
+//    uint P = 0;
+//    uint V = std::max(this->get(0).getOctetBoundary(), 4u);
+//    uint R = (4+P)%V;
+//    P += R == 0 ? 0:(V-R);
+//    R = (4+P)%V;
+
+    uint P = this->calculPaddingAfterNbElements();
 
     for(uint i = 0; i < P; i++)
     {
@@ -60,15 +63,13 @@ void HLAvariableArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) co
         _vectorpDataElement[i]->encodeInto(a_buffer);
         if(i != _vectorpDataElement.size()-1)
         {
+            //Calcul padding after each element which depends on the encoded lenght of the element
             size_t sizeElement = _vectorpDataElement[i]->getEncodedLength();
             uint VElement = std::max(_vectorpDataElement[i]->getOctetBoundary(), 4u);
             uint PElement = 0;
             uint RElement = (sizeElement+PElement)%VElement;
-            std::cout << "Reste : " << RElement << std::endl;
             PElement += RElement == 0 ? 0:(VElement-RElement);
-            std::cout << "P : " << PElement << std::endl;
             RElement = (sizeElement+PElement)%VElement;
-            std::cout << "Reste : " << RElement << std::endl;
             for(uint j = 0; j < PElement; j++)
             {
                 const Octet octet(0);
@@ -76,9 +77,35 @@ void HLAvariableArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) co
             }
         }
     }
-
     PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
+}
 
+size_t HLAvariableArrayImplementation::decodeFrom(const std::vector<Octet> &a_buffer, size_t a_index)
+    throw (EncoderException)
+{
+    HLAinteger32BE nbElements;
+    std::cout << "a_index 1: " << a_index << std::endl;
+    a_index = nbElements.decodeFrom(a_buffer, a_index);
+    std::cout << "a_index 2: " << a_index << std::endl;
+    Integer32 result = nbElements.get();
+    std::cout << "NbElements : " << result << std::endl;
+    uint P = this->calculPaddingAfterNbElements();
+    std::cout << "P : " << P << std::endl;
+    a_index += P;
+    std::cout << "a_index 3: " << a_index << std::endl;
+    _vectorpDataElement.reserve(nbElements.get());
+    for(int i=0; i<nbElements.get(); i++) {
+        _vectorpDataElement.push_back(_pDataElementPrototype->clone().release());
+    }
+    for(auto it = _vectorpDataElement.begin(); it != _vectorpDataElement.end(); it++) {
+        a_index = (*it)->decodeFrom(a_buffer, a_index);
+        std::cout << "a_index a: " << a_index << std::endl;
+        if(it != _vectorpDataElement.end())
+            a_index += this->calculPaddingAfterEachElements(**it);
+        std::cout << "a_index b: " << a_index << std::endl;
+    }
+    PrintInfo<>(Encode::decode, &a_buffer[0], a_buffer.size());
+    return a_index;
 }
 
 size_t HLAvariableArrayImplementation::size() const
@@ -158,6 +185,34 @@ size_t HLAvariableArrayImplementation::getEncodedLength() const
 bool HLAvariableArrayImplementation::isSameTypeAs(const HLAvariableArrayImplementation &a_rhs)
 {
     return _pDataElementPrototype->isSameTypeAs(*a_rhs._pDataElementPrototype);
+}
+
+uint HLAvariableArrayImplementation::calculPaddingAfterNbElements() const
+{
+    //Calcul padding after nbElements indication
+    uint P = 0;
+    uint V = std::max(_pDataElementPrototype->getOctetBoundary(), 4u);
+    uint R = (4+P)%V;
+    std::cout << "R : " << R << std::endl;
+    P += R == 0 ? 0:(V-R);
+    std::cout << "P : " << P << std::endl;
+    R = (4+P)%V;
+    std::cout << "R : " << R << std::endl;
+
+    return P;
+}
+
+uint HLAvariableArrayImplementation::calculPaddingAfterEachElements(const DataElement &a_dataElement) const
+{
+    //Calcul padding after each element which depends on the encoded lenght of the element
+    size_t sizeElement = a_dataElement.getEncodedLength();
+    uint V = std::max(a_dataElement.getOctetBoundary(), 4u);
+    uint P = 0;
+    uint R = (sizeElement+P)%V;
+    P += R == 0 ? 0:(V-R);
+    R = (sizeElement+P)%V;
+
+    return P;
 }
 
 }

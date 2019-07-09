@@ -14,6 +14,7 @@ public:
     virtual ~HLAvariableArrayImplementation();
 
     void encodeInto(std::vector<Octet> &a_buffer) const throw(EncoderException);
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index) throw (EncoderException);
 
     size_t size() const;
 
@@ -28,6 +29,10 @@ public:
     size_t getEncodedLength() const;
 
     bool isSameTypeAs(const HLAvariableArrayImplementation& a_rhs);
+
+private:
+    uint calculPaddingAfterNbElements() const;
+    uint calculPaddingAfterEachElements(const DataElement &a_dataElement) const;
 
 private:
     std::unique_ptr<DataElement> _pDataElementPrototype;
