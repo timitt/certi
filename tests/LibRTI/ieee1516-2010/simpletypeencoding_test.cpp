@@ -5,7 +5,7 @@
 #include <RTI/encoding/BasicDataElements.h>
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/VariableLengthData.h>
-#include <libRTI/ieee1516-2010/HLAtypesIEEE1516.hh>
+
 #include <bitset>
 
 using ::std::cout;
@@ -54,7 +54,7 @@ TEST(HLATypesTest, TestHLASCIIchar)
 TEST(HLATypesTest, TestHLAboolean)
 {
     HLAboolean hlaBooleanTestEncode;
-    hlaBooleanTestEncode = ::libhla::HLAfalse;
+    hlaBooleanTestEncode = false;
 
     try
     {
@@ -260,7 +260,7 @@ TEST(HLATypesTest, TestHLAinteger32LE)
 TEST(HLATypesTest, TestHLAinteger32BE)
 {
     HLAinteger32BE hlaInteger32BETestEncode;
-    hlaInteger32BETestEncode = 1250000;
+    hlaInteger32BETestEncode = 2;
     try
     {
         VariableLengthData variableLengthData = hlaInteger32BETestEncode.encode();

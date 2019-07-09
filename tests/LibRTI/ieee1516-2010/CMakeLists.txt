@@ -10,6 +10,7 @@ find_package(Threads REQUIRED)
 add_executable(TestRTI-IEEE1516-2010
                 simpletypeencoding_test.cpp
                 hlatypes_test.cpp
+                complexetypeencoding_test.cpp
                 ../../main.cpp
                 )
 
