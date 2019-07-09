@@ -5,9 +5,7 @@
 #include <cstring>
 #include <iostream>
 
-#include <bitset>
-
-#include "HLAtypesIEEE1516.hh"
+#include "PrintInfo.h"
 
 #ifdef HOST_IS_BIG_ENDIAN
 #define g_isBigEndian true
@@ -15,16 +13,7 @@
 #define g_isBigEndian false
 #endif
 
-#ifdef DEBUG_ENCODE_DECODE
-#define g_showingDebugInfo true
-#else
-#define g_showingDebugInfo false
-#endif
-
-enum class Encode { encode_before_swap, encode_after_swap, decode_before_swap, decode_after_swap };
 enum class Endian { little, big };
-
-
 
 template<typename I>
 class Swap
@@ -79,55 +68,6 @@ private:
     I &_intValue;
 };
 
-template<class I, class V=I>
-class PrintInfo
-{
-public:
-
-    PrintInfo(const Encode &a_encode, const I &a_int, const char *a_octets, const uint &a_nbOctets)
-        : _intValue(a_int), _value(a_int), _octets(a_octets), _nbOctets(a_nbOctets)
-    {
-        reshow(a_encode);
-    }
-
-    PrintInfo(const Encode &a_encode, const I &a_int, const char *a_octets, const uint &a_nbOctets, const V &a_v)
-        : _intValue(a_int), _value(a_v), _octets(a_octets), _nbOctets(a_nbOctets)
-    {
-        reshow(a_encode);
-    }
-
-    void reshow(const Encode &a_encode) const
-    {
-        if(g_showingDebugInfo)
-        {
-            if(a_encode == Encode::encode_before_swap)
-                std::cout << "-------------------------------------ENCODE BEFORE SWAP--------------------------------------" << std::endl;
-            else if(a_encode == Encode::encode_after_swap)
-                std::cout << "-------------------------------------ENCODE AFTER SWAP---------------------------------------" << std::endl;
-            else if(a_encode == Encode::decode_before_swap)
-                std::cout << "-------------------------------------DECODE BEFORE SWAP--------------------------------------" << std::endl;
-            else if(a_encode == Encode::decode_after_swap)
-                std::cout << "-------------------------------------DECODE AFTER SWAP---------------------------------------" << std::endl;
-
-            std::cout << "value : " << std::dec << _value << std::endl;
-            std::cout << "bits : ";
-            for(int i=0; i < static_cast<int>(_nbOctets); i++)
-                std::cout << std::bitset<8>(_octets[i]) << " ";
-
-            std::cout << std::endl;
-        }
-    }
-
-private:
-    const I &_intValue;
-    const V &_value;
-    const char *_octets;
-    const uint &_nbOctets;
-};
-
-typedef PrintInfo<uint16_t, wchar_t> PrintInfo16;
-typedef PrintInfo<uint32_t, wchar_t> PrintInfo32;
-
 #define DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(EncodableDataType, SimpleDataType, encoder)                     \
                                                                                                                     \
     class RTI_EXPORT EncodableDataType##Implementation                                                              \
@@ -162,8 +102,7 @@ typedef PrintInfo<uint32_t, wchar_t> PrintInfo32;
             {                                                                                                       \
                 val.charValue[i] = a_buffer[a_index + i];                                                           \
             }                                                                                                       \
-            typedef PrintInfo<I, SimpleDataType> PrintInfo;                                                         \
-            PrintInfo info(Encode::decode_before_swap, val.intValue, val.charValue, a_nbOctet, val.value);          \
+            PrintInfo<I> info(Encode::decode_before_swap, val.intValue, val.charValue, a_nbOctet);          \
             Swap<I>(val.intValue, a_endianRepresentation);                                                          \
             info.reshow(Encode::decode_after_swap);                                                                 \
             _data = val.value;                                                                                      \
@@ -181,8 +120,7 @@ typedef PrintInfo<uint32_t, wchar_t> PrintInfo32;
                 char charValue[8];                                                                                  \
             } val;                                                                                                  \
             val.value = _data;                                                                                      \
-            typedef PrintInfo<I, SimpleDataType> PrintInfo;                                                         \
-            PrintInfo info(Encode::encode_before_swap, val.intValue, val.charValue, a_nbOctet, val.value);          \
+            PrintInfo<I> info(Encode::encode_before_swap, val.intValue, val.charValue, a_nbOctet);          \
             Swap<I>(val.intValue, a_endianRepresentation);                                                          \
             info.reshow(Encode::encode_after_swap);                                                                 \
             for(uint i=0; i < a_nbOctet; i++)                                                                       \
@@ -238,27 +176,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        ::libhla::HLAdata<::libhla::HLAboolean> value;
-        *value = a_buffer[a_index];
-        if(*value == ::libhla::HLAtrue)
-            _data = true;
-        else if(*value == ::libhla::HLAfalse)
-            _data = false;
-        else
-        {
-            throw EncoderException(L"This is not a Standard Boolean type.");
-        }
+        _data = bool(a_buffer[a_index]);
         return a_index + 1;
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        ::libhla::HLAdata<::libhla::HLAboolean> value;
-        if(*value != ::libhla::HLAtrue && *value != ::libhla::HLAfalse)
-        {
-            throw EncoderException(L"This is not a Standard Boolean type.");
-        }
         a_buffer.push_back(_data);
     }
 
@@ -765,8 +689,8 @@ namespace rti1516e
         {
             val.charValue[i] = a_buffer[a_index + i];
         }
-        PrintInfo16 info16(Encode::decode_before_swap, val.intValue, val.charValue, 2, val.value);
-        PrintInfo32 info32(Encode::decode_before_swap, val.int32Value, val.char4Value, 4, val.value);
+        PrintInfo<uint16_t> info16(Encode::decode_before_swap, val.intValue, val.charValue, 2);
+        PrintInfo<uint32_t> info32(Encode::decode_before_swap, val.int32Value, val.char4Value, 4);
         Swap<uint16_t>(val.intValue, Endian::big);
         info16.reshow(Encode::decode_after_swap);
         info32.reshow(Encode::decode_after_swap);
@@ -809,8 +733,8 @@ namespace rti1516e
             throw EncoderException(L"SimpleDataType have to be on 16 bits or on 32 bits");
         }
 
-        PrintInfo16 info16(Encode::encode_before_swap, val.intValue, val.charValue, 2, val.value);
-        PrintInfo32 info32(Encode::encode_before_swap, val.int32Value, val.char4Value, 4, val.value);
+        PrintInfo<uint16_t> info16(Encode::encode_before_swap, val.intValue, val.charValue, 2);
+        PrintInfo<uint32_t> info32(Encode::encode_before_swap, val.int32Value, val.char4Value, 4);
         Swap<uint16_t>(val.intValue, Endian::big);
         info16.reshow(Encode::encode_after_swap);
         info32.reshow(Encode::encode_after_swap);
@@ -838,6 +762,84 @@ namespace rti1516e
         } val;
         val.value = _data;
         return Integer64(val.intValue);
+    }
+    )
+
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLA3Byte, Integer32,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        union {
+            uint16_t intValue;
+            uint32_t int32Value;
+            char charValue[4];
+        } val;
+
+        for(uint i=0; i<3; i++)
+        {
+            val.charValue[i] = a_buffer[a_index + i];
+        }
+        val.charValue[3] = 0;
+        PrintInfo<uint32_t> info32(Encode::decode_before_swap, val.int32Value, val.charValue, 3);
+        Swap<uint16_t>(val.intValue, Endian::little);
+        info32.reshow(Encode::decode_after_swap);
+
+        if(!g_isBigEndian)
+            val.int32Value = val.int32Value & 0x0000ffff;
+        else
+            val.int32Value = val.int32Value & 0xffff0000;
+
+        info32.reshow(Encode::decode_after_swap);
+        _data = val.int32Value;
+
+        return a_index + 2;
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        union {
+            uint16_t intValue;
+            uint32_t int32Value;
+            char charValue[4];
+        } val;
+        val.int32Value = _data;
+        if(sizeof(wchar_t) == 4)
+        {
+            if(!g_isBigEndian)
+                val.int32Value = val.int32Value & 0x0000ffff;
+            else {
+                val.int32Value = val.int32Value & 0xffff0000;
+                val.int32Value = val.int32Value >> 16;
+            }
+        }
+        else if(sizeof(wchar_t) != 2)
+        {
+            throw EncoderException(L"SimpleDataType have to be on 16 bits or on 32 bits");
+        }
+
+        PrintInfo<uint32_t> info32(Encode::encode_before_swap, val.int32Value, val.charValue, 3);
+        Swap<uint16_t>(val.intValue, Endian::little);
+        info32.reshow(Encode::encode_after_swap);
+        for(uint i=0; i < 3; i++)
+        {
+            a_buffer.push_back(val.charValue[i]);
+        }
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 3;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 4;
+    }
+
+    Integer64 hash() const
+    {
+        return 0;
     }
     )
 }

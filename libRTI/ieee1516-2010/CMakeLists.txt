@@ -69,11 +69,15 @@ set(RTI1516e_LIB_SRCS
     HLAvariableArray.hh
     HLAfixedRecord.hh
     HLAvariantRecord.hh
-    BasicDataElement.cpp
-    BasicDataElementImplementation.cpp
-    BasicDataElementImplementation.h
-    DataElement.cpp
-    EncodingExceptions.cpp
+    encoding/BasicDataElement.cpp
+    encoding/BasicDataElementImplementation.cpp
+    encoding/BasicDataElementImplementation.h
+    encoding/DataElement.cpp
+    encoding/EncodingExceptions.cpp
+    encoding/HLAvariableArray.cpp
+    encoding/HLAvariableArrayImplementation.h
+    encoding/HLAvariableArrayImplementation.cpp
+    encoding/PrintInfo.h
    )
 
 set(RTI1516e_LIB_INCLUDE
@@ -96,6 +100,7 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/DataElement.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingExceptions.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingConfig.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAvariableArray.h
 )
 
 add_library(RTI1516e ${RTI1516e_LIB_SRCS} ${RTI1516e_LIB_INCLUDE})
