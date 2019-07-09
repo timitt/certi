@@ -12,6 +12,7 @@ using ::std::cout;
 using ::std::endl;
 using ::std::stringstream;
 using ::rti1516e::HLAASCIIchar;
+using ::rti1516e::HLAASCIIstring;
 using ::rti1516e::HLAboolean;
 using ::rti1516e::HLAbyte;
 using ::rti1516e::HLAfloat32BE;
@@ -27,6 +28,7 @@ using ::rti1516e::HLAinteger64BE;
 using ::rti1516e::HLAoctetPairLE;
 using ::rti1516e::HLAoctetPairBE;
 using ::rti1516e::HLAunicodeChar;
+using ::rti1516e::HLAunicodeString;
 using ::rti1516e::VariableLengthData;
 
 TEST(HLATypesTest, TestHLASCIIchar)
@@ -44,6 +46,26 @@ TEST(HLATypesTest, TestHLASCIIchar)
         HLAASCIIchar hlaAsciiCharTestDecode;
         hlaAsciiCharTestDecode.decode(variableLengthData);
         ASSERT_EQ(hlaAsciiCharTestEncode.get(), hlaAsciiCharTestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLASCIIstring)
+{
+    HLAASCIIstring hlaAsciiStringTestEncode;
+    hlaAsciiStringTestEncode = "abcdefg";
+    try {
+        VariableLengthData variableLengthData = hlaAsciiStringTestEncode.encode();
+        //Take into account padding and 4 Bytes for nbElements
+        size_t size = variableLengthData.size() - (hlaAsciiStringTestEncode.getEncodedLength()-1)*3 - 4;
+        ASSERT_EQ(hlaAsciiStringTestEncode.getEncodedLength(), size);
+
+        HLAASCIIstring hlaAsciiStringTestDecode;
+        hlaAsciiStringTestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaAsciiStringTestEncode.get(), hlaAsciiStringTestDecode.get());
     }
     catch(rti1516e::EncoderException& e)
     {
@@ -392,6 +414,26 @@ TEST(HLATypesTest, TestHLAunicodeChar)
         HLAunicodeChar hlaUnicodeTestDecode;
         hlaUnicodeTestDecode.decode(variableLengthData);
         ASSERT_EQ(hlaUnicodeTestEncode.get(), hlaUnicodeTestDecode.get());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+}
+
+TEST(HLATypesTest, TestHLAUnicodeString)
+{
+    std::wstring str(L"abcdefg");
+    HLAunicodeString hlaUnicodeStringTestEncode(str);
+    try {
+        VariableLengthData variableLengthData = hlaUnicodeStringTestEncode.encode();
+        //Take into account padding and 4 Bytes for nbElements
+        size_t size = variableLengthData.size() - ((hlaUnicodeStringTestEncode.getEncodedLength()/2)-1)*2 - 4;
+        ASSERT_EQ(hlaUnicodeStringTestEncode.getEncodedLength(), size);
+
+        HLAunicodeString hlaunicodeStringTestDecode;
+        hlaunicodeStringTestDecode.decode(variableLengthData);
+        ASSERT_EQ(hlaUnicodeStringTestEncode.get(), hlaunicodeStringTestDecode.get());
     }
     catch(rti1516e::EncoderException& e)
     {

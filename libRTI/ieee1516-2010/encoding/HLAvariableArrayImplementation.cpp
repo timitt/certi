@@ -63,13 +63,14 @@ void HLAvariableArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) co
         _vectorpDataElement[i]->encodeInto(a_buffer);
         if(i != _vectorpDataElement.size()-1)
         {
-            //Calcul padding after each element which depends on the encoded lenght of the element
-            size_t sizeElement = _vectorpDataElement[i]->getEncodedLength();
-            uint VElement = std::max(_vectorpDataElement[i]->getOctetBoundary(), 4u);
-            uint PElement = 0;
-            uint RElement = (sizeElement+PElement)%VElement;
-            PElement += RElement == 0 ? 0:(VElement-RElement);
-            RElement = (sizeElement+PElement)%VElement;
+//            //Calcul padding after each element which depends on the encoded lenght of the element
+//            size_t sizeElement = _vectorpDataElement[i]->getEncodedLength();
+//            uint VElement = std::max(_vectorpDataElement[i]->getOctetBoundary(), 4u);
+//            uint PElement = 0;
+//            uint RElement = (sizeElement+PElement)%VElement;
+//            PElement += RElement == 0 ? 0:(VElement-RElement);
+//            RElement = (sizeElement+PElement)%VElement;
+            uint PElement = this->calculPaddingAfterEachElements(*_vectorpDataElement[i]);
             for(uint j = 0; j < PElement; j++)
             {
                 const Octet octet(0);
@@ -84,25 +85,17 @@ size_t HLAvariableArrayImplementation::decodeFrom(const std::vector<Octet> &a_bu
     throw (EncoderException)
 {
     HLAinteger32BE nbElements;
-    std::cout << "a_index 1: " << a_index << std::endl;
     a_index = nbElements.decodeFrom(a_buffer, a_index);
-    std::cout << "a_index 2: " << a_index << std::endl;
-    Integer32 result = nbElements.get();
-    std::cout << "NbElements : " << result << std::endl;
     uint P = this->calculPaddingAfterNbElements();
-    std::cout << "P : " << P << std::endl;
     a_index += P;
-    std::cout << "a_index 3: " << a_index << std::endl;
     _vectorpDataElement.reserve(nbElements.get());
     for(int i=0; i<nbElements.get(); i++) {
         _vectorpDataElement.push_back(_pDataElementPrototype->clone().release());
     }
     for(auto it = _vectorpDataElement.begin(); it != _vectorpDataElement.end(); it++) {
         a_index = (*it)->decodeFrom(a_buffer, a_index);
-        std::cout << "a_index a: " << a_index << std::endl;
         if(it != _vectorpDataElement.end())
             a_index += this->calculPaddingAfterEachElements(**it);
-        std::cout << "a_index b: " << a_index << std::endl;
     }
     PrintInfo<>(Encode::decode, &a_buffer[0], a_buffer.size());
     return a_index;
@@ -193,11 +186,11 @@ uint HLAvariableArrayImplementation::calculPaddingAfterNbElements() const
     uint P = 0;
     uint V = std::max(_pDataElementPrototype->getOctetBoundary(), 4u);
     uint R = (4+P)%V;
-    std::cout << "R : " << R << std::endl;
+//    std::cout << "R : " << R << std::endl;
     P += R == 0 ? 0:(V-R);
-    std::cout << "P : " << P << std::endl;
+//    std::cout << "P : " << P << std::endl;
     R = (4+P)%V;
-    std::cout << "R : " << R << std::endl;
+//    std::cout << "R : " << R << std::endl;
 
     return P;
 }
@@ -209,8 +202,11 @@ uint HLAvariableArrayImplementation::calculPaddingAfterEachElements(const DataEl
     uint V = std::max(a_dataElement.getOctetBoundary(), 4u);
     uint P = 0;
     uint R = (sizeElement+P)%V;
+//    std::cout << "R : " << R << std::endl;
     P += R == 0 ? 0:(V-R);
+//    std::cout << "P : " << P << std::endl;
     R = (sizeElement+P)%V;
+//    std::cout << "R : " << R << std::endl;
 
     return P;
 }

@@ -82,22 +82,23 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
     {
         FAIL() << e.what();
     }
-////    float64BE_1.encode();
+
+
 //    HLA3Byte hla3Byte_1(16);
 //    HLA3Byte hla3Byte_2(32);
 //    HLA3Byte hla3Byte_3(64);
 //    HLA3Byte hla3Byte_4(128);
-////    hla3Byte_1.encode();
 //    HLAvariableArray hlaVariableArray1(hla3Byte_1);
 //    hlaVariableArray1.addElement(hla3Byte_1);
 //    HLAvariableArray hlaVariableArray2(hla3Byte_2);
 //    hlaVariableArray2.addElement(hla3Byte_2);
 //    hlaVariableArray2.addElement(hla3Byte_3);
 //    hlaVariableArray2.addElement(hla3Byte_4);
-//    hlaVariableArray2.encode();
-////    HLAvariableArray hlaVariableArray(hlaVariableArray1);
-////    hlaVariableArray.addElement(hlaVariableArray1);
-////    hlaVariableArray.addElement(hlaVariableArray2);
-////    hlaVariableArray.encode();
+//    VariableLengthData vld = hlaVariableArray2.encode();
+//    hlaVariableArray2.decode(vld);
+//    HLAvariableArray hlaVariableArray(hlaVariableArray1);
+//    hlaVariableArray.addElement(hlaVariableArray1);
+//    hlaVariableArray.addElement(hlaVariableArray2);
+//    hlaVariableArray.encode();
 
 }

@@ -1,11 +1,14 @@
 #include <RTI/VariableLengthData.h>
+#include <RTI/encoding/BasicDataElements.h>
 #include <RTI/encoding/EncodingConfig.h>
 #include <RTI/encoding/EncodingExceptions.h>
+#include <RTI/encoding/HLAvariableArray.h>
 #include <vector>
 #include <cstring>
 #include <iostream>
 
 #include "PrintInfo.h"
+#include "HLAvariableArrayImplementation.h"
 
 #ifdef HOST_IS_BIG_ENDIAN
 #define g_isBigEndian true
@@ -169,6 +172,48 @@ namespace rti1516e
     Integer64 hash() const
     {
         return Integer64(_data);
+    }
+    )
+
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAASCIIstring, std::string,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        HLAASCIIchar hlaCharacterPrototype('a');
+        HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
+        hlaVariableArray.decodeFrom(a_buffer, a_index);
+        for(int i=0; i<hlaVariableArray.size(); i++) {
+            HLAASCIIchar hlaCharacter(*static_cast<HLAASCIIchar*>(hlaVariableArray.get(i).clone().release()));
+            _data.append(1, hlaCharacter.get());
+        }
+        return a_index + _data.length();
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        HLAASCIIchar hlaCharacterPrototype('a');
+        HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
+        for(char character: _data) {
+            HLAASCIIchar hlaCharacter(character);
+            hlaVariableArray.addElement(hlaCharacter);
+        }
+        hlaVariableArray.encodeInto(a_buffer);
+    }
+
+    size_t getEncodedLength() const
+    {
+        return _data.length();
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return _data.length();
+    }
+
+    Integer64 hash() const
+    {
+        return 0;
     }
     )
 
@@ -765,76 +810,40 @@ namespace rti1516e
     }
     )
 
-    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLA3Byte, Integer32,
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAunicodeString, std::wstring,
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        union {
-            uint16_t intValue;
-            uint32_t int32Value;
-            char charValue[4];
-        } val;
-
-        for(uint i=0; i<3; i++)
-        {
-            val.charValue[i] = a_buffer[a_index + i];
+        HLAunicodeChar hlaCharacterPrototype(wchar_t(L'a'));
+        HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
+        hlaVariableArray.decodeFrom(a_buffer, a_index);
+        for(int i=0; i<hlaVariableArray.size(); i++) {
+            HLAunicodeChar hlaCharacter(*static_cast<HLAunicodeChar*>(hlaVariableArray.get(i).clone().release()));
+            _data.append(1, hlaCharacter.get());
         }
-        val.charValue[3] = 0;
-        PrintInfo<uint32_t> info32(Encode::decode_before_swap, val.int32Value, val.charValue, 3);
-        Swap<uint16_t>(val.intValue, Endian::little);
-        info32.reshow(Encode::decode_after_swap);
-
-        if(!g_isBigEndian)
-            val.int32Value = val.int32Value & 0x0000ffff;
-        else
-            val.int32Value = val.int32Value & 0xffff0000;
-
-        info32.reshow(Encode::decode_after_swap);
-        _data = val.int32Value;
-
-        return a_index + 2;
+        return a_index + _data.length();
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        union {
-            uint16_t intValue;
-            uint32_t int32Value;
-            char charValue[4];
-        } val;
-        val.int32Value = _data;
-        if(sizeof(wchar_t) == 4)
-        {
-            if(!g_isBigEndian)
-                val.int32Value = val.int32Value & 0x0000ffff;
-            else {
-                val.int32Value = val.int32Value & 0xffff0000;
-                val.int32Value = val.int32Value >> 16;
-            }
+        HLAunicodeChar hlaCharacterPrototype(wchar_t(L'a'));
+        HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
+        for(char character: _data) {
+            HLAunicodeChar hlaCharacter(character);
+            hlaVariableArray.addElement(hlaCharacter);
         }
-        else if(sizeof(wchar_t) != 2)
-        {
-            throw EncoderException(L"SimpleDataType have to be on 16 bits or on 32 bits");
-        }
-
-        PrintInfo<uint32_t> info32(Encode::encode_before_swap, val.int32Value, val.charValue, 3);
-        Swap<uint16_t>(val.intValue, Endian::little);
-        info32.reshow(Encode::encode_after_swap);
-        for(uint i=0; i < 3; i++)
-        {
-            a_buffer.push_back(val.charValue[i]);
-        }
+        hlaVariableArray.encodeInto(a_buffer);
     }
 
     size_t getEncodedLength() const
     {
-        return 3;
+        return (_data.length()*2);
     }
 
     unsigned int getOctetBoundary() const
     {
-        return 4;
+        return (_data.length()*2);
     }
 
     Integer64 hash() const
@@ -842,4 +851,82 @@ namespace rti1516e
         return 0;
     }
     )
+
+//    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLA3Byte, Integer32,
+//    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+//    throw (EncoderException)
+//    {
+//        union {
+//            uint16_t intValue;
+//            uint32_t int32Value;
+//            char charValue[4];
+//        } val;
+
+//        for(uint i=0; i<3; i++)
+//        {
+//            val.charValue[i] = a_buffer[a_index + i];
+//        }
+//        val.charValue[3] = 0;
+//        PrintInfo<uint32_t> info32(Encode::decode_before_swap, val.int32Value, val.charValue, 3);
+//        Swap<uint16_t>(val.intValue, Endian::little);
+//        info32.reshow(Encode::decode_after_swap);
+
+//        if(!g_isBigEndian)
+//            val.int32Value = val.int32Value & 0x0000ffff;
+//        else
+//            val.int32Value = val.int32Value & 0xffff0000;
+
+//        info32.reshow(Encode::decode_after_swap);
+//        _data = val.int32Value;
+
+//        return a_index + 2;
+//    }
+
+//    void encodeInto(std::vector<Octet>& a_buffer) const
+//    throw (EncoderException)
+//    {
+//        union {
+//            uint16_t intValue;
+//            uint32_t int32Value;
+//            char charValue[4];
+//        } val;
+//        val.int32Value = _data;
+//        if(sizeof(wchar_t) == 4)
+//        {
+//            if(!g_isBigEndian)
+//                val.int32Value = val.int32Value & 0x0000ffff;
+//            else {
+//                val.int32Value = val.int32Value & 0xffff0000;
+//                val.int32Value = val.int32Value >> 16;
+//            }
+//        }
+//        else if(sizeof(wchar_t) != 2)
+//        {
+//            throw EncoderException(L"SimpleDataType have to be on 16 bits or on 32 bits");
+//        }
+
+//        PrintInfo<uint32_t> info32(Encode::encode_before_swap, val.int32Value, val.charValue, 3);
+//        Swap<uint16_t>(val.intValue, Endian::little);
+//        info32.reshow(Encode::encode_after_swap);
+//        for(uint i=0; i < 3; i++)
+//        {
+//            a_buffer.push_back(val.charValue[i]);
+//        }
+//    }
+
+//    size_t getEncodedLength() const
+//    {
+//        return 3;
+//    }
+
+//    unsigned int getOctetBoundary() const
+//    {
+//        return 4;
+//    }
+
+//    Integer64 hash() const
+//    {
+//        return 0;
+//    }
+//    )
 }
