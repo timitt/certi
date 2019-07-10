@@ -21,6 +21,8 @@ class PrintInfo
 {
 public:
 
+    PrintInfo()=delete;
+
     PrintInfo(const Encode &a_encode, const char *a_octets, const uint &a_nbOctets)
         : _protoValue(0), _value(_protoValue), _octets(a_octets), _nbOctets(a_nbOctets), _noValue(true)
     {
@@ -32,6 +34,8 @@ public:
     {
         reshow(a_encode);
     }
+
+    virtual ~PrintInfo() {}
 
     void reshow(const Encode &a_encode) const
     {

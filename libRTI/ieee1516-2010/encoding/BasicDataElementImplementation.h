@@ -183,7 +183,7 @@ namespace rti1516e
         HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
         hlaVariableArray.decodeFrom(a_buffer, a_index);
         for(int i=0; i<hlaVariableArray.size(); i++) {
-            HLAASCIIchar hlaCharacter(*static_cast<HLAASCIIchar*>(hlaVariableArray.get(i).clone().release()));
+            HLAASCIIchar hlaCharacter(*static_cast<HLAASCIIchar*>(hlaVariableArray.get(i).clone().get()));
             _data.append(1, hlaCharacter.get());
         }
         return a_index + _data.length();
@@ -818,7 +818,7 @@ namespace rti1516e
         HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
         hlaVariableArray.decodeFrom(a_buffer, a_index);
         for(int i=0; i<hlaVariableArray.size(); i++) {
-            HLAunicodeChar hlaCharacter(*static_cast<HLAunicodeChar*>(hlaVariableArray.get(i).clone().release()));
+            HLAunicodeChar hlaCharacter(*static_cast<HLAunicodeChar*>(hlaVariableArray.get(i).clone().get()));
             _data.append(1, hlaCharacter.get());
         }
         return a_index + _data.length();

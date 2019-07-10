@@ -33,6 +33,8 @@ EncodableDataType::EncodableDataType(EncodableDataType const& rhs) :            
                                                                                                                     \
 EncodableDataType::~EncodableDataType()                                                                             \
 {                                                                                                                   \
+    delete _impl;                                                                                                   \
+    _impl = NULL;                                                                                                   \
 }                                                                                                                   \
                                                                                                                     \
 EncodableDataType& EncodableDataType::operator=(EncodableDataType const& rhs)                                       \
@@ -44,6 +46,7 @@ EncodableDataType& EncodableDataType::operator=(EncodableDataType const& rhs)   
 std::auto_ptr<DataElement> EncodableDataType::clone() const                                                         \
 {                                                                                                                   \
     return std::auto_ptr<DataElement>(new EncodableDataType(*this));                                                \
+                                                                                                                    \
 }                                                                                                                   \
                                                                                                                     \
 VariableLengthData EncodableDataType::encode() const                                                                \

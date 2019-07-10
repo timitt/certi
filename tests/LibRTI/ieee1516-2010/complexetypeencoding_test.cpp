@@ -35,7 +35,7 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
         HLAvariableArray hlaVariableArray(asciiChar_1);
         hlaVariableArray.addElement(asciiChar_1);
         hlaVariableArray.addElement(asciiChar_2);
-        HLAASCIIchar asciiCharReturn(*static_cast<HLAASCIIchar*>(hlaVariableArray.get(1).clone().release()));
+        HLAASCIIchar asciiCharReturn(*static_cast<HLAASCIIchar*>(hlaVariableArray.get(1).clone().get()));
 
         ASSERT_EQ(asciiChar_2.get(), asciiCharReturn.get());
     }
@@ -70,9 +70,9 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
 
         HLAvariableArray hlaVariableArrayDecode(float64BE_1_encode);
         hlaVariableArrayDecode.decode(vld);
-        HLAfloat64BE float64BE_1_decode(*static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(0).clone().release()));
+        HLAfloat64BE float64BE_1_decode(*static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(0).clone().get()));
         HLAfloat64BE float64BE_2_decode(0.0);
-        double val = static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(1).clone().release())->get();
+        double val = static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(1).clone().get())->get();
         float64BE_2_decode.set(val);
 
         ASSERT_EQ(float64BE_1_encode.get(), float64BE_1_decode.get());
@@ -88,8 +88,8 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
 //    HLA3Byte hla3Byte_2(32);
 //    HLA3Byte hla3Byte_3(64);
 //    HLA3Byte hla3Byte_4(128);
-//    HLAvariableArray hlaVariableArray1(hla3Byte_1);
-//    hlaVariableArray1.addElement(hla3Byte_1);
+////    HLAvariableArray hlaVariableArray1(hla3Byte_1);
+////    hlaVariableArray1.addElement(hla3Byte_1);
 //    HLAvariableArray hlaVariableArray2(hla3Byte_2);
 //    hlaVariableArray2.addElement(hla3Byte_2);
 //    hlaVariableArray2.addElement(hla3Byte_3);
