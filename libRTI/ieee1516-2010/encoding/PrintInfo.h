@@ -24,13 +24,13 @@ public:
     PrintInfo()=delete;
 
     PrintInfo(const Encode &a_encode, const char *a_octets, const uint &a_nbOctets)
-        : _protoValue(0), _value(_protoValue), _octets(a_octets), _nbOctets(a_nbOctets), _noValue(true)
+        : _value(NULL), _octets(a_octets), _nbOctets(a_nbOctets)
     {
         reshow(a_encode);
     }
 
     PrintInfo(const Encode &a_encode, const I &a_int, const char *a_octets, const uint &a_nbOctets)
-        : _protoValue(0), _value(a_int), _octets(a_octets), _nbOctets(a_nbOctets), _noValue(false)
+        : _value(&a_int), _octets(a_octets), _nbOctets(a_nbOctets)
     {
         reshow(a_encode);
     }
@@ -54,14 +54,14 @@ public:
             else if(a_encode == Encode::decode)
                 std::cout << "-------------------------------------------DECODE--------------------------------------------" << std::endl;
 
-            if(!_noValue)
+            if(_value)
             {
                 union {
                     I intVal;
                     float floatVal;
                     double doubleVal;
                 } val;
-                val.intVal = _value;
+                val.intVal = *_value;
                 std::cout << "value int : " << std::dec << val.intVal << std::endl;
                 if(_nbOctets == 4) {
                     std::cout << "value float : " << std::dec << val.floatVal << std::endl;
@@ -87,9 +87,7 @@ public:
     }
 
 private:
-    const I _protoValue;
-    const I &_value;
+    const I *_value;
     const char *_octets;
     const uint &_nbOctets;
-    bool _noValue;
 };

@@ -1,28 +1,26 @@
 #include <iostream>
 
-#include <ieee1516-2010/RTI/encoding/BasicDataElements.h>
-
 #include "HLAarrayImplementation.h"
 #include "PrintInfo.h"
 
 namespace rti1516e {
-
+//\brief Constructor of Base class ArrayImplementation
+//@param a_prototype A prototype of the DataElement
 HLAarrayImplementation::HLAarrayImplementation(const rti1516e::DataElement &a_prototype)
     : _pDataElementPrototype(a_prototype.clone())
 {
 
 }
 
+//\brief Copy Constructor of Base class ArrayImplementation
+//@param a_prototype A prototype of the DataElement
 HLAarrayImplementation::HLAarrayImplementation(const HLAarrayImplementation &a_rhs)
     : _pDataElementPrototype(a_rhs._pDataElementPrototype->clone())
 {
-    for(auto it = a_rhs._vectorpDataElement.begin(); it != a_rhs._vectorpDataElement.end(); it++)
-    {
-        if(*it != NULL)
-            _vectorpDataElement.push_back((*it)->clone().release());
-    }
+
 }
 
+//\brief Destructor of Base class ArrayImplementation
 HLAarrayImplementation::~HLAarrayImplementation()
 {
     for(auto it = _vectorpDataElement.begin(); it != _vectorpDataElement.end(); it++)
@@ -33,29 +31,16 @@ HLAarrayImplementation::~HLAarrayImplementation()
     _vectorpDataElement.clear();
 }
 
+//\brief Size of array
+//@return The size of array
 size_t HLAarrayImplementation::size() const
 {
     return _vectorpDataElement.size();
 }
 
-void HLAarrayImplementation::addElement(const DataElement &a_dataElement)
-  throw(EncoderException)
-{
-    if(!a_dataElement.isSameTypeAs(*_pDataElementPrototype))
-        throw EncoderException(L"Data type is not the same than prototype");
-    _vectorpDataElement.push_back(a_dataElement.clone().release());
-}
-
-void HLAarrayImplementation::addElementPointer(DataElement *a_dataElement)
-  throw (EncoderException)
-{
-    if(a_dataElement == NULL)
-        throw EncoderException(L"Data Element pointer is NULL");
-    if(!a_dataElement->isSameTypeAs(*_pDataElementPrototype))
-        throw EncoderException(L"Data type is not the same than prototype");
-    _vectorpDataElement.push_back(a_dataElement);
-}
-
+//\brief Get an element of the array
+//@param a_index Index of the element to get
+//@return A DataElement reference
 const DataElement &HLAarrayImplementation::get(size_t a_index) const
   throw(EncoderException)
 {
@@ -66,6 +51,9 @@ const DataElement &HLAarrayImplementation::get(size_t a_index) const
     return *_vectorpDataElement[a_index];
 }
 
+//\brief Set an element by this index
+//@param a_index Index of the element to get
+//@param a_dataElement the element to set
 void HLAarrayImplementation::set(size_t a_index, const DataElement &a_dataElement)
   throw (EncoderException)
 {
@@ -73,9 +61,14 @@ void HLAarrayImplementation::set(size_t a_index, const DataElement &a_dataElemen
         throw EncoderException(L"Index out of range");
     if(!a_dataElement.isSameTypeAs(*_pDataElementPrototype))
         throw EncoderException(L"DataElement is not the same type as prototype");
+    if(_vectorpDataElement[a_index])
+        delete _vectorpDataElement[a_index];
     _vectorpDataElement[a_index] = a_dataElement.clone().release();
 }
 
+//\brief Set an pointer to element by this index
+//@param a_index Index of the element to get
+//@param a_dataElement the pointer to the element to set. The user is responsible of the memory which is pointed.
 void HLAarrayImplementation::setElementPointer(size_t a_index, DataElement *a_dataElement)
 {
     if(a_dataElement == NULL)
@@ -87,6 +80,8 @@ void HLAarrayImplementation::setElementPointer(size_t a_index, DataElement *a_da
     _vectorpDataElement[a_index] = a_dataElement;
 }
 
+//\brief Get max octet Boundary of the array
+//@return the max octet boundary between each element of the array
 unsigned int HLAarrayImplementation::getOctetBoundary() const
 {
     uint maxBoundarySize = 0;
@@ -97,6 +92,8 @@ unsigned int HLAarrayImplementation::getOctetBoundary() const
     return maxBoundarySize;
 }
 
+//\brief Get encoded length of the array
+//@return the encoded length
 size_t HLAarrayImplementation::getEncodedLength() const
 {
     size_t totalEncodedLength = 0;
@@ -107,9 +104,42 @@ size_t HLAarrayImplementation::getEncodedLength() const
     return totalEncodedLength;
 }
 
+//\brief Test if is the same type as another array
+//@return True if it the same type
 bool HLAarrayImplementation::isSameTypeAs(const HLAarrayImplementation &a_rhs)
 {
     return _pDataElementPrototype->isSameTypeAs(*a_rhs._pDataElementPrototype);
+}
+
+//\brief Calcul padding after NbElements
+//@return the number of padding Bytes
+uint HLAarrayImplementation::calculPaddingAfterNbElements() const
+{
+    //Calcul padding after nbElements indication
+    uint P = 0;
+    uint V = std::max(_pDataElementPrototype->getOctetBoundary(), 4u);
+    uint R = (4+P)%V;
+//    R = (4+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
+    P = (R == 0) ? 0:(V-R);
+
+    return P;
+}
+
+//\brief Calcul padding after Each elements
+//@return the number of padding Bytes after each elements
+uint HLAarrayImplementation::calculPaddingAfterEachElements(const DataElement &a_dataElement) const
+{
+    //Calcul padding after each element which depends on the encoded lenght of the element
+    size_t sizeElement = a_dataElement.getEncodedLength();
+    uint V = std::max(a_dataElement.getOctetBoundary(), 4u);
+    uint P = 0;
+    uint R = (sizeElement+P)%V;
+    std::cout << "R mod: " << R << std::endl;
+//    R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
+    std::cout << "R mask: " << R << std::endl;
+    P = (R == 0) ? 0:(V-R);
+
+    return P;
 }
 
 }

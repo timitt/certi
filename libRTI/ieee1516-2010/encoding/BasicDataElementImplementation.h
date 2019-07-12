@@ -182,7 +182,7 @@ namespace rti1516e
         HLAASCIIchar hlaCharacterPrototype('a');
         HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
         hlaVariableArray.decodeFrom(a_buffer, a_index);
-        for(int i=0; i<hlaVariableArray.size(); i++) {
+        for(size_t i=0; i<hlaVariableArray.size(); i++) {
             HLAASCIIchar hlaCharacter(*static_cast<HLAASCIIchar*>(hlaVariableArray.get(i).clone().get()));
             _data.append(1, hlaCharacter.get());
         }
@@ -817,7 +817,7 @@ namespace rti1516e
         HLAunicodeChar hlaCharacterPrototype(wchar_t(L'a'));
         HLAvariableArray hlaVariableArray(hlaCharacterPrototype);
         hlaVariableArray.decodeFrom(a_buffer, a_index);
-        for(int i=0; i<hlaVariableArray.size(); i++) {
+        for(size_t i=0; i<hlaVariableArray.size(); i++) {
             HLAunicodeChar hlaCharacter(*static_cast<HLAunicodeChar*>(hlaVariableArray.get(i).clone().get()));
             _data.append(1, hlaCharacter.get());
         }

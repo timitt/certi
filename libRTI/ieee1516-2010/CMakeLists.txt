@@ -78,11 +78,11 @@ set(RTI1516e_LIB_SRCS
     encoding/HLAvariableArrayImplementation.h
     encoding/HLAvariableArrayImplementation.cpp
     encoding/PrintInfo.h
-#    encoding/HLAarrayImplementation.h
-#    encoding/HLAarrayImplementation.cpp
-#    encoding/HLAfixedArray.cpp
-#    encoding/HLAfixedArrayImplementation.h
-#    encoding/HLAfixedArrayImplementation.cpp
+    encoding/HLAarrayImplementation.h
+    encoding/HLAarrayImplementation.cpp
+    encoding/HLAfixedArray.cpp
+    encoding/HLAfixedArrayImplementation.h
+    encoding/HLAfixedArrayImplementation.cpp
    )
 
 set(RTI1516e_LIB_INCLUDE

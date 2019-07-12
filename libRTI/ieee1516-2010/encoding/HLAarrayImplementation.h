@@ -18,9 +18,6 @@ public:
 
     size_t size() const;
 
-    void addElement(const DataElement &a_dataElement) throw (EncoderException);
-    void addElementPointer(DataElement* a_dataElement) throw (EncoderException);
-
     const DataElement& get(size_t a_index) const throw(EncoderException);
     void set(size_t a_index, const DataElement& a_dataElement) throw (EncoderException);
     void setElementPointer(size_t a_index, DataElement *a_dataElement);
@@ -29,6 +26,10 @@ public:
     size_t getEncodedLength() const;
 
     bool isSameTypeAs(const HLAarrayImplementation& a_rhs);
+
+protected:
+    uint calculPaddingAfterNbElements() const;
+    uint calculPaddingAfterEachElements(const DataElement &a_dataElement) const;
 
 protected:
     std::unique_ptr<DataElement> _pDataElementPrototype;

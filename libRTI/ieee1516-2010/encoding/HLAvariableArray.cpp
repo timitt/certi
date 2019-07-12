@@ -10,9 +10,10 @@
 namespace rti1516e
 {
 
-HLAvariableArray::HLAvariableArray(const rti1516e::DataElement &prototype)
+HLAvariableArray::HLAvariableArray(const rti1516e::DataElement &prototype) :
+    _impl(new HLAvariableArrayImplementation(prototype))
 {
-    _impl = new HLAvariableArrayImplementation(prototype);
+
 }
 
 HLAvariableArray::HLAvariableArray(const HLAvariableArray &rhs) :
@@ -129,17 +130,7 @@ const DataElement &HLAvariableArray::get(size_t index) const
 const DataElement &HLAvariableArray::operator [](size_t index) const
   throw (EncoderException)
 {
-
-}
-
-HLAvariableArray::HLAvariableArray()
-{
-
-}
-
-HLAvariableArray &HLAvariableArray::operator=(const HLAvariableArray &rhs)
-{
-
+    return _impl->get(index);
 }
 
 }
