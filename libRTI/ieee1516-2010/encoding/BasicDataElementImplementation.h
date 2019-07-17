@@ -586,6 +586,40 @@ namespace rti1516e
     }
     )
 
+    DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAoctet, Octet,
+    size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
+    throw (EncoderException)
+    {
+        _data = a_buffer[a_index];
+        return a_index + 1;
+    }
+
+    void encodeInto(std::vector<Octet>& a_buffer) const
+    throw (EncoderException)
+    {
+        if(_data < -128 || _data > 127)
+        {
+            throw EncoderException(L"This is not a Standard ASCII character(see ANSI X3.4-1986).");
+        }
+        a_buffer.push_back(_data);
+    }
+
+    size_t getEncodedLength() const
+    {
+        return 1;
+    }
+
+    unsigned int getOctetBoundary() const
+    {
+        return 1;
+    }
+
+    Integer64 hash() const
+    {
+        return Integer64(_data);
+    }
+    )
+
     DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAoctetPairLE, OctetPair,
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)

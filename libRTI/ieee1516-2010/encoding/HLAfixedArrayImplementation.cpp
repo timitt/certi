@@ -16,7 +16,7 @@ HLAfixedArrayImplementation::HLAfixedArrayImplementation(const DataElement &a_pr
 }
 
 //\brief Copy Constructor of class ArrayFixedImplementation
-//@param a_prototype A prototype of the DataElement
+//@param a_rhs ArrayFixedImplementation onject to copy
 HLAfixedArrayImplementation::HLAfixedArrayImplementation(const HLAfixedArrayImplementation &a_rhs)
  : HLAarrayImplementation(a_rhs), _length(a_rhs._length)
 {

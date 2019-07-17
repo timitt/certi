@@ -1,19 +1,29 @@
 #include <gtest/gtest.h>
 #include <RTI/encoding/HLAvariableArray.h>
 #include <RTI/encoding/HLAfixedArray.h>
+#include <RTI/encoding/HLAfixedRecord.h>
+#include <RTI/encoding/HLAopaqueData.h>
 #include <RTI/encoding/BasicDataElements.h>
 #include <RTI/VariableLengthData.h>
+#include <RTI/encoding/EncodingConfig.h>
 
 using ::rti1516e::HLAvariableArray;
 using ::rti1516e::HLAfixedArray;
+using ::rti1516e::HLAfixedRecord;
+using ::rti1516e::HLAopaqueData;
 
 using ::rti1516e::DataElement;
 using ::rti1516e::HLAASCIIchar;
 using ::rti1516e::HLAbyte;
 using ::rti1516e::HLAfloat64BE;
 using ::rti1516e::HLAfloat64LE;
+using ::rti1516e::HLAoctet;
+using ::rti1516e::HLAinteger32BE;
+using ::rti1516e::HLAinteger32LE;
 //using ::rti1516e::HLA3Byte;
 using ::rti1516e::VariableLengthData;
+
+using ::rti1516e::Octet;
 
 TEST(HLAComplexeTypesTest, TestHLAvariableArray)
 {
@@ -37,7 +47,7 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
         HLAvariableArray hlaVariableArray(asciiChar_1);
         hlaVariableArray.addElement(asciiChar_1);
         hlaVariableArray.addElement(asciiChar_2);
-        HLAASCIIchar asciiCharReturn(*static_cast<HLAASCIIchar*>(hlaVariableArray.get(1).clone().get()));
+        HLAASCIIchar asciiCharReturn(static_cast<const HLAASCIIchar&>(hlaVariableArray.get(1)));
 
         ASSERT_EQ(asciiChar_2.get(), asciiCharReturn.get());
     }
@@ -72,9 +82,9 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
 
         HLAvariableArray hlaVariableArrayDecode(float64BE_1_encode);
         hlaVariableArrayDecode.decode(vld);
-        HLAfloat64BE float64BE_1_decode(*static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(0).clone().get()));
+        HLAfloat64BE float64BE_1_decode(static_cast<const HLAfloat64BE&>(hlaVariableArrayDecode.get(0)));
         HLAfloat64BE float64BE_2_decode(0.0);
-        double val = static_cast<HLAfloat64BE*>(hlaVariableArrayDecode.get(1).clone().get())->get();
+        double val = static_cast<const HLAfloat64BE&>(hlaVariableArrayDecode.get(1)).get();
         float64BE_2_decode.set(val);
 
         ASSERT_EQ(float64BE_1_encode.get(), float64BE_1_decode.get());
@@ -117,9 +127,9 @@ TEST(HLAComplexeTypesTest, TestHLAfixedArray)
 
         HLAfixedArray hlaFixedArrayDecode(float64BE_1_encode, 2);
         hlaFixedArrayDecode.decode(vld);
-        HLAfloat64BE float64BE_1_decode(*static_cast<HLAfloat64BE*>(hlaFixedArrayDecode.get(0).clone().get()));
+        HLAfloat64BE float64BE_1_decode(static_cast<const HLAfloat64BE&>(hlaFixedArrayDecode.get(0)));
         HLAfloat64BE float64BE_2_decode(0.0);
-        double val = static_cast<HLAfloat64BE*>(hlaFixedArrayDecode.get(1).clone().get())->get();
+        double val = static_cast<const HLAfloat64BE&>(hlaFixedArrayDecode.get(1)).get();
         float64BE_2_decode.set(val);
 
         ASSERT_EQ(float64BE_1_encode.get(), float64BE_1_decode.get());
@@ -197,5 +207,111 @@ TEST(HLAComplexeTypesTest, TestHLAfixedArray)
     {
         SUCCEED() << e.what();
     }
+
+}
+
+TEST(HLAComplexeTypesTest, TestHLAfixedRecord)
+{
+    try
+    {
+        HLAoctet octet_encode(1);
+        HLAinteger32BE integer_encode(2);
+        HLAfloat64BE decimal_encode(3);
+        HLAfixedRecord hlafixedRecord;
+        hlafixedRecord.appendElement(octet_encode);
+        hlafixedRecord.appendElement(integer_encode);
+        hlafixedRecord.appendElement(decimal_encode);
+        VariableLengthData vld = hlafixedRecord.encode();
+
+        hlafixedRecord.decode(vld);
+        const HLAoctet octet_decode = static_cast<const HLAoctet&>(hlafixedRecord.get(0));
+        const HLAinteger32BE integer_decode = static_cast<const HLAinteger32BE&>(hlafixedRecord.get(1));
+        const HLAfloat64BE decimal_decode = static_cast<const HLAfloat64BE&>(hlafixedRecord.get(2));
+
+        ASSERT_EQ(octet_encode, octet_decode);
+        ASSERT_EQ(integer_encode, integer_decode);
+        ASSERT_EQ(decimal_encode, decimal_decode);
+
+        HLAfixedRecord hlafixedRecord2(hlafixedRecord);
+        const HLAoctet octet_decode2 = static_cast<const HLAoctet&>(hlafixedRecord2.get(0));
+        const HLAinteger32BE integer_decode2 = static_cast<const HLAinteger32BE&>(hlafixedRecord2.get(1));
+        const HLAfloat64BE decimal_decode2 = static_cast<const HLAfloat64BE&>(hlafixedRecord2.get(2));
+
+        ASSERT_EQ(octet_decode, octet_decode2);
+        ASSERT_EQ(integer_decode, integer_decode2);
+        ASSERT_EQ(decimal_decode, decimal_decode2);
+
+
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        SUCCEED() << e.what();
+    }
+
+}
+
+TEST(HLAComplexeTypesTest, TestHLAopaqueData)
+{
+    const size_t dataSize = 4;
+    const size_t bufferSize = 4;
+
+    Octet *bufferOctetEncode = new Octet[dataSize];
+    bufferOctetEncode[0] = 1;
+    bufferOctetEncode[1] = 2;
+    bufferOctetEncode[2] = 3;
+    bufferOctetEncode[3] = 4;
+    HLAopaqueData hLAopaqueDataEncode(&bufferOctetEncode, bufferSize, dataSize);
+    VariableLengthData vld = hLAopaqueDataEncode.encode();
+
+    Octet *bufferOctetDecode = new Octet[dataSize];
+    bufferOctetDecode[0] = 0;
+    bufferOctetDecode[1] = 0;
+    bufferOctetDecode[2] = 0;
+    bufferOctetDecode[3] = 0;
+
+    HLAopaqueData hLAopaqueDataDecode(&bufferOctetDecode, bufferSize, dataSize);
+    hLAopaqueDataDecode.decode(vld);
+
+    ASSERT_EQ(hLAopaqueDataEncode.dataLength(), 4);
+    ASSERT_EQ(hLAopaqueDataDecode.dataLength(), 4);
+    ASSERT_EQ(hLAopaqueDataEncode.get()[0], hLAopaqueDataDecode.get()[0]);
+    ASSERT_EQ(hLAopaqueDataEncode.get()[1], hLAopaqueDataDecode.get()[1]);
+    ASSERT_EQ(hLAopaqueDataEncode.get()[2], hLAopaqueDataDecode.get()[2]);
+    ASSERT_EQ(hLAopaqueDataEncode.get()[3], hLAopaqueDataDecode.get()[3]);
+
+    if(bufferOctetEncode) {
+        delete []bufferOctetEncode;
+        bufferOctetEncode = NULL;
+    }
+
+    if(bufferOctetDecode) {
+        delete []bufferOctetDecode;
+        bufferOctetDecode = NULL;
+    }
+
+    std::vector<Octet> vectorOctetEncode;
+    vectorOctetEncode.push_back(1);
+    vectorOctetEncode.push_back(2);
+    vectorOctetEncode.push_back(3);
+    vectorOctetEncode.push_back(4);
+
+    HLAopaqueData hLAopaqueDataAutoMemoryEncode(&vectorOctetEncode[0], vectorOctetEncode.size());
+    VariableLengthData vldAutoMemory = hLAopaqueDataAutoMemoryEncode.encode();
+
+    std::vector<Octet> vectorOctetDecode;
+    vectorOctetDecode.push_back(0);
+    vectorOctetDecode.push_back(0);
+    vectorOctetDecode.push_back(0);
+    vectorOctetDecode.push_back(0);
+
+    HLAopaqueData hLAopaqueDataAutoMemoryDecode(&vectorOctetDecode[0], vectorOctetDecode.size());
+    hLAopaqueDataAutoMemoryDecode.decode(vldAutoMemory);
+
+    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.dataLength(), 4);
+    ASSERT_EQ(hLAopaqueDataAutoMemoryDecode.dataLength(), 4);
+    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[0], hLAopaqueDataAutoMemoryDecode.get()[0]);
+    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[1], hLAopaqueDataAutoMemoryDecode.get()[1]);
+    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[2], hLAopaqueDataAutoMemoryDecode.get()[2]);
+    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[3], hLAopaqueDataAutoMemoryDecode.get()[3]);
 
 }
