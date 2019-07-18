@@ -3,11 +3,14 @@
 
 namespace rti1516e {
 
+//\brief Default constructor of class HLAFixedRecordImplementation
 HLAfixedRecordImplementation::HLAfixedRecordImplementation()
 {
 
 }
 
+//\brief Copy constructor of class HLAFixedRecordImplementation
+//@param a_rhs The HlaFixedRecordImplementation object which have to be copied
 HLAfixedRecordImplementation::HLAfixedRecordImplementation(const HLAfixedRecordImplementation &a_rhs)
 {
     for(DataElement* pElem : a_rhs._vectorpDataElement) {
@@ -18,6 +21,7 @@ HLAfixedRecordImplementation::HLAfixedRecordImplementation(const HLAfixedRecordI
     }
 }
 
+//\brief Default constructor of class HLAFixedRecordImplementation
 HLAfixedRecordImplementation::~HLAfixedRecordImplementation()
 {
     for(DataElement* pElem : _vectorpDataElement) {
@@ -29,6 +33,8 @@ HLAfixedRecordImplementation::~HLAfixedRecordImplementation()
     _vectorpDataElement.clear();
 }
 
+//\brief Compare type of HLAFixedRecordImplementation with another object.
+//@param a_rhs The HlaFixedRecordImplementation object which have to be compared
 bool HLAfixedRecordImplementation::isSameTypeAs(const HLAfixedRecordImplementation &a_rhs) const
 {
     if(_vectorpDataElement.size() != a_rhs._vectorpDataElement.size())
@@ -40,6 +46,8 @@ bool HLAfixedRecordImplementation::isSameTypeAs(const HLAfixedRecordImplementati
     return true;
 }
 
+//\brief Compare type of HLAFixedRecordImplementation with type of DataElement
+//@param a_inData The DataElement object which have to be compared by type
 bool HLAfixedRecordImplementation::hasElementSameTypeAs(size_t a_index, const DataElement &a_inData) const
 {
     if(a_index >= _vectorpDataElement.size())
@@ -47,16 +55,21 @@ bool HLAfixedRecordImplementation::hasElementSameTypeAs(size_t a_index, const Da
     return a_inData.isSameTypeAs(*_vectorpDataElement[a_index]);
 }
 
+//\brief Return the size of the HLAFixedRecordImplementation object
 size_t HLAfixedRecordImplementation::size() const
 {
     return _vectorpDataElement.size();
 }
 
+//\brief Append a DataElement to HLAfixedRecordImplementation object
+//@param a_dataElement The DataElement object which have to be append to the array
 void HLAfixedRecordImplementation::appendElement(const DataElement &a_dataElement)
 {
     _vectorpDataElement.push_back(a_dataElement.clone().release());
 }
 
+//\brief Append a DataElement pointer to HLAfixedRecordImplementation object
+//@param a_dataElement The DataElement pointer which have to be append to the array
 void HLAfixedRecordImplementation::appendElementPointer(DataElement *a_pdataElement)
     throw (EncoderException)
 {
@@ -65,6 +78,9 @@ void HLAfixedRecordImplementation::appendElementPointer(DataElement *a_pdataElem
     _vectorpDataElement.push_back(a_pdataElement);
 }
 
+//\brief Set a DataElement in the HLAfixedRecordImplementation object
+//@param a_index Index of the DataElement object which have to be setted into the array
+//@param a_dataElement The DataElement reference which have to be setted into the array
 void HLAfixedRecordImplementation::set(size_t a_index, const DataElement &a_dataElement)
     throw (EncoderException)
 {
@@ -173,13 +189,9 @@ uint HLAfixedRecordImplementation::calculPaddingAfterEachElements(uint &a_offset
         size_t sizeElement = _vectorpDataElement[a_index]->getEncodedLength();
         uint V = _vectorpDataElement[a_index + 1]->getOctetBoundary();
         uint R = (a_offset+sizeElement+P)%V;
-        std::cout << "R: " << R << std::endl;
         //R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
         P = (R == 0) ? 0:(V-R);
-        std::cout << "P: " << P << std::endl;
-        std::cout << "offset: " << a_offset << std::endl;
         a_offset += (sizeElement + P);
-        std::cout << "offset: " << a_offset << std::endl;
     }
     else {
         P = 0;

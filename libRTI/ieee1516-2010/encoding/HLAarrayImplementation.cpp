@@ -134,9 +134,7 @@ uint HLAarrayImplementation::calculPaddingAfterEachElements(const DataElement &a
     uint V = std::max(a_dataElement.getOctetBoundary(), 4u);
     uint P = 0;
     uint R = (sizeElement+P)%V;
-    std::cout << "R mod: " << R << std::endl;
 //    R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
-    std::cout << "R mask: " << R << std::endl;
     P = (R == 0) ? 0:(V-R);
 
     return P;

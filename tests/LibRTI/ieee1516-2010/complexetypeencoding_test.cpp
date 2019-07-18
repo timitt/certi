@@ -215,31 +215,39 @@ TEST(HLAComplexeTypesTest, TestHLAfixedRecord)
     try
     {
         HLAoctet octet_encode(1);
-        HLAinteger32BE integer_encode(2);
+        HLAinteger32LE integer_encode(2);
         HLAfloat64BE decimal_encode(3);
-        HLAfixedRecord hlafixedRecord;
-        hlafixedRecord.appendElement(octet_encode);
-        hlafixedRecord.appendElement(integer_encode);
-        hlafixedRecord.appendElement(decimal_encode);
-        VariableLengthData vld = hlafixedRecord.encode();
+        HLAfixedRecord hlafixedRecordEncode;
+        hlafixedRecordEncode.appendElement(octet_encode);
+        hlafixedRecordEncode.appendElement(integer_encode);
+        hlafixedRecordEncode.appendElement(decimal_encode);
+        VariableLengthData vld = hlafixedRecordEncode.encode();
 
-        hlafixedRecord.decode(vld);
-        const HLAoctet octet_decode = static_cast<const HLAoctet&>(hlafixedRecord.get(0));
-        const HLAinteger32BE integer_decode = static_cast<const HLAinteger32BE&>(hlafixedRecord.get(1));
-        const HLAfloat64BE decimal_decode = static_cast<const HLAfloat64BE&>(hlafixedRecord.get(2));
+        Octet test(0x0);
+        HLAoctet octetTemp(test);
+        HLAinteger32LE integerTemp(0);
+        HLAfloat64BE decimalTemp(0.0);
+        HLAfixedRecord hlafixedRecordDecode;
+        hlafixedRecordDecode.appendElement(octetTemp);
+        hlafixedRecordDecode.appendElement(integerTemp);
+        hlafixedRecordDecode.appendElement(decimalTemp);
+        hlafixedRecordDecode.decode(vld);
+        const HLAoctet octet_decode = static_cast<const HLAoctet&>(hlafixedRecordDecode.get(0));
+        const HLAinteger32LE integer_decode = static_cast<const HLAinteger32LE&>(hlafixedRecordDecode.get(1));
+        const HLAfloat64BE decimal_decode = static_cast<const HLAfloat64BE&>(hlafixedRecordDecode.get(2));
 
         ASSERT_EQ(octet_encode, octet_decode);
         ASSERT_EQ(integer_encode, integer_decode);
         ASSERT_EQ(decimal_encode, decimal_decode);
 
-        HLAfixedRecord hlafixedRecord2(hlafixedRecord);
+        HLAfixedRecord hlafixedRecord2(hlafixedRecordEncode);
         const HLAoctet octet_decode2 = static_cast<const HLAoctet&>(hlafixedRecord2.get(0));
-        const HLAinteger32BE integer_decode2 = static_cast<const HLAinteger32BE&>(hlafixedRecord2.get(1));
+        const HLAinteger32LE integer_decode2 = static_cast<const HLAinteger32LE&>(hlafixedRecord2.get(1));
         const HLAfloat64BE decimal_decode2 = static_cast<const HLAfloat64BE&>(hlafixedRecord2.get(2));
 
-        ASSERT_EQ(octet_decode, octet_decode2);
-        ASSERT_EQ(integer_decode, integer_decode2);
-        ASSERT_EQ(decimal_decode, decimal_decode2);
+        ASSERT_EQ(octet_encode, octet_decode2);
+        ASSERT_EQ(integer_encode, integer_decode2);
+        ASSERT_EQ(decimal_encode, decimal_decode2);
 
 
     }

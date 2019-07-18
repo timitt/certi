@@ -1,3 +1,4 @@
+#include <cstring>
 #include <RTI/encoding/HLAfixedRecord.h>
 #include <RTI/VariableLengthData.h>
 #include "HLAfixedRecordImplementation.h"
@@ -55,13 +56,15 @@ throw (EncoderException)
 void HLAfixedRecord::decode(const VariableLengthData &inData)
 throw (EncoderException)
 {
-
+    std::vector<Octet> buffer(inData.size());
+    std::memcpy(&buffer[0], inData.data(), inData.size());
+    decodeFrom(buffer, 0);
 }
 
 size_t HLAfixedRecord::decodeFrom(const std::vector<Octet> &buffer, size_t index)
 throw (EncoderException)
 {
-
+    return _impl->decodeFrom(buffer, index);
 }
 
 size_t HLAfixedRecord::getEncodedLength() const

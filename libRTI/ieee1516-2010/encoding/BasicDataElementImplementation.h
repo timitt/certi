@@ -77,7 +77,7 @@ private:
     {                                                                                                               \
     public:                                                                                                         \
         EncodableDataType##Implementation();                                                                        \
-        EncodableDataType##Implementation(const SimpleDataType& value);                                             \
+        EncodableDataType##Implementation(const SimpleDataType& value);                                    \
         EncodableDataType##Implementation(const EncodableDataType##Implementation& rhs);                            \
         virtual ~EncodableDataType##Implementation();                                                               \
                                                                                                                     \
@@ -146,6 +146,7 @@ namespace rti1516e
     throw (EncoderException)
     {
         _data = a_buffer[a_index];
+//        PrintInfo<uint8_t>(Encode::decode, &a_buffer[0], 1);
         return a_index + 1;
     }
 
@@ -157,6 +158,7 @@ namespace rti1516e
             throw EncoderException(L"This is not a Standard ASCII character(see ANSI X3.4-1986).");
         }
         a_buffer.push_back(_data);
+//        PrintInfo<uint8_t>(Encode::encode, &a_buffer[0], 1);
     }
 
     size_t getEncodedLength() const
@@ -222,6 +224,7 @@ namespace rti1516e
     throw (EncoderException)
     {
         _data = bool(a_buffer[a_index]);
+//        PrintInfo<uint8_t>(Encode::decode, &a_buffer[0], 1);
         return a_index + 1;
     }
 
@@ -229,6 +232,7 @@ namespace rti1516e
     throw (EncoderException)
     {
         a_buffer.push_back(_data);
+//        PrintInfo<uint8_t>(Encode::encode, &a_buffer[0], 1);
     }
 
     size_t getEncodedLength() const
@@ -252,6 +256,7 @@ namespace rti1516e
     throw (EncoderException)
     {
         _data = a_buffer[a_index];
+//        PrintInfo<uint8_t>(Encode::decode, &a_buffer[0], 1);
         return a_index + 1;
     }
 
@@ -263,6 +268,7 @@ namespace rti1516e
             throw EncoderException(L"This is not a Standard ASCII character(see ANSI X3.4-1986).");
         }
         a_buffer.push_back(_data);
+//        PrintInfo<uint8_t>(Encode::encode, &a_buffer[0], 1);
     }
 
     size_t getEncodedLength() const
