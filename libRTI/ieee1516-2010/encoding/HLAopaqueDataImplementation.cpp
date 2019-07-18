@@ -138,11 +138,11 @@ const Octet *HLAopaqueDataImplementation::get() const
 void HLAopaqueDataImplementation::encodeInto(std::vector<Octet> &a_buffer) const
     throw (EncoderException)
 {
-    HLAoctet hLAoctet;
+    HLAbyte hLAoctet;
     HLAvariableArray hLAvariableArray(hLAoctet);
 
     for(size_t i=0; i<_dataSize; i++) {
-        HLAoctet hlaOctetItem(_tabOctet[i]);
+        HLAbyte hlaOctetItem(_tabOctet[i]);
         hLAvariableArray.addElement(hlaOctetItem);
     }
 
@@ -156,7 +156,7 @@ void HLAopaqueDataImplementation::encodeInto(std::vector<Octet> &a_buffer) const
 size_t HLAopaqueDataImplementation::decodeFrom(const std::vector<Octet> &a_buffer, size_t a_index)
     throw (EncoderException)
 {
-    HLAoctet hLAoctet;
+    HLAbyte hLAoctet;
     HLAvariableArray hLAvariableArray(hLAoctet);
 
     hLAvariableArray.decodeFrom(a_buffer, a_index);
