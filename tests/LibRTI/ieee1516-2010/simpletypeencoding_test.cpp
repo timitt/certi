@@ -5,6 +5,7 @@
 #include <RTI/encoding/BasicDataElements.h>
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/VariableLengthData.h>
+#include <RTI/encoding/HLAenumerate.h>
 
 #include <bitset>
 
@@ -14,6 +15,7 @@ using ::std::stringstream;
 using ::rti1516e::HLAASCIIchar;
 using ::rti1516e::HLAASCIIstring;
 using ::rti1516e::HLAboolean;
+using ::rti1516e::HLAbooleanEnumerate;
 using ::rti1516e::HLAbyte;
 using ::rti1516e::HLAfloat32BE;
 using ::rti1516e::HLAfloat32LE;
@@ -76,7 +78,7 @@ TEST(HLATypesTest, TestHLASCIIstring)
 TEST(HLATypesTest, TestHLAboolean)
 {
     HLAboolean hlaBooleanTestEncode;
-    hlaBooleanTestEncode = false;
+    hlaBooleanTestEncode = HLAbooleanEnumerate::HLAtrue;
 
     try
     {

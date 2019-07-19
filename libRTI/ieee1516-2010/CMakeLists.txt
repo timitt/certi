@@ -119,6 +119,8 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAfixedRecord.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAopaqueData.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64Time.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAvariantRecord.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAenumerate.h
 )
 
 add_library(RTI1516e ${RTI1516e_LIB_SRCS} ${RTI1516e_LIB_INCLUDE})

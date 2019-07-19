@@ -87,7 +87,7 @@ private:
         void set(const SimpleDataType& inData);                                                                     \
                                                                                                                     \
         const SimpleDataType& get() const;                                                                          \
-                                                                                                                    \
+                                                                                                              \
         encoder                                                                                                     \
                                                                                                                     \
     private:                                                                                                        \
@@ -220,10 +220,14 @@ namespace rti1516e
     )
 
     DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAboolean, bool,
+
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        _data = bool(a_buffer[a_index]);
+        HLAinteger32BE value;
+        value.decodeFrom(a_buffer, a_index);
+        _data = bool(value);
+//        _data = bool(a_buffer[a_index]);
 //        PrintInfo<uint8_t>(Encode::decode, &a_buffer[0], 1);
         return a_index + 1;
     }
@@ -231,18 +235,20 @@ namespace rti1516e
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        a_buffer.push_back(_data);
+        HLAinteger32BE value(_data);
+        value.encodeInto(a_buffer);
+//        a_buffer.push_back(_data);
 //        PrintInfo<uint8_t>(Encode::encode, &a_buffer[0], 1);
     }
 
     size_t getEncodedLength() const
     {
-        return 1;
+        return 4;
     }
 
     unsigned int getOctetBoundary() const
     {
-        return 1;
+        return 4;
     }
 
     Integer64 hash() const
