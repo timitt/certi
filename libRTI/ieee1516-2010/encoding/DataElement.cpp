@@ -14,7 +14,7 @@ bool DataElement::isSameTypeAs(DataElement const& inData) const
 
 Integer64 DataElement::hash() const
 {
-    return -1;
+    return Integer64(-1);
 }
 
 }

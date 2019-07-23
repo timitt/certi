@@ -215,7 +215,7 @@ namespace rti1516e
 
     Integer64 hash() const
     {
-        return 0;
+        return Integer64(0);
     }
     )
 
@@ -227,7 +227,6 @@ namespace rti1516e
         HLAinteger32BE value;
         value.decodeFrom(a_buffer, a_index);
         _data = bool(value);
-//        _data = bool(a_buffer[a_index]);
 //        PrintInfo<uint8_t>(Encode::decode, &a_buffer[0], 1);
         return a_index + 1;
     }
@@ -237,7 +236,6 @@ namespace rti1516e
     {
         HLAinteger32BE value(_data);
         value.encodeInto(a_buffer);
-//        a_buffer.push_back(_data);
 //        PrintInfo<uint8_t>(Encode::encode, &a_buffer[0], 1);
     }
 
@@ -628,6 +626,12 @@ namespace rti1516e
 
     Integer64 hash() const
     {
+//        union {
+//            Integer64 intValue;
+//            char charValue;
+//        } val;
+//        val.charValue = _data;
+//        return val.intValue;
         return Integer64(_data);
     }
     )
@@ -894,7 +898,7 @@ namespace rti1516e
 
     Integer64 hash() const
     {
-        return 0;
+        return Integer64(0);
     }
     )
 

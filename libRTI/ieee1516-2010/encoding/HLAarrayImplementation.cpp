@@ -25,8 +25,10 @@ HLAarrayImplementation::~HLAarrayImplementation()
 {
     for(auto it = _vectorpDataElement.begin(); it != _vectorpDataElement.end(); it++)
     {
-        delete (*it);
-        *it = NULL;
+        if(*it != NULL) {
+            delete (*it);
+            *it = NULL;
+        }
     }
     _vectorpDataElement.clear();
 }

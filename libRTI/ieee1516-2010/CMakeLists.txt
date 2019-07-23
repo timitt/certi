@@ -89,6 +89,9 @@ set(RTI1516e_LIB_SRCS
     encoding/HLAopaqueData.cpp
     encoding/HLAopaqueDataImplementation.h
     encoding/HLAopaqueDataImplementation.cpp
+    encoding/HLAvariantRecord.cpp
+    encoding/HLAvariantRecordImplementation.h
+    encoding/HLAvariantRecordImplementation.cpp
     time/HLAfloat64Time.cpp
     time/HLAfloat64TimeImpl.h
     time/HLAfloat64TimeImpl.cpp
@@ -111,6 +114,7 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/Typedefs.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/VariableLengthData.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/BasicDataElements.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAenumerate.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/DataElement.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingExceptions.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingConfig.h
@@ -120,7 +124,6 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAopaqueData.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64Time.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAvariantRecord.h
-    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAenumerate.h
 )
 
 add_library(RTI1516e ${RTI1516e_LIB_SRCS} ${RTI1516e_LIB_INCLUDE})

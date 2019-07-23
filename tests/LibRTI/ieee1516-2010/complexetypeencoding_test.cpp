@@ -2,6 +2,7 @@
 #include <RTI/encoding/HLAvariableArray.h>
 #include <RTI/encoding/HLAfixedArray.h>
 #include <RTI/encoding/HLAfixedRecord.h>
+#include <RTI/encoding/HLAvariantRecord.h>
 #include <RTI/encoding/HLAopaqueData.h>
 #include <RTI/encoding/BasicDataElements.h>
 #include <RTI/VariableLengthData.h>
@@ -11,6 +12,7 @@ using ::rti1516e::HLAvariableArray;
 using ::rti1516e::HLAfixedArray;
 using ::rti1516e::HLAfixedRecord;
 using ::rti1516e::HLAopaqueData;
+using ::rti1516e::HLAvariantRecord;
 
 using ::rti1516e::DataElement;
 using ::rti1516e::HLAASCIIchar;
@@ -260,66 +262,130 @@ TEST(HLAComplexeTypesTest, TestHLAfixedRecord)
 
 TEST(HLAComplexeTypesTest, TestHLAopaqueData)
 {
-    const size_t dataSize = 4;
-    const size_t bufferSize = 4;
+    try
+    {
+        const size_t dataSize = 4;
+        const size_t bufferSize = 4;
 
-    Octet *bufferOctetEncode = new Octet[dataSize];
-    bufferOctetEncode[0] = 1;
-    bufferOctetEncode[1] = 2;
-    bufferOctetEncode[2] = 3;
-    bufferOctetEncode[3] = 4;
-    HLAopaqueData hLAopaqueDataEncode(&bufferOctetEncode, bufferSize, dataSize);
-    VariableLengthData vld = hLAopaqueDataEncode.encode();
+        Octet *bufferOctetEncode = new Octet[dataSize];
+        bufferOctetEncode[0] = 1;
+        bufferOctetEncode[1] = 2;
+        bufferOctetEncode[2] = 3;
+        bufferOctetEncode[3] = 4;
+        HLAopaqueData hLAopaqueDataEncode(&bufferOctetEncode, bufferSize, dataSize);
+        VariableLengthData vld = hLAopaqueDataEncode.encode();
 
-    Octet *bufferOctetDecode = new Octet[dataSize];
-    bufferOctetDecode[0] = 0;
-    bufferOctetDecode[1] = 0;
-    bufferOctetDecode[2] = 0;
-    bufferOctetDecode[3] = 0;
+        Octet *bufferOctetDecode = new Octet[dataSize];
+        bufferOctetDecode[0] = 0;
+        bufferOctetDecode[1] = 0;
+        bufferOctetDecode[2] = 0;
+        bufferOctetDecode[3] = 0;
 
-    HLAopaqueData hLAopaqueDataDecode(&bufferOctetDecode, bufferSize, dataSize);
-    hLAopaqueDataDecode.decode(vld);
+        HLAopaqueData hLAopaqueDataDecode(&bufferOctetDecode, bufferSize, dataSize);
+        hLAopaqueDataDecode.decode(vld);
 
-    ASSERT_EQ(hLAopaqueDataEncode.dataLength(), 4);
-    ASSERT_EQ(hLAopaqueDataDecode.dataLength(), 4);
-    ASSERT_EQ(hLAopaqueDataEncode.get()[0], hLAopaqueDataDecode.get()[0]);
-    ASSERT_EQ(hLAopaqueDataEncode.get()[1], hLAopaqueDataDecode.get()[1]);
-    ASSERT_EQ(hLAopaqueDataEncode.get()[2], hLAopaqueDataDecode.get()[2]);
-    ASSERT_EQ(hLAopaqueDataEncode.get()[3], hLAopaqueDataDecode.get()[3]);
+        ASSERT_EQ(hLAopaqueDataEncode.dataLength(), 4);
+        ASSERT_EQ(hLAopaqueDataDecode.dataLength(), 4);
+        ASSERT_EQ(hLAopaqueDataEncode.get()[0], hLAopaqueDataDecode.get()[0]);
+        ASSERT_EQ(hLAopaqueDataEncode.get()[1], hLAopaqueDataDecode.get()[1]);
+        ASSERT_EQ(hLAopaqueDataEncode.get()[2], hLAopaqueDataDecode.get()[2]);
+        ASSERT_EQ(hLAopaqueDataEncode.get()[3], hLAopaqueDataDecode.get()[3]);
 
-    if(bufferOctetEncode) {
-        delete []bufferOctetEncode;
-        bufferOctetEncode = NULL;
+        if(bufferOctetEncode) {
+            delete []bufferOctetEncode;
+            bufferOctetEncode = NULL;
+        }
+
+        if(bufferOctetDecode) {
+            delete []bufferOctetDecode;
+            bufferOctetDecode = NULL;
+        }
+
+        std::vector<Octet> vectorOctetEncode;
+        vectorOctetEncode.push_back(1);
+        vectorOctetEncode.push_back(2);
+        vectorOctetEncode.push_back(3);
+        vectorOctetEncode.push_back(4);
+
+        HLAopaqueData hLAopaqueDataAutoMemoryEncode(&vectorOctetEncode[0], vectorOctetEncode.size());
+        VariableLengthData vldAutoMemory = hLAopaqueDataAutoMemoryEncode.encode();
+
+        std::vector<Octet> vectorOctetDecode;
+        vectorOctetDecode.push_back(0);
+        vectorOctetDecode.push_back(0);
+        vectorOctetDecode.push_back(0);
+        vectorOctetDecode.push_back(0);
+
+        HLAopaqueData hLAopaqueDataAutoMemoryDecode(&vectorOctetDecode[0], vectorOctetDecode.size());
+        hLAopaqueDataAutoMemoryDecode.decode(vldAutoMemory);
+
+        ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.dataLength(), 4);
+        ASSERT_EQ(hLAopaqueDataAutoMemoryDecode.dataLength(), 4);
+        ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[0], hLAopaqueDataAutoMemoryDecode.get()[0]);
+        ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[1], hLAopaqueDataAutoMemoryDecode.get()[1]);
+        ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[2], hLAopaqueDataAutoMemoryDecode.get()[2]);
+        ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[3], hLAopaqueDataAutoMemoryDecode.get()[3]);
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        SUCCEED() << e.what();
     }
 
-    if(bufferOctetDecode) {
-        delete []bufferOctetDecode;
-        bufferOctetDecode = NULL;
+}
+
+TEST(HLAComplexeTypesTest, HLAvariantRecord)
+{
+    try
+    {
+        HLAoctet discriminentEncoder_1(1);
+        HLAoctet discriminentEncoder_2(2);
+
+        HLAinteger32BE valueEncoder_1(10);
+        HLAoctet valueEncoder_2(20);
+        HLAoctet valueEncoder_3(30);
+
+        HLAfixedRecord fixeRecordEncoder;
+        fixeRecordEncoder.appendElement(valueEncoder_2);
+        fixeRecordEncoder.appendElement(valueEncoder_3);
+
+        HLAvariantRecord variantEncoder(discriminentEncoder_1);
+        variantEncoder.addVariant(discriminentEncoder_1, valueEncoder_1);
+        variantEncoder.addVariant(discriminentEncoder_2, fixeRecordEncoder);
+        VariableLengthData vldEncodeOctets = variantEncoder.encode();
+        variantEncoder.setDiscriminant(discriminentEncoder_1);
+        VariableLengthData vldEncodeInteger = variantEncoder.encode();
+
+        HLAoctet discriminentDecoder_1(1);
+        HLAoctet discriminentDecoder_2(2);
+
+        HLAinteger32BE valueDecoder_1(-1);
+        HLAoctet valueDecoder_2(-1);
+        HLAoctet valueDecoder_3(-1);
+
+        HLAfixedRecord fixeRecordDecoder;
+        fixeRecordDecoder.appendElement(valueDecoder_2);
+        fixeRecordDecoder.appendElement(valueDecoder_3);
+
+        HLAvariantRecord variantDecoder(discriminentDecoder_1);
+        variantDecoder.addVariant(discriminentDecoder_1, valueDecoder_1);
+        variantDecoder.addVariant(discriminentDecoder_2, fixeRecordDecoder);
+        variantDecoder.decode(vldEncodeOctets);
+
+        HLAfixedRecord fixeRecordDecoderCast(static_cast<const HLAfixedRecord&>(variantDecoder.getVariant()));
+        valueDecoder_2 = static_cast<const HLAoctet&>(fixeRecordDecoderCast.get(0));
+        valueDecoder_3 = static_cast<const HLAoctet&>(fixeRecordDecoderCast.get(1));
+
+        variantDecoder.setDiscriminant(discriminentDecoder_1);
+        variantDecoder.decode(vldEncodeInteger);
+
+        valueDecoder_1 = static_cast<const HLAinteger32BE&>(variantDecoder.getVariant());
+
+        ASSERT_EQ(valueEncoder_1.get(), valueDecoder_1.get());
+        ASSERT_EQ(valueEncoder_2.get(), valueDecoder_2.get());
+        ASSERT_EQ(valueEncoder_3.get(), valueDecoder_3.get());
     }
-
-    std::vector<Octet> vectorOctetEncode;
-    vectorOctetEncode.push_back(1);
-    vectorOctetEncode.push_back(2);
-    vectorOctetEncode.push_back(3);
-    vectorOctetEncode.push_back(4);
-
-    HLAopaqueData hLAopaqueDataAutoMemoryEncode(&vectorOctetEncode[0], vectorOctetEncode.size());
-    VariableLengthData vldAutoMemory = hLAopaqueDataAutoMemoryEncode.encode();
-
-    std::vector<Octet> vectorOctetDecode;
-    vectorOctetDecode.push_back(0);
-    vectorOctetDecode.push_back(0);
-    vectorOctetDecode.push_back(0);
-    vectorOctetDecode.push_back(0);
-
-    HLAopaqueData hLAopaqueDataAutoMemoryDecode(&vectorOctetDecode[0], vectorOctetDecode.size());
-    hLAopaqueDataAutoMemoryDecode.decode(vldAutoMemory);
-
-    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.dataLength(), 4);
-    ASSERT_EQ(hLAopaqueDataAutoMemoryDecode.dataLength(), 4);
-    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[0], hLAopaqueDataAutoMemoryDecode.get()[0]);
-    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[1], hLAopaqueDataAutoMemoryDecode.get()[1]);
-    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[2], hLAopaqueDataAutoMemoryDecode.get()[2]);
-    ASSERT_EQ(hLAopaqueDataAutoMemoryEncode.get()[3], hLAopaqueDataAutoMemoryDecode.get()[3]);
-
+    catch(rti1516e::EncoderException& e)
+    {
+        SUCCEED() << e.what();
+    }
 }

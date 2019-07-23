@@ -93,6 +93,9 @@ void HLAfixedRecordImplementation::set(size_t a_index, const DataElement &a_data
     _vectorpDataElement[a_index] = a_dataElement.clone().release();
 }
 
+//\brief Set a pointer to DataElement in the HLAfixedRecordImplementation object
+//@param a_index Index of the DataElement object which have to be setted into the array
+//@param a_dataElement The DataElement reference which have to be setted into the array
 void HLAfixedRecordImplementation::setElementPointer(size_t a_index, DataElement *a_pDataElement)
     throw (EncoderException)
 {
@@ -107,6 +110,9 @@ void HLAfixedRecordImplementation::setElementPointer(size_t a_index, DataElement
     _vectorpDataElement[a_index] = a_pDataElement;
 }
 
+//\brief Get a DataElement in the HLAfixedRecordImplementation object
+//@param a_index Index of the DataElement object which have to be setted into the array
+//@return The DataElement reference which at the index a_index
 const DataElement &HLAfixedRecordImplementation::get(size_t a_index) const
     throw (EncoderException)
 {
@@ -115,6 +121,8 @@ const DataElement &HLAfixedRecordImplementation::get(size_t a_index) const
     return *_vectorpDataElement[a_index];
 }
 
+//\brief Get the encoded length in the HLAfixedRecordImplementation object
+//@return The size encoded
 size_t HLAfixedRecordImplementation::getEncodedLength() const
     throw (EncoderException)
 {
@@ -127,6 +135,8 @@ size_t HLAfixedRecordImplementation::getEncodedLength() const
     return lenght;
 }
 
+//\brief Get the octet boundary in the HLAfixedRecordImplementation object
+//@return The octet boundary
 unsigned int HLAfixedRecordImplementation::getOctetBoundary() const
 {
     uint maxBoundarySize = 0;
@@ -137,6 +147,8 @@ unsigned int HLAfixedRecordImplementation::getOctetBoundary() const
     return maxBoundarySize;
 }
 
+//\brief Encode elements into a Byte buffer
+//@param a_buffer The buffer wich will contain the result of encoding process
 void HLAfixedRecordImplementation::encodeInto(std::vector<Octet> &a_buffer) const
     throw (EncoderException)
 {
@@ -162,6 +174,10 @@ void HLAfixedRecordImplementation::encodeInto(std::vector<Octet> &a_buffer) cons
     PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
 }
 
+//\brief decode elements from a Byte buffer
+//@param a_buffer The buffer wich will contain the buffer to decode
+//@param a_index The start index to decode
+//@return The number of Byte in buffer decoded
 size_t HLAfixedRecordImplementation::decodeFrom(const std::vector<Octet> &a_buffer, size_t a_index)
     throw (EncoderException)
 {

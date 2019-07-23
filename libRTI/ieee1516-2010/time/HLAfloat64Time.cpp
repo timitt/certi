@@ -6,7 +6,7 @@ namespace rti1516e
 
 HLAfloat64Time::HLAfloat64Time()
 {
-    _impl = new HLAfloat64TimeImpl();
+
 }
 
 HLAfloat64Time::HLAfloat64Time(const double &value)
