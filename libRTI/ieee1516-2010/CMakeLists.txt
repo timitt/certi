@@ -92,9 +92,6 @@ set(RTI1516e_LIB_SRCS
     encoding/HLAvariantRecord.cpp
     encoding/HLAvariantRecordImplementation.h
     encoding/HLAvariantRecordImplementation.cpp
-    time/HLAfloat64Time.cpp
-    time/HLAfloat64TimeImpl.h
-    time/HLAfloat64TimeImpl.cpp
    )
 
 set(RTI1516e_LIB_INCLUDE
@@ -122,7 +119,6 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAfixedArray.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAfixedRecord.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAopaqueData.h
-    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64Time.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAvariantRecord.h
 )
 
