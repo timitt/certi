@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/time/HLAfloat64Time.h>
+#include <RTI/time/HLAfloat64Interval.h>
 
 using ::rti1516e::HLAfloat64Time;
+using ::rti1516e::HLAfloat64Interval;
 
 TEST(HLATimeTypesTest, TestHLAfloat64Time)
 {
@@ -27,7 +29,7 @@ TEST(HLATimeTypesTest, TestHLAfloat64Time)
 #endif
         HLAfloat64Time hLAfloat64TimeTestDecode;
         hLAfloat64TimeTestDecode.decode(variableLengthData);
-        ASSERT_EQ(hLAfloat64TimeTestDecode.getTime(), hLAfloat64TimeTestEncode.getTime());
+        ASSERT_FLOAT_EQ(hLAfloat64TimeTestDecode.getTime(), hLAfloat64TimeTestEncode.getTime());
     }
     catch(rti1516e::EncoderException& e)
     {
@@ -49,7 +51,7 @@ TEST(HLATimeTypesTest, TestHLAfloat64Time)
 #endif
         HLAfloat64Time hLAfloat64TimeTestDecode1;
         hLAfloat64TimeTestDecode1.decode(ptr, size);
-        ASSERT_EQ(hLAfloat64TimeTestDecode1.getTime(), hLAfloat64TimeTestDecode1.getTime());
+        ASSERT_FLOAT_EQ(hLAfloat64TimeTestDecode1.getTime(), hLAfloat64TimeTestDecode1.getTime());
     }
     catch(rti1516e::EncoderException& e)
     {
@@ -62,6 +64,88 @@ TEST(HLATimeTypesTest, TestHLAfloat64Time)
     void *ptr3 = tab3;
     ASSERT_THROW(hLAfloat64TimeTestEncode2.encode(ptr3, 4), rti1516e::CouldNotEncode);
 
+    HLAfloat64Interval hlaFloat64Interval(15.478);
+    HLAfloat64Time hLAfloat64TimeTestADD(10);
+
+    hLAfloat64TimeTestADD += hlaFloat64Interval;
+    ASSERT_FLOAT_EQ(hLAfloat64TimeTestADD.getTime(), 25.478);
+
+    hLAfloat64TimeTestADD -= hlaFloat64Interval;
+    ASSERT_FLOAT_EQ(hLAfloat64TimeTestADD.getTime(), 10);
 
 }
 
+TEST(HLATimeTypesTest, TestHLAfloat64Interval)
+{
+    HLAfloat64Interval *hlaFloat64Interval = new HLAfloat64Interval();
+
+    std::cout << std::endl;
+
+    delete hlaFloat64Interval;
+
+    HLAfloat64Interval hlaFloat64IntervalTestEncode;
+    hlaFloat64IntervalTestEncode = 458.4;
+
+    try
+    {
+        rti1516e::VariableLengthData variableLengthData = hlaFloat64IntervalTestEncode.encode();
+        size_t size = variableLengthData.size();
+        ASSERT_EQ(hlaFloat64IntervalTestEncode.encodedLength(), size);
+
+#ifdef HOST_IS_BIG_ENDIAN
+        const double data = *static_cast<const double*>(variableLengthData.data());
+        ASSERT_EQ(hlaFloat32BETestEncode.get(), data);
+#endif
+        HLAfloat64Interval hlaFloat64IntervalTestDecode;
+        hlaFloat64IntervalTestDecode.decode(variableLengthData);
+        ASSERT_FLOAT_EQ(hlaFloat64IntervalTestDecode.getInterval(), hlaFloat64IntervalTestDecode.getInterval());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+
+    HLAfloat64Interval hlaFloat64IntervalTestEncode1;
+    hlaFloat64IntervalTestEncode1 = 9.54;
+    char tab[9];
+    void *ptr = &tab;
+    try
+    {
+        size_t size = hlaFloat64IntervalTestEncode1.encode(ptr, 9);
+        ASSERT_EQ(hlaFloat64IntervalTestEncode1.encodedLength(), size);
+
+#ifdef HOST_IS_BIG_ENDIAN
+        const double data = *static_cast<const double*>(variableLengthData.data());
+        ASSERT_EQ(hlaFloat32BETestEncode.get(), data);
+#endif
+        HLAfloat64Interval hlaFloat64IntervalTestDecode1;
+        hlaFloat64IntervalTestDecode1.decode(ptr, size);
+        ASSERT_FLOAT_EQ(hlaFloat64IntervalTestDecode1.getInterval(), hlaFloat64IntervalTestDecode1.getInterval());
+    }
+    catch(rti1516e::EncoderException& e)
+    {
+        FAIL() << e.what();
+    }
+
+    HLAfloat64Interval hlaFloat64IntervalTestEncode2;
+    hlaFloat64IntervalTestEncode2 = 7.58;
+    char tab3[4];
+    void *ptr3 = tab3;
+    ASSERT_THROW(hlaFloat64IntervalTestEncode2.encode(ptr3, 4), rti1516e::CouldNotEncode);
+
+    HLAfloat64Interval hlaFloat64IntervalTestDifferences;
+
+    HLAfloat64Time hLAfloat64Time0(458.56);
+    HLAfloat64Time hLAfloat64Time1(448.56);
+
+    hlaFloat64IntervalTestDifferences.setToDifference(hLAfloat64Time0, hLAfloat64Time0);
+    ASSERT_FLOAT_EQ(hlaFloat64IntervalTestDifferences.getInterval(), 0);
+    hlaFloat64IntervalTestDifferences.setToDifference(hLAfloat64Time0, hLAfloat64Time1);
+    ASSERT_FLOAT_EQ(hlaFloat64IntervalTestDifferences.getInterval(), 10);
+    hLAfloat64Time1.setTime(0);
+    hlaFloat64IntervalTestDifferences.setToDifference(hLAfloat64Time0, hLAfloat64Time1);
+    ASSERT_FLOAT_EQ(hlaFloat64IntervalTestDifferences.getInterval(), 458.56);
+    hlaFloat64IntervalTestDifferences.setToDifference(hLAfloat64Time1, hLAfloat64Time0);
+    ASSERT_FLOAT_EQ(hlaFloat64IntervalTestDifferences.getInterval(), -458.56);
+
+}

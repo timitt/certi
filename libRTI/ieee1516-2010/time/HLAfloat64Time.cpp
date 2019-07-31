@@ -1,8 +1,10 @@
 #include <RTI/time/HLAfloat64Time.h>
+#include <RTI/time/HLAfloat64Interval.h>
 #include <RTI/encoding/EncodingConfig.h>
 #include <typeinfo>
 #include <cstring>
 #include "HLAfloat64TimeImpl.h"
+
 
 namespace rti1516e
 {
@@ -63,7 +65,7 @@ throw (rti1516e::InvalidLogicalTime)
         if (other._impl != NULL)
             *_impl = *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Time");
+        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloa0.t64Time");
     }
     return *this;
 }
@@ -72,14 +74,26 @@ LogicalTime &HLAfloat64Time::operator+=(const LogicalTimeInterval &addend) //Tod
 throw (rti1516e::IllegalTimeArithmetic,
        rti1516e::InvalidLogicalTimeInterval)
 {
-
+    try {
+        const HLAfloat64Interval& other=  static_cast<const HLAfloat64Interval&>(addend);
+        setTime(getTime() + other.getInterval());
+    } catch(const std::bad_cast& e) {
+        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+    }
+    return *this;
 }
 
-LogicalTime &HLAfloat64Time::operator-=(const LogicalTimeInterval &subtrahend) //Todo: need HLAfloat64TimeInterval before
+LogicalTime &HLAfloat64Time::operator-=(const LogicalTimeInterval &subtrahend)
 throw (rti1516e::IllegalTimeArithmetic,
        rti1516e::InvalidLogicalTimeInterval)
 {
-
+    try {
+        const HLAfloat64Interval& other=  static_cast<const HLAfloat64Interval&>(subtrahend);
+        setTime(getTime() - other.getInterval());
+    } catch(const std::bad_cast& e) {
+        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+    }
+    return *this;
 }
 
 bool HLAfloat64Time::operator>(const LogicalTime &value) const
