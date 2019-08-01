@@ -5,18 +5,18 @@
 namespace rti1516e
 {
 
-//\brief Class that implement basic methods for HLAfloat implementation
-class HLAfloat64 {
+//\brief Class that implement basic methods for HLAInteger64 implementation
+class HLAinteger64 {
 public:
-    HLAfloat64();
-    HLAfloat64(const double& value);
-    HLAfloat64(const HLAfloat64 &other);
+    HLAinteger64();
+    HLAinteger64(const Integer64& value);
+    HLAinteger64(const HLAinteger64 &other);
     void setInitial();
     bool isInitial() const;
     void setFinal();
     bool isFinal() const;
-    double getTime() const;
-    void setTime(double value);
+    Integer64 getTime() const;
+    void setTime(Integer64 value);
     std::__cxx11::wstring toString() const;
 
     size_t encode(void *buffer, size_t bufferSize) const
@@ -26,10 +26,10 @@ public:
            rti1516e::CouldNotDecode);
 
 protected:
-    double _time;
-    double _zero;
-    const double _epsilon = std::numeric_limits<double>::epsilon();
-    const double _positiveInfinity = std::numeric_limits<double>::infinity();
+    Integer64 _time;
+    Integer64 _zero;
+    const Integer64 _epsilon = std::numeric_limits<Integer64>::epsilon();
+    const Integer64 _positiveInfinity = std::numeric_limits<Integer64>::infinity();
 };
 
 }

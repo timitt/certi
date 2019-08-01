@@ -5,7 +5,6 @@
 #include <cstring>
 #include "HLAfloat64TimeImpl.h"
 
-
 namespace rti1516e
 {
 
@@ -21,7 +20,8 @@ HLAfloat64Time::HLAfloat64Time(const double &value)
 
 HLAfloat64Time::HLAfloat64Time(const LogicalTime &value)
 {
-    _impl = new HLAfloat64TimeImpl(dynamic_cast<const HLAfloat64TimeImpl &> (value));
+    HLAfloat64Time object = dynamic_cast<const HLAfloat64Time &> (value);
+    _impl = new HLAfloat64TimeImpl(object.getTime());
 }
 
 HLAfloat64Time::HLAfloat64Time(const HLAfloat64Time &value)
@@ -70,7 +70,7 @@ throw (rti1516e::InvalidLogicalTime)
     return *this;
 }
 
-LogicalTime &HLAfloat64Time::operator+=(const LogicalTimeInterval &addend) //Todo: need HLAfloat64TimeInterval before
+LogicalTime &HLAfloat64Time::operator+=(const LogicalTimeInterval &addend)
 throw (rti1516e::IllegalTimeArithmetic,
        rti1516e::InvalidLogicalTimeInterval)
 {

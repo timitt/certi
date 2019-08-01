@@ -12,9 +12,6 @@ public:
     HLAfloat64IntervalImpl(const double& time);
     HLAfloat64IntervalImpl(const HLAfloat64IntervalImpl &other);
 
-    std::__cxx11::wstring toString() const;
-
-
     HLAfloat64IntervalImpl& operator= (HLAfloat64IntervalImpl const & other)
        throw (rti1516e::InvalidLogicalTimeInterval);
     HLAfloat64IntervalImpl& operator+=(HLAfloat64IntervalImpl const& other)

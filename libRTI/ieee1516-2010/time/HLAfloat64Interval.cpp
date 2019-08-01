@@ -79,8 +79,7 @@ rti1516e::LogicalTimeInterval& HLAfloat64Interval::operator+=(rti1516e::LogicalT
     return *this;
 }
 
-rti1516e::LogicalTimeInterval& HLAfloat64Interval::operator-= (
-   rti1516e::LogicalTimeInterval const & value)
+rti1516e::LogicalTimeInterval& HLAfloat64Interval::operator-=(rti1516e::LogicalTimeInterval const & value)
    throw (rti1516e::IllegalTimeArithmetic,
           rti1516e::InvalidLogicalTimeInterval)
 {
@@ -170,7 +169,7 @@ void HLAfloat64Interval::setToDifference (rti1516e::LogicalTime const & minuend,
         if (val0._impl != NULL && val1._impl != NULL)
             this->setInterval(val0.getTime() - val1.getTime());
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAinteger64Time");
     }
 }
 

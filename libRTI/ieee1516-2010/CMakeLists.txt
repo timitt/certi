@@ -100,6 +100,14 @@ set(RTI1516e_LIB_SRCS
     time/HLAfloat64IntervalImpl.cpp
     time/HLAfloat64.h
     time/HLAfloat64.cpp
+    time/HLAinteger64Time.cpp
+    time/HLAinteger64TimeImpl.h
+    time/HLAinteger64TimeImpl.cpp
+    time/HLAinteger64Interval.cpp
+    time/HLAinteger64IntervalImpl.h
+    time/HLAinteger64IntervalImpl.cpp
+    time/HLAinteger64.h
+    time/HLAinteger64.cpp
    )
 
 set(RTI1516e_LIB_INCLUDE
@@ -130,6 +138,8 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAvariantRecord.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64Time.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64Interval.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAinteger64Time.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAinteger64Interval.h
 )
 
 add_library(RTI1516e ${RTI1516e_LIB_SRCS} ${RTI1516e_LIB_INCLUDE})

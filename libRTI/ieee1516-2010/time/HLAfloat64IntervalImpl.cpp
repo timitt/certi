@@ -98,13 +98,6 @@ bool HLAfloat64IntervalImpl::operator<= (HLAfloat64IntervalImpl const & other) c
     return _time <= other._time;
 }
 
-//\brief String representation of the HLAfloat64IntervalImpl
-//@return the time in string format
-std::__cxx11::wstring HLAfloat64IntervalImpl::toString() const
-{
-    return std::to_wstring(_time);
-}
-
 //\brief Overload cast from HLAfloat64IntervalImpl to double (cast the time)
 HLAfloat64IntervalImpl::operator double() const
 {
