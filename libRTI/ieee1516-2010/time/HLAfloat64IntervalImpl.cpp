@@ -25,7 +25,7 @@ HLAfloat64IntervalImpl::HLAfloat64IntervalImpl(const HLAfloat64IntervalImpl &oth
 //\brief Overload orpérator = for class HLAfloat64IntervalImpl
 //@param other The HLAfloat64IntervalImpl object to be copied (copy only the time Time and Zero)
 HLAfloat64IntervalImpl &HLAfloat64IntervalImpl::operator=(HLAfloat64IntervalImpl const &other)
-throw (rti1516e::InvalidLogicalTimeInterval)
+throw (InvalidLogicalTimeInterval)
 {
     _time = other._time;
     _zero = other._zero;
@@ -35,8 +35,8 @@ throw (rti1516e::InvalidLogicalTimeInterval)
 //\brief Overload orpérator += for class HLAfloat64TimeImpl
 //@param other The HLAfloat64IntervalImpl object to be added (add only the interval time)
 HLAfloat64IntervalImpl& HLAfloat64IntervalImpl::operator+=(HLAfloat64IntervalImpl const& other)
-   throw (rti1516e::IllegalTimeArithmetic,
-          rti1516e::InvalidLogicalTimeInterval)
+   throw (IllegalTimeArithmetic,
+          InvalidLogicalTimeInterval)
 {
     _time += other._time;
     return *this;
@@ -45,8 +45,8 @@ HLAfloat64IntervalImpl& HLAfloat64IntervalImpl::operator+=(HLAfloat64IntervalImp
 //\brief Overload orpérator += for class HLAfloat64IntervalImpl
 //@param other The HLAfloat64IntervalImpl object to be subtracted (subtracts only the interval time)
 HLAfloat64IntervalImpl& HLAfloat64IntervalImpl::operator-=(HLAfloat64IntervalImpl const& other)
-   throw (rti1516e::IllegalTimeArithmetic,
-          rti1516e::InvalidLogicalTimeInterval)
+   throw (IllegalTimeArithmetic,
+          InvalidLogicalTimeInterval)
 {
     _time -= other._time;
     return *this;
@@ -56,7 +56,7 @@ HLAfloat64IntervalImpl& HLAfloat64IntervalImpl::operator-=(HLAfloat64IntervalImp
 //@param other The HLAfloat64IntervalImpl object to be compared (compare only the time Time)
 //@return True if is higher, false if not
 bool HLAfloat64IntervalImpl::operator> (HLAfloat64IntervalImpl const & other) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+   throw (InvalidLogicalTimeInterval)
 {
     return _time > other._time;
 }
@@ -65,7 +65,7 @@ bool HLAfloat64IntervalImpl::operator> (HLAfloat64IntervalImpl const & other) co
 //@param other The HLAfloat64IntervalImpl object to be compared (compare only the time Time)
 //@return True if is smaller, false if not
 bool HLAfloat64IntervalImpl::operator< (HLAfloat64IntervalImpl const & other) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+   throw (InvalidLogicalTimeInterval)
 {
     return _time < other._time;
 }
@@ -74,7 +74,7 @@ bool HLAfloat64IntervalImpl::operator< (HLAfloat64IntervalImpl const & other) co
 //@param other The HLAfloat64IntervalImpl object to be compared (compare only the time Time)
 //@return True if the time froms both object are equals
 bool HLAfloat64IntervalImpl::operator== (HLAfloat64IntervalImpl const & other) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+   throw (InvalidLogicalTimeInterval)
 {
     return _time == other._time;
 
@@ -84,7 +84,7 @@ bool HLAfloat64IntervalImpl::operator== (HLAfloat64IntervalImpl const & other) c
 //@param other The HLAfloat64IntervalImpl object to be compared (compare only the time Time)
 //@return True if is higher or equal, false if not
 bool HLAfloat64IntervalImpl::operator>= (HLAfloat64IntervalImpl const & other) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+   throw (InvalidLogicalTimeInterval)
 {
     return _time >= other._time;
 }
@@ -93,7 +93,7 @@ bool HLAfloat64IntervalImpl::operator>= (HLAfloat64IntervalImpl const & other) c
 //@param other The HLAfloat64IntervalImpl object to be compared (compare only the time Time)
 //@return True if is smaller or equal, false if not
 bool HLAfloat64IntervalImpl::operator<= (HLAfloat64IntervalImpl const & other) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+   throw (InvalidLogicalTimeInterval)
 {
     return _time <= other._time;
 }

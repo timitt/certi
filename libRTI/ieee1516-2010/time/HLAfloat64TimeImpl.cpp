@@ -28,7 +28,7 @@ HLAfloat64TimeImpl::HLAfloat64TimeImpl(const HLAfloat64TimeImpl &other) : HLAflo
 //\brief Overload orpérator = for class HLAfloat64TimeImpl
 //@param other The HLAfloat64TimeImpl object to be copied (copy only the time Time and Zero)
 HLAfloat64TimeImpl &HLAfloat64TimeImpl::operator=(const HLAfloat64TimeImpl &other)
-throw (rti1516e::InvalidLogicalTime)
+throw (InvalidLogicalTime)
 {
     _time = other._time;
     _zero = other._zero;
@@ -39,7 +39,7 @@ throw (rti1516e::InvalidLogicalTime)
 //@param other The HLAfloat64TimeImpl object to be compared (compare only the time Time)
 //@return True if is higher, false if not
 bool HLAfloat64TimeImpl::operator>(const HLAfloat64TimeImpl &other) const
-throw (rti1516e::InvalidLogicalTime)
+throw (InvalidLogicalTime)
 {
     return _time > other._time;
 }
@@ -48,7 +48,7 @@ throw (rti1516e::InvalidLogicalTime)
 //@param other The HLAfloat64TimeImpl object to be compared (compare only the time Time)
 //@return True if is smaller, false if not
 bool HLAfloat64TimeImpl::operator<(const HLAfloat64TimeImpl &other) const
-throw (rti1516e::InvalidLogicalTime)
+throw (InvalidLogicalTime)
 {
     return _time < other._time;
 }
@@ -57,7 +57,7 @@ throw (rti1516e::InvalidLogicalTime)
 //@param other The HLAfloat64TimeImpl object to be compared (compare only the time Time)
 //@return True if the time froms both object are equals
 bool HLAfloat64TimeImpl::operator==(const HLAfloat64TimeImpl &other) const
-throw (rti1516e::InvalidLogicalTime)
+throw (InvalidLogicalTime)
 {
     return _time == other._time;
 }
@@ -66,7 +66,7 @@ throw (rti1516e::InvalidLogicalTime)
 //@param other The HLAfloat64TimeImpl object to be compared (compare only the time Time)
 //@return True if is higher or equal, false if not
 bool HLAfloat64TimeImpl::operator>=(const HLAfloat64TimeImpl &other) const
-throw (rti1516e::InvalidLogicalTime)
+throw (InvalidLogicalTime)
 {
     return _time >= other._time;
 }
@@ -75,7 +75,7 @@ throw (rti1516e::InvalidLogicalTime)
 //@param other The HLAfloat64TimeImpl object to be compared (compare only the time Time)
 //@return True if is smaller or equal, false if not
 bool HLAfloat64TimeImpl::operator<=(const HLAfloat64TimeImpl &other) const
-throw (rti1516e::InvalidLogicalTime)
+throw (InvalidLogicalTime)
 {
     return _time <= other._time;
 }

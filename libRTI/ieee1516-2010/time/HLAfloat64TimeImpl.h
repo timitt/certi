@@ -1,4 +1,3 @@
-#include <RTI/LogicalTime.h>
 #include <RTI/encoding/BasicDataElements.h>
 #include "HLAfloat64.h"
 
@@ -12,17 +11,17 @@ public:
     HLAfloat64TimeImpl(const HLAfloat64TimeImpl &other);
 
     HLAfloat64TimeImpl &operator=(const HLAfloat64TimeImpl &other)
-        throw (rti1516e::InvalidLogicalTime);
+        throw (InvalidLogicalTime);
     bool operator>(const HLAfloat64TimeImpl &other) const
-        throw (rti1516e::InvalidLogicalTime);
+        throw (InvalidLogicalTime);
     bool operator<(const HLAfloat64TimeImpl &other) const
-        throw (rti1516e::InvalidLogicalTime);
+        throw (InvalidLogicalTime);
     bool operator==(const HLAfloat64TimeImpl &other) const
-        throw (rti1516e::InvalidLogicalTime);
+        throw (InvalidLogicalTime);
     bool operator>=(const HLAfloat64TimeImpl &other) const
-        throw (rti1516e::InvalidLogicalTime);
+        throw (InvalidLogicalTime);
     bool operator<=(const HLAfloat64TimeImpl &other) const
-        throw (rti1516e::InvalidLogicalTime);
+        throw (InvalidLogicalTime);
     operator double() const;
 };
 

@@ -13,23 +13,23 @@ public:
     HLAfloat64IntervalImpl(const HLAfloat64IntervalImpl &other);
 
     HLAfloat64IntervalImpl& operator= (HLAfloat64IntervalImpl const & other)
-       throw (rti1516e::InvalidLogicalTimeInterval);
+       throw (InvalidLogicalTimeInterval);
     HLAfloat64IntervalImpl& operator+=(HLAfloat64IntervalImpl const& other)
-       throw (rti1516e::IllegalTimeArithmetic,
-              rti1516e::InvalidLogicalTimeInterval);
+       throw (IllegalTimeArithmetic,
+              InvalidLogicalTimeInterval);
     HLAfloat64IntervalImpl& operator-=(HLAfloat64IntervalImpl const& other)
-       throw (rti1516e::IllegalTimeArithmetic,
-              rti1516e::InvalidLogicalTimeInterval);
+       throw (IllegalTimeArithmetic,
+              InvalidLogicalTimeInterval);
     bool operator> (HLAfloat64IntervalImpl const & other) const
-       throw (rti1516e::InvalidLogicalTimeInterval);
+       throw (InvalidLogicalTimeInterval);
     bool operator< (HLAfloat64IntervalImpl const & other) const
-       throw (rti1516e::InvalidLogicalTimeInterval);
+       throw (InvalidLogicalTimeInterval);
     bool operator== (HLAfloat64IntervalImpl const & other) const
-       throw (rti1516e::InvalidLogicalTimeInterval);
+       throw (InvalidLogicalTimeInterval);
     bool operator>= (HLAfloat64IntervalImpl const & other) const
-       throw (rti1516e::InvalidLogicalTimeInterval);
+       throw (InvalidLogicalTimeInterval);
     bool operator<= (HLAfloat64IntervalImpl const & other) const
-       throw (rti1516e::InvalidLogicalTimeInterval);
+       throw (InvalidLogicalTimeInterval);
 
     operator double () const;
 

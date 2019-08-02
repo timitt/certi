@@ -15,7 +15,7 @@ HLAfloat64Interval::HLAfloat64Interval(double time)
     _impl = new HLAfloat64IntervalImpl(time);
 }
 
-HLAfloat64Interval::HLAfloat64Interval(rti1516e::LogicalTimeInterval const &other)
+HLAfloat64Interval::HLAfloat64Interval(LogicalTimeInterval const &other)
 {
     _impl = new HLAfloat64IntervalImpl(dynamic_cast<const HLAfloat64IntervalImpl &> (other));
 }
@@ -52,116 +52,116 @@ bool HLAfloat64Interval::isEpsilon () const
     return _impl->isFinal();
 }
 
-rti1516e::LogicalTimeInterval& HLAfloat64Interval::operator= (rti1516e::LogicalTimeInterval const & value)
-   throw (rti1516e::InvalidLogicalTimeInterval)
+LogicalTimeInterval& HLAfloat64Interval::operator= (LogicalTimeInterval const & value)
+   throw (InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other= dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             *_impl = *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return *this;
 }
 
-rti1516e::LogicalTimeInterval& HLAfloat64Interval::operator+=(rti1516e::LogicalTimeInterval const& value)
-   throw (rti1516e::IllegalTimeArithmetic,
-          rti1516e::InvalidLogicalTimeInterval)
+LogicalTimeInterval& HLAfloat64Interval::operator+=(LogicalTimeInterval const& value)
+   throw (IllegalTimeArithmetic,
+          InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other= dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             *_impl += *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return *this;
 }
 
-rti1516e::LogicalTimeInterval& HLAfloat64Interval::operator-=(rti1516e::LogicalTimeInterval const & value)
-   throw (rti1516e::IllegalTimeArithmetic,
-          rti1516e::InvalidLogicalTimeInterval)
+LogicalTimeInterval& HLAfloat64Interval::operator-=(LogicalTimeInterval const & value)
+   throw (IllegalTimeArithmetic,
+          InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other= dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             *_impl -= *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return *this;
 }
 
-bool HLAfloat64Interval::operator> (rti1516e::LogicalTimeInterval const & value) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+bool HLAfloat64Interval::operator> (LogicalTimeInterval const & value) const
+   throw (InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other=  dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             return *_impl > *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return false;
 }
 
-bool HLAfloat64Interval::operator< (rti1516e::LogicalTimeInterval const & value) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+bool HLAfloat64Interval::operator< (LogicalTimeInterval const & value) const
+   throw (InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other=  dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             return *_impl < *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return false;
 }
 
-bool HLAfloat64Interval::operator== (rti1516e::LogicalTimeInterval const & value) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+bool HLAfloat64Interval::operator== (LogicalTimeInterval const & value) const
+   throw (InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other=  dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             return *_impl == *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return false;
 }
 
-bool HLAfloat64Interval::operator>= (rti1516e::LogicalTimeInterval const & value) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+bool HLAfloat64Interval::operator>= (LogicalTimeInterval const & value) const
+   throw (InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other=  dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             return *_impl >= *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return false;
 }
 
-bool HLAfloat64Interval::operator<= (rti1516e::LogicalTimeInterval const & value) const
-   throw (rti1516e::InvalidLogicalTimeInterval)
+bool HLAfloat64Interval::operator<= (LogicalTimeInterval const & value) const
+   throw (InvalidLogicalTimeInterval)
 {
     try {
         const HLAfloat64Interval& other=  dynamic_cast<const HLAfloat64Interval&>(value);
         if (other._impl != NULL)
             return *_impl <= *other._impl;
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAfloat64Interval");
     }
     return false;
 }
 
 
-void HLAfloat64Interval::setToDifference (rti1516e::LogicalTime const & minuend, rti1516e::LogicalTime const& subtrahend)
-   throw (rti1516e::IllegalTimeArithmetic,
-          rti1516e::InvalidLogicalTime)
+void HLAfloat64Interval::setToDifference (LogicalTime const & minuend, LogicalTime const& subtrahend)
+   throw (IllegalTimeArithmetic,
+          InvalidLogicalTime)
 {
     try {
         const HLAfloat64Time& val0=  static_cast<const HLAfloat64Time&>(minuend);
@@ -169,7 +169,7 @@ void HLAfloat64Interval::setToDifference (rti1516e::LogicalTime const & minuend,
         if (val0._impl != NULL && val1._impl != NULL)
             this->setInterval(val0.getTime() - val1.getTime());
     } catch(const std::bad_cast& e) {
-        throw rti1516e::InvalidLogicalTime(L"Cannot convert LogicalTime to HLAinteger64Time");
+        throw InvalidLogicalTime(L"Cannot convert LogicalTime to HLAinteger64Time");
     }
 }
 
@@ -195,14 +195,14 @@ void HLAfloat64Interval::setInterval(double value)
     _impl->setTime(value);
 }
 
-HLAfloat64Interval& HLAfloat64Interval::operator=(const HLAfloat64Interval& other)
-   throw (rti1516e::InvalidLogicalTimeInterval)
+HLAfloat64Interval& HLAfloat64Interval::operator=(HLAfloat64Interval const& other)
+   throw (InvalidLogicalTimeInterval)
 {
     *_impl = *other._impl;
     return *this;
 }
 
-rti1516e::VariableLengthData HLAfloat64Interval::encode () const
+VariableLengthData HLAfloat64Interval::encode() const
 {
     VariableLengthData vlData;
     std::vector<Octet> buffer(encodedLength());
@@ -212,14 +212,14 @@ rti1516e::VariableLengthData HLAfloat64Interval::encode () const
 }
 
 size_t HLAfloat64Interval::encode(void* buffer, size_t bufferSize) const
-   throw (rti1516e::CouldNotEncode)
+   throw (CouldNotEncode)
 {
     return _impl->encode(buffer, bufferSize);
 }
 
-void HLAfloat64Interval::decode(rti1516e::VariableLengthData const & encodedValue)
-   throw (rti1516e::InternalError,
-          rti1516e::CouldNotDecode)
+void HLAfloat64Interval::decode(VariableLengthData const & encodedValue)
+   throw (InternalError,
+          CouldNotDecode)
 {
     std::vector<Octet> buffer(encodedValue.size());
     std::memcpy(&buffer[0], encodedValue.data(), encodedValue.size());
@@ -227,8 +227,8 @@ void HLAfloat64Interval::decode(rti1516e::VariableLengthData const & encodedValu
 }
 
 void HLAfloat64Interval::decode(void* buffer, size_t bufferSize)
-   throw (rti1516e::InternalError,
-          rti1516e::CouldNotDecode)
+   throw (InternalError,
+          CouldNotDecode)
 {
     _impl->decode(buffer, bufferSize);
 }
@@ -238,5 +238,9 @@ size_t HLAfloat64Interval::encodedLength() const
     return 8;
 }
 
+HLAfloat64Interval::operator double () const
+{
+    return _impl->getTime();
+}
 
 }

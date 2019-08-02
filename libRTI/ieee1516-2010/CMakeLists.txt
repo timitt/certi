@@ -110,6 +110,9 @@ set(RTI1516e_LIB_SRCS
     time/HLAinteger64.cpp
     time/HLAfloat64TimeFactory.cpp
     time/HLAinteger64TimeFactory.cpp
+    time/LogicalTime.cpp
+    time/LogicalTimeInterval.cpp
+    time/LogicalTimeFactory.cpp
    )
 
 set(RTI1516e_LIB_INCLUDE
