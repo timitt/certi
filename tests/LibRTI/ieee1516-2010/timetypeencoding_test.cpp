@@ -1,14 +1,18 @@
 #include <gtest/gtest.h>
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/time/HLAfloat64Time.h>
+#include <RTI/time/HLAfloat64TimeFactory.h>
 #include <RTI/time/HLAfloat64Interval.h>
 #include <RTI/time/HLAinteger64Time.h>
 #include <RTI/time/HLAinteger64Interval.h>
+#include <RTI/time/HLAinteger64TimeFactory.h>
 
 using ::rti1516e::HLAfloat64Time;
+using ::rti1516e::HLAfloat64TimeFactory;
 using ::rti1516e::HLAfloat64Interval;
 using ::rti1516e::HLAinteger64Time;
 using ::rti1516e::HLAinteger64Interval;
+using ::rti1516e::HLAinteger64TimeFactory;
 
 TEST(HLATimeTypesTest, TestHLAfloat64Time)
 {
@@ -296,4 +300,102 @@ TEST(HLATimeTypesTest, TestHLAinteger64Interval)
     hlaInteger64IntervalTestDifferences.setToDifference(hLAInteger64Time1, hLAInteger64Time0);
     ASSERT_EQ(hlaInteger64IntervalTestDifferences.getInterval(), -458);
 
+}
+
+TEST(HLATimeTypesTest, TestHLAfloat64TimeFactory)
+{
+    HLAfloat64TimeFactory factory;
+    std::auto_ptr<HLAfloat64Time> time;
+    time = factory.makeLogicalTime(1);
+
+    ASSERT_EQ(time->getTime(), 1);
+
+    std::auto_ptr<rti1516e::LogicalTime> time_1 = factory.makeFinal();
+    ASSERT_TRUE(time_1->isFinal());
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_2 = factory.makeEpsilon();
+    ASSERT_TRUE(time_2->isEpsilon());
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_3 = factory.makeZero();
+    ASSERT_TRUE(time_3->isZero());
+
+    HLAfloat64Time hLAfloat64TimeTestEncode;
+    hLAfloat64TimeTestEncode = 157.54;
+    rti1516e::VariableLengthData variableLengthData = hLAfloat64TimeTestEncode.encode();
+
+    std::auto_ptr<rti1516e::LogicalTime> time_4 = factory.decodeLogicalTime(variableLengthData);
+    ASSERT_EQ(time_4->toString(), hLAfloat64TimeTestEncode.toString());
+
+    HLAfloat64Time hLAfloat64TimeTestEncode1;
+    hLAfloat64TimeTestEncode1 = 47986.48;
+    char tab[9];
+    void *ptr = &tab;
+    hLAfloat64TimeTestEncode1.encode(tab, 9);
+
+    std::auto_ptr<rti1516e::LogicalTime> time_5 = factory.decodeLogicalTime(ptr, 9);
+    ASSERT_EQ(time_5->toString(), hLAfloat64TimeTestEncode1.toString());
+
+
+    HLAfloat64Interval hLAfloat64IntervalestEncode3;
+    hLAfloat64IntervalestEncode3 = 788.448;
+    rti1516e::VariableLengthData variableLengthData3 = hLAfloat64IntervalestEncode3.encode();
+
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_6 = factory.decodeLogicalTimeInterval(variableLengthData3);
+    ASSERT_EQ(time_6->toString(), hLAfloat64IntervalestEncode3.toString());
+
+    HLAfloat64Interval hLAfloat64IntervalestEncode4;
+    hLAfloat64IntervalestEncode4 = 687.484;
+    char tab1[9];
+    void *ptr1 = &tab;
+    hLAfloat64IntervalestEncode4.encode(ptr1, 9);
+
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_7 = factory.decodeLogicalTimeInterval(ptr1, 9);
+    ASSERT_EQ(time_7->toString(), hLAfloat64IntervalestEncode4.toString());
+}
+
+TEST(HLATimeTypesTest, TestHLAintegerTimeFactory)
+{
+    HLAinteger64TimeFactory factory;
+    std::auto_ptr<HLAinteger64Time> time;
+    time = factory.makeLogicalTime(1);
+
+    ASSERT_EQ(time->getTime(), 1);
+
+    std::auto_ptr<rti1516e::LogicalTime> time_1 = factory.makeFinal();
+    ASSERT_TRUE(time_1->isFinal());
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_2 = factory.makeEpsilon();
+    ASSERT_TRUE(time_2->isEpsilon());
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_3 = factory.makeZero();
+    ASSERT_TRUE(time_3->isZero());
+
+    HLAinteger64Time hLAinteger64TimeTestEncode;
+    hLAinteger64TimeTestEncode = 157.54;
+    rti1516e::VariableLengthData variableLengthData = hLAinteger64TimeTestEncode.encode();
+
+    std::auto_ptr<rti1516e::LogicalTime> time_4 = factory.decodeLogicalTime(variableLengthData);
+    ASSERT_EQ(time_4->toString(), hLAinteger64TimeTestEncode.toString());
+
+    HLAinteger64Time hLAinteger64TimeTestEncode1;
+    hLAinteger64TimeTestEncode1 = 47986.48;
+    char tab[9];
+    void *ptr = &tab;
+    hLAinteger64TimeTestEncode1.encode(tab, 9);
+
+    std::auto_ptr<rti1516e::LogicalTime> time_5 = factory.decodeLogicalTime(ptr, 9);
+    ASSERT_EQ(time_5->toString(), hLAinteger64TimeTestEncode1.toString());
+
+
+    HLAinteger64Interval hLAinteger64IntervalestEncode3;
+    hLAinteger64IntervalestEncode3 = 788.448;
+    rti1516e::VariableLengthData variableLengthData3 = hLAinteger64IntervalestEncode3.encode();
+
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_6 = factory.decodeLogicalTimeInterval(variableLengthData3);
+    ASSERT_EQ(time_6->toString(), hLAinteger64IntervalestEncode3.toString());
+
+    HLAinteger64Interval hLAinteger64IntervalestEncode4;
+    hLAinteger64IntervalestEncode4 = 687.484;
+    char tab1[9];
+    void *ptr1 = &tab;
+    hLAinteger64IntervalestEncode4.encode(ptr1, 9);
+
+    std::auto_ptr<rti1516e::LogicalTimeInterval> time_7 = factory.decodeLogicalTimeInterval(ptr1, 9);
+    ASSERT_EQ(time_7->toString(), hLAinteger64IntervalestEncode4.toString());
 }
