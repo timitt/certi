@@ -47,6 +47,7 @@
 #define NODE_DIMENSIONS (const xmlChar*) "dimensions"
 #define NODE_DIMENSION (const xmlChar*) "dimension"
 #define NODE_NAME (const xmlChar*) "name"
+#define NODE_DATATYPE (const xmlChar*) "dataType"
 
 #define ATTRIBUTE_DTDVERSION (const xmlChar*) "DTDversion"
 #define ATTRIBUTE_XMLNSVERSION (const xmlChar*) "xmlns"
@@ -90,7 +91,7 @@ public:
      * @param[in] pathToXmlFile the path to the XML file.
      * @return the RootObject resulting from the parse.
      */
-    RootObject* parse(std::string pathToXmlFile);
+    virtual RootObject* parse(std::string pathToXmlFile);
 
     /** Return true if the XML parser is available.
      * XML Parser may not be available if CERTI was

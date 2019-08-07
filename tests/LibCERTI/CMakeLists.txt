@@ -12,6 +12,8 @@ set(lib_certi_SRCS
     ${CERTI_SOURCE_DIR}/libCERTI/ObjectClassBroadcastList.cc
     )
 
+add_definitions(-DSOURCE_DIR="${CERTI_SOURCE_DIR}")
+
 add_executable(TestLibCERTI
                
                ../mocks/sockettcp_mock.h
@@ -27,6 +29,12 @@ add_executable(TestLibCERTI
                
                ${lib_certi_SRCS}
                ../main.cpp
+
+               XMLparser_test.cpp
+               Base.xml
+               HLAstandardMIM.xml
+               RPR-FOM2D18.xml
+
                )
 
 target_link_libraries(TestLibCERTI

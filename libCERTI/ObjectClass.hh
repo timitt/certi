@@ -31,6 +31,7 @@ class ObjectAttribute;
 class ObjectClass;
 class ObjectClassSet;
 class ObjectClassAttribute;
+class ObjectClassAttribute1516e;
 class ObjectClassBroadcastList;
 }
 
@@ -175,6 +176,8 @@ public:
     std::pair<ObjectClassBroadcastList*, Responses> killFederate(FederateHandle theFederate) noexcept;
 
     ObjectClassAttribute* getAttribute(AttributeHandle the_handle) const;
+
+    ObjectClassAttribute1516e *getAttribute1516e(AttributeHandle the_handle) const;
 
     bool hasAttribute(AttributeHandle theHandle) const;
 

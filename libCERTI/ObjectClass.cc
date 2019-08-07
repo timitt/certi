@@ -26,6 +26,7 @@
 #include "ObjectAttribute.hh"
 #include "ObjectClass.hh"
 #include "ObjectClassAttribute.hh"
+#include "ieee1516-2010/ObjectClassAttribute1516e.h"
 #include "ObjectClassBroadcastList.hh"
 #include "ObjectClassSet.hh"
 
@@ -481,6 +482,11 @@ ObjectClassAttribute* ObjectClass::getAttribute(AttributeHandle the_handle) cons
                               + "> unknown for ObjectClass <"
                               + getName()
                               + ">.");
+}
+
+ObjectClassAttribute1516e *ObjectClass::getAttribute1516e(AttributeHandle the_handle) const
+{
+    return static_cast<ObjectClassAttribute1516e*>(getAttribute(the_handle));
 }
 
 // ----------------------------------------------------------------------------

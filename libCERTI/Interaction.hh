@@ -28,6 +28,7 @@
 namespace certi {
 class InteractionBroadcastList;
 class InteractionSet;
+class Parameter1516e;
 } // namespace certi
 
 // CERTI headers
@@ -213,6 +214,8 @@ public:
     OrderType order;
 
     bool isPublishing(FederateHandle);
+
+    Parameter1516e *getParameter1516e(ParameterHandle the_handle) const;
 
 private:
     /*

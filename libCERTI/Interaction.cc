@@ -26,6 +26,7 @@
 #include "InteractionSet.hh"
 #include "NM_Classes.hh"
 #include "PrettyDebug.hh"
+#include "ieee1516-2010/Parameter1516e.h"
 
 #include <assert.h>
 #include <iostream>
@@ -251,7 +252,14 @@ Parameter* Interaction::getParameterByHandle(ParameterHandle the_handle) const
     }
 
     throw InteractionParameterNotDefined("for handle " + std::to_string(the_handle));
-} /* end of getParameterByHandle */
+}
+
+Parameter1516e *Interaction::getParameter1516e(ParameterHandle the_handle) const
+{
+    return static_cast<Parameter1516e*>(getParameterByHandle(the_handle));
+}
+
+/* end of getParameterByHandle */
 
 // ----------------------------------------------------------------------------
 //! Returns the parameter handle obtained by its name.
