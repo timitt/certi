@@ -130,6 +130,10 @@ public:
         return _enumerators.at(name);
     }
 
+    virtual size_t calTotalSize() {
+        _totalSize = _representation->totalSize();
+        return _totalSize;
+    }
 
 private:
 

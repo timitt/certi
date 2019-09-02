@@ -165,6 +165,11 @@ public:
         _discriminantTypeTemp = discriminantTypeTemp;
     }
 
+    virtual size_t calTotalSize() {
+        _totalSize = 0;
+        return _totalSize;
+    }
+
 private:
     std::string _discriminantName;
     std::shared_ptr<EnumeratedDataType> _discriminantType;

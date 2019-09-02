@@ -147,6 +147,7 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAinteger64Interval.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64TimeFactory.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAinteger64TimeFactory.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/Padding.h
 
 )
 

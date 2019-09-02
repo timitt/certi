@@ -1,4 +1,5 @@
 #include "HLAvariantRecordImplementation.h"
+#include <RTI/encoding/Padding.h>
 #include "PrintInfo.h"
 #include <stdexcept>
 
@@ -326,13 +327,14 @@ throw(EncoderException)
 uint HLAvariantRecordImplementation::calculPaddingAfterDiscriminant() const
 {
     //Calcul padding after nbElements indication
-    uint P = 0;
-    uint V = this->getOctetBoundary();
-    uint S = _pDataElementDiscriminent->getEncodedLength();
-    uint R = (S+P)%V;
-//    R = (S+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
-    P = (R == 0) ? 0:(V-R);
+//    uint P = 0;
+//    uint V = this->getOctetBoundary();
+//    uint S = _pDataElementDiscriminent->getEncodedLength();
+//    uint R = (S+P)%V;
+////    R = (S+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
+//    P = (R == 0) ? 0:(V-R);
 
+    uint P = padding::VariantRecord::calculPaddingAfterDiscriminant(_pDataElementDiscriminent->getEncodedLength(), this->getOctetBoundary());
     return P;
 }
 

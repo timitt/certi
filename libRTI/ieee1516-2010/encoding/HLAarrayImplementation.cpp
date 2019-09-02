@@ -3,6 +3,8 @@
 #include "HLAarrayImplementation.h"
 #include "PrintInfo.h"
 
+#include <RTI/encoding/Padding.h>
+
 namespace rti1516e {
 //\brief Constructor of Base class ArrayImplementation
 //@param a_prototype A prototype of the DataElement
@@ -118,11 +120,13 @@ bool HLAarrayImplementation::isSameTypeAs(const HLAarrayImplementation &a_rhs)
 uint HLAarrayImplementation::calculPaddingAfterNbElements() const
 {
     //Calcul padding after nbElements indication
-    uint P = 0;
-    uint V = std::max(_pDataElementPrototype->getOctetBoundary(), 4u);
-    uint R = (4+P)%V;
-//    R = (4+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
-    P = (R == 0) ? 0:(V-R);
+//    uint P = 0;
+//    uint V = std::max(_pDataElementPrototype->getOctetBoundary(), 4u);
+//    uint R = (4+P)%V;
+////    R = (4+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
+//    P = (R == 0) ? 0:(V-R);
+
+    uint P = padding::HlaArray::calculPaddingAfterNbElements(_pDataElementPrototype->getOctetBoundary());
 
     return P;
 }
@@ -132,12 +136,14 @@ uint HLAarrayImplementation::calculPaddingAfterNbElements() const
 uint HLAarrayImplementation::calculPaddingAfterEachElements(const DataElement &a_dataElement) const
 {
     //Calcul padding after each element which depends on the encoded lenght of the element
-    size_t sizeElement = a_dataElement.getEncodedLength();
-    uint V = std::max(a_dataElement.getOctetBoundary(), 4u);
-    uint P = 0;
-    uint R = (sizeElement+P)%V;
-//    R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
-    P = (R == 0) ? 0:(V-R);
+//    size_t sizeElement = a_dataElement.getEncodedLength();
+//    uint V = std::max(a_dataElement.getOctetBoundary(), 4u);
+//    uint P = 0;
+//    uint R = (sizeElement+P)%V;
+////    R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
+//    P = (R == 0) ? 0:(V-R);
+
+    uint P = padding::HlaArray::calculPaddingAfterEachElements(a_dataElement.getEncodedLength(), a_dataElement.getOctetBoundary());
 
     return P;
 }

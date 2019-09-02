@@ -119,6 +119,14 @@ public:
         _fields.push_back(a_field);
     }
 
+    virtual size_t calTotalSize() {
+        _totalSize = 0;
+        for(auto it = _fields.cbegin(); it != _fields.cend(); it++) {
+            _totalSize += it->typeElem()->totalSize();
+        }
+        return _totalSize;
+    }
+
 private:
     std::string _encoding;
     std::string _semantics;

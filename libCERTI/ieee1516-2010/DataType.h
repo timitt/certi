@@ -22,12 +22,12 @@ private:
 class DataType
 {
 public:
-    DataType():_category(EncodableDataType::CATEGORY::NA), _name(EncodableDataType::TYPE::HLAunknown), _nameUnknown(""){}
+    DataType():_category(EncodableDataType::CATEGORY::NA), _name(EncodableDataType::TYPE::HLAunknown), _nameUnknown(""), _totalSize(0){}
 
     DataType(const EncodableDataType::CATEGORY &a_category, const EncodableDataType::TYPE &a_name, const std::string& a_nameUnknown) :
-        _category(a_category), _name(a_name), _nameUnknown(a_nameUnknown) {}
+        _category(a_category), _name(a_name), _nameUnknown(a_nameUnknown), _totalSize(0) {}
 
-    DataType(const DataType &a_rhs) : _category(a_rhs._category), _name(a_rhs._name) {}
+    DataType(const DataType &a_rhs) : _category(a_rhs._category), _name(a_rhs._name), _nameUnknown(a_rhs._nameUnknown), _totalSize(a_rhs._totalSize) {}
 
     virtual ~DataType() {}
 
@@ -67,12 +67,21 @@ public:
             _nameUnknown = name;
     }
 
+    size_t totalSize() const
+    {
+        return _totalSize;
+    }
+
+    virtual size_t calTotalSize() = 0;
+
 protected:
     EncodableDataType::CATEGORY _category;
     EncodableDataType::TYPE _name;
     std::string _nameUnknown;
-
+    size_t _totalSize;
 };
+
+
 
 }
 #endif

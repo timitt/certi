@@ -61,6 +61,11 @@ public:
         _encoding = encoding;
     }
 
+    virtual size_t calTotalSize() {
+        _totalSize = _size;
+        return _totalSize;
+    }
+
 private:
     size_t _size;
     EncodableDataType::ENDIAN _endian;

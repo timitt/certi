@@ -73,6 +73,11 @@ public:
         _semantics = semantics;
     }
 
+    virtual size_t calTotalSize() {
+        _totalSize = _representation->size();
+        return _totalSize;
+    }
+
 private:
     std::shared_ptr<BasicDataType> _representation;
     std::string _units;

@@ -1,5 +1,7 @@
 #include "HLAfixedRecordImplementation.h"
+#include <RTI/encoding/Padding.h>
 #include "PrintInfo.h"
+
 
 namespace rti1516e {
 
@@ -201,13 +203,15 @@ uint HLAfixedRecordImplementation::calculPaddingAfterEachElements(uint &a_offset
 {
     uint P = 0;
     if(a_index < _vectorpDataElement.size() - 1) {
-        //Calcul padding after each element which depends on the encoded lenght of the element
-        size_t sizeElement = _vectorpDataElement[a_index]->getEncodedLength();
-        uint V = _vectorpDataElement[a_index + 1]->getOctetBoundary();
-        uint R = (a_offset+sizeElement+P)%V;
-        //R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
-        P = (R == 0) ? 0:(V-R);
-        a_offset += (sizeElement + P);
+//        //Calcul padding after each element which depends on the encoded lenght of the element
+//        size_t sizeElement = _vectorpDataElement[a_index]->getEncodedLength();
+//        uint V = _vectorpDataElement[a_index + 1]->getOctetBoundary();
+//        uint R = (a_offset+sizeElement+P)%V;
+//        //R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask instead classic modulo
+//        P = (R == 0) ? 0:(V-R);
+//        a_offset += (sizeElement + P);
+
+        P = padding::FixedRecord::calculPaddingAfterEachElements(a_offset, _vectorpDataElement[a_index]->getEncodedLength(), _vectorpDataElement[a_index + 1]->getOctetBoundary());
     }
     else {
         P = 0;

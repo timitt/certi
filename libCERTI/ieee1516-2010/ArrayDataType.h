@@ -74,6 +74,14 @@ public:
         _typeElementsTemp = typeElementsTemp;
     }
 
+    virtual size_t calTotalSize() {
+        if(_cardinality == "Dynamic")
+            _totalSize = 0;
+        else
+            _totalSize = atoi(_cardinality.c_str());
+        return _totalSize;
+    }
+
 
 private:
     std::shared_ptr<DataType> _typeElements;
