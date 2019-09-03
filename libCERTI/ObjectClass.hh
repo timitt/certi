@@ -232,6 +232,8 @@ public:
     bool isFederatePublisher(FederateHandle the_federate) const;
     bool isSubscribed(FederateHandle) const;
 
+    bool checkSizeData(const ObjectAttribute &oa, const AttributeValue_t &data) const;
+
 private:
     /// private default constructor with no code one should not call it.
     ObjectClass() = delete;

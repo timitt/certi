@@ -120,9 +120,18 @@
          </interactionClass>
       </interactionClass>
    </interactions>
-   <routingSpace name="Geo">
+   <!--<routingSpace name="Geo">
       <dimension name="X" />
       <dimension name="Y" />
+   </routingSpace>-->
+   <routingSpace>
+      <name>Geo</name>
+      <dimension>
+        <name>X</name>
+      </dimension>
+      <dimension>
+        <name>Y</name>
+      </dimension>
    </routingSpace>
    <synchronizations>
       <synchronization label="Init" dataType="NA" capability="RegisterAchieve"/>

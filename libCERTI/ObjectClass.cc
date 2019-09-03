@@ -530,6 +530,16 @@ bool ObjectClass::isSubscribed(FederateHandle fed) const
     return false;
 }
 
+bool ObjectClass::checkSizeData(const ObjectAttribute &oa, const AttributeValue_t &data) const
+{
+    ObjectClassAttribute1516e* classAttribute = static_cast<ObjectClassAttribute1516e*>(oa.getObjectClassAttribute());
+    if(classAttribute->getType()->category() == EncodableDataType::CATEGORY::BasicDataType) {
+        BasicDataType* basicDataType = static_cast<BasicDataType*>(classAttribute->getType().get());
+        return basicDataType->totalSize() == data.size();
+    }
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 /*! Return 'true' if the object instance designated by 'theID' is
   present in that class.
@@ -865,6 +875,8 @@ ObjectClass::updateAttributeValues(FederateHandle the_federate,
     ObjectAttribute* oa;
     for (int i = 0; i < the_size; i++) {
         oa = object->getAttribute(the_attributes[i]);
+
+//        checkSizeData(*oa, the_values[i]);
 
         if (oa->getOwner() != the_federate) {
             throw AttributeNotOwned("Attribute #" + std::to_string(the_attributes[i]) + " is not owned by federate #"
