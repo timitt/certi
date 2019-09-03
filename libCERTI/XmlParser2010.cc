@@ -52,10 +52,6 @@ XmlParser2010::XmlParser2010(RootObject* root, const bool is_parsing_modules) : 
 
 XmlParser2010::~XmlParser2010()
 {
-//    for(auto it = _predefinedDataType.begin(); it != _predefinedDataType.end(); it ++) {
-//        if(it->second != nullptr)
-//            delete it->second;
-//    }
     _predefinedDataType.clear();
 }
 
@@ -124,7 +120,6 @@ void XmlParser2010::parseClass(ObjectClass *parent)
         // Attributes
         if ((!xmlStrcmp(cur->name, NODE_ATTRIBUTE))) {
             if (!class_already_exists) {
-                //std::string name = std::string(CleanXmlGetProp(cur,ATTRIBUTE_NAME));
 
                 HLAntos_t2010 objClassProp;
                 objClassProp.name = nullptr;
@@ -206,7 +201,6 @@ void XmlParser2010::parseInteraction(Interaction *parent)
     intClassProp.dataType = nullptr;
     parseNTOS(&intClassProp);
     // Name
-    //name = std::string(CleanXmlGetProp(cur,ATTRIBUTE_NAME));
 
     // Transportation
     TransportType transport{RELIABLE};
@@ -464,35 +458,6 @@ void XmlParser2010::parseEnumeratedData()
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"representation")) {
                     std::string dataTypeName((const char*)getText(tempNode));
                     enumeratedDataType->setRepresentationTemp(dataTypeName);
-//                    auto it = _predefinedDataType.find(dataTypeName);
-//                    if(it != _predefinedDataType.end()) {
-//                        if(it->second->category() == EncodableDataType::CATEGORY::BasicDataType) {
-//                            std::shared_ptr<BasicDataType> pBasicDataType = std::make_shared<BasicDataType>(*static_cast<BasicDataType*>(it->second.get()));
-//                            enumeratedDataType->setRepresentation(pBasicDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::SimpleDataType) {
-//                            std::shared_ptr<SimpleDataType> pSimpleDataType = std::make_shared<SimpleDataType>(*static_cast<SimpleDataType*>(it->second.get()));
-//                            enumeratedDataType->setRepresentation(pSimpleDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::EnumeratedDataType) {
-//                            std::shared_ptr<EnumeratedDataType> pSimpleDataType = std::make_shared<EnumeratedDataType>(*static_cast<EnumeratedDataType*>(it->second.get()));
-//                            enumeratedDataType->setRepresentation(pSimpleDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::ArrayDataType) {
-//                            std::shared_ptr<ArrayDataType> pArrayDataType = std::make_shared<ArrayDataType>(*static_cast<ArrayDataType*>(it->second.get()));
-//                            enumeratedDataType->setRepresentation(pArrayDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::FixedRecordDataType) {
-//                            std::shared_ptr<FixedRecordDataType> pArrayDataType = std::make_shared<FixedRecordDataType>(*static_cast<FixedRecordDataType*>(it->second.get()));
-//                            enumeratedDataType->setRepresentation(pArrayDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::VariantRecordDataType) {
-//                            std::shared_ptr<VariantRecordDataType> pArrayDataType = std::make_shared<VariantRecordDataType>(*static_cast<VariantRecordDataType*>(it->second.get()));
-//                            enumeratedDataType->setRepresentation(pArrayDataType);
-//                        }
-//                    }
-//                    else
-//                        throw DataTypeException(std::string("The type ") + dataTypeName + std::string(" does not exist in the enumerated data"));
                 }
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"semantics")) {
                     enumeratedDataType->setSemantics((const char*)getText(tempNode));
@@ -537,35 +502,6 @@ void XmlParser2010::parseArrayData()
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"dataType")) {
                     std::string dataTypeName((const char*)getText(tempNode));
                     arrayDataType->setTypeElementsTemp(dataTypeName);
-//                    auto it = _predefinedDataType.find(dataTypeName);
-//                    if(it != _predefinedDataType.end()) {
-//                        if(it->second->category() == EncodableDataType::CATEGORY::BasicDataType) {
-//                            std::shared_ptr<BasicDataType> pBasicDataType = std::make_shared<BasicDataType>(*static_cast<BasicDataType*>(it->second.get()));
-//                            arrayDataType->setTypeElements(pBasicDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::SimpleDataType) {
-//                            std::shared_ptr<SimpleDataType> pSimpleDataType = std::make_shared<SimpleDataType>(*static_cast<SimpleDataType*>(it->second.get()));
-//                            arrayDataType->setTypeElements(pSimpleDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::EnumeratedDataType) {
-//                            std::shared_ptr<EnumeratedDataType> pSimpleDataType = std::make_shared<EnumeratedDataType>(*static_cast<EnumeratedDataType*>(it->second.get()));
-//                            arrayDataType->setTypeElements(pSimpleDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::ArrayDataType) {
-//                            std::shared_ptr<ArrayDataType> pArrayDataType = std::make_shared<ArrayDataType>(*static_cast<ArrayDataType*>(it->second.get()));
-//                            arrayDataType->setTypeElements(pArrayDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::FixedRecordDataType) {
-//                            std::shared_ptr<FixedRecordDataType> pArrayDataType = std::make_shared<FixedRecordDataType>(*static_cast<FixedRecordDataType*>(it->second.get()));
-//                            arrayDataType->setTypeElements(pArrayDataType);
-//                        }
-//                        else if(it->second->category() == EncodableDataType::CATEGORY::VariantRecordDataType) {
-//                            std::shared_ptr<VariantRecordDataType> pArrayDataType = std::make_shared<VariantRecordDataType>(*static_cast<VariantRecordDataType*>(it->second.get()));
-//                            arrayDataType->setTypeElements(pArrayDataType);
-//                        }
-//                    }
-//                    else
-//                        throw DataTypeException(std::string("The type ") + dataTypeName + std::string(" does not exist in the array data"));
                 }
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"cardinality")) {
                     arrayDataType->setCardinality((const char*)getText(tempNode));
@@ -614,35 +550,6 @@ void XmlParser2010::parseFixedRecordData()
                         else if(!xmlStrcmp(tempNodeField->name, (const xmlChar*)"dataType")) {
                             std::string dataTypeName((const char*)getText(tempNodeField));
                             field.setTypeElemTemp(dataTypeName);
-//                            auto it = _predefinedDataType.find(dataTypeName);
-//                            if(it != _predefinedDataType.end()) {
-//                                if(it->second->category() == EncodableDataType::CATEGORY::BasicDataType) {
-//                                    std::shared_ptr<BasicDataType> pBasicDataType = std::make_shared<BasicDataType>(*static_cast<BasicDataType*>(it->second.get()));
-//                                    field.setTypeElem(pBasicDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::SimpleDataType) {
-//                                    std::shared_ptr<SimpleDataType> pSimpleDataType = std::make_shared<SimpleDataType>(*static_cast<SimpleDataType*>(it->second.get()));
-//                                    field.setTypeElem(pSimpleDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::EnumeratedDataType) {
-//                                    std::shared_ptr<EnumeratedDataType> pSimpleDataType = std::make_shared<EnumeratedDataType>(*static_cast<EnumeratedDataType*>(it->second.get()));
-//                                    field.setTypeElem(pSimpleDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::ArrayDataType) {
-//                                    std::shared_ptr<ArrayDataType> pArrayDataType = std::make_shared<ArrayDataType>(*static_cast<ArrayDataType*>(it->second.get()));
-//                                    field.setTypeElem(pArrayDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::FixedRecordDataType) {
-//                                    std::shared_ptr<FixedRecordDataType> pArrayDataType = std::make_shared<FixedRecordDataType>(*static_cast<FixedRecordDataType*>(it->second.get()));
-//                                    field.setTypeElem(pArrayDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::VariantRecordDataType) {
-//                                    std::shared_ptr<VariantRecordDataType> pArrayDataType = std::make_shared<VariantRecordDataType>(*static_cast<VariantRecordDataType*>(it->second.get()));
-//                                    field.setTypeElem(pArrayDataType);
-//                                }
-//                            }
-//                            else
-//                                throw DataTypeException(std::string("The type ") + dataTypeName + std::string(" does not exist in the fixed record"));
                         }
                         else if(!xmlStrcmp(tempNodeField->name, (const xmlChar*)"semantics")) {
                             field.setSemantics((const char*)getText(tempNodeField));
@@ -679,15 +586,6 @@ void XmlParser2010::parseVariantRecordData()
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"dataType")) {
                     std::string dataTypeName((const char*)getText(tempNode));
                     variantRecordDataType->setDiscriminantTypeTemp(dataTypeName);
-//                    auto it = _predefinedDataType.find(dataTypeName);
-//                    if(it != _predefinedDataType.end()) {
-//                        if(it->second->category() == EncodableDataType::CATEGORY::EnumeratedDataType) {
-//                            std::shared_ptr<EnumeratedDataType> pBasicDataType = std::make_shared<EnumeratedDataType>(*static_cast<EnumeratedDataType*>(it->second.get()));
-//                            variantRecordDataType->setDiscriminantType(pBasicDataType);
-//                        }
-//                    }
-//                    else
-//                        throw EnumerateException(std::string("The enumerate type ") + dataTypeName + std::string(" does not exist"));
                 }
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"alternative")) {
                     xmlNodePtr tempNodeAlternative = tempNode->children;
@@ -695,9 +593,6 @@ void XmlParser2010::parseVariantRecordData()
                     while(tempNodeAlternative != NULL) {
                         if(!xmlStrcmp(tempNodeAlternative->name, (const xmlChar*)"enumerator")) {
                             alternative.setEnumeratorTemp((const char*)getText(tempNodeAlternative));
-//                            EnumeratedDataType* enumDataType = static_cast<EnumeratedDataType*>(variantRecordDataType->discriminantType().get());
-//                            std::shared_ptr<Enumerator> enumerator = enumDataType->getEnumerator((const char*)getText(tempNodeAlternative));
-//                            alternative.setEnumerator(enumerator);
                         }
                         else if(!xmlStrcmp(tempNodeAlternative->name, (const xmlChar*)"name")) {
                             alternative.setName((const char*)getText(tempNodeAlternative));
@@ -705,36 +600,6 @@ void XmlParser2010::parseVariantRecordData()
                         else if(!xmlStrcmp(tempNodeAlternative->name, (const xmlChar*)"dataType")) {
                             std::string dataTypeName((const char*)getText(tempNodeAlternative));
                             alternative.setTypeTemp(dataTypeName);
-//                            auto it = _predefinedDataType.find(dataTypeName);
-//                            if(it != _predefinedDataType.end()) {
-//                                if(it->second->category() == EncodableDataType::CATEGORY::BasicDataType) {
-//                                    std::shared_ptr<BasicDataType> pBasicDataType = std::make_shared<BasicDataType>(*static_cast<BasicDataType*>(it->second.get()));
-//                                    alternative.setType(pBasicDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::SimpleDataType) {
-//                                    std::shared_ptr<SimpleDataType> pSimpleDataType = std::make_shared<SimpleDataType>(*static_cast<SimpleDataType*>(it->second.get()));
-//                                    alternative.setType(pSimpleDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::EnumeratedDataType) {
-//                                    std::shared_ptr<EnumeratedDataType> pArrayDataType = std::make_shared<EnumeratedDataType>(*static_cast<EnumeratedDataType*>(it->second.get()));
-//                                    alternative.setType(pArrayDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::ArrayDataType) {
-//                                    std::shared_ptr<ArrayDataType> pArrayDataType = std::make_shared<ArrayDataType>(*static_cast<ArrayDataType*>(it->second.get()));
-//                                    alternative.setType(pArrayDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::FixedRecordDataType) {
-//                                    std::shared_ptr<FixedRecordDataType> pArrayDataType = std::make_shared<FixedRecordDataType>(*static_cast<FixedRecordDataType*>(it->second.get()));
-//                                    alternative.setType(pArrayDataType);
-//                                }
-//                                else if(it->second->category() == EncodableDataType::CATEGORY::VariantRecordDataType) {
-//                                    std::shared_ptr<VariantRecordDataType> pArrayDataType = std::make_shared<VariantRecordDataType>(*static_cast<VariantRecordDataType*>(it->second.get()));
-//                                    alternative.setType(pArrayDataType);
-//                                }
-
-//                            }
-//                            else
-//                                throw DataTypeException(std::string("The type ") + dataTypeName + std::string(" does not exist in the variant record"));
                         }
                         else if(!xmlStrcmp(tempNodeAlternative->name, (const xmlChar*)"semantics")) {
                             alternative.setSemantics((const char*)getText(tempNodeAlternative));

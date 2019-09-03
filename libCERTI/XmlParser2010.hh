@@ -88,6 +88,9 @@ private:
      */
 //    void parseRoutingSpace(void) override;
 
+    ///
+    /// \brief parseDataType Parse all datatypes
+    ///
     void parseDataType();
     void parseBasicData();
     void parseSimpleData();
@@ -96,6 +99,10 @@ private:
     void parseFixedRecordData();
     void parseVariantRecordData();
 
+    ///
+    /// \brief connectDataTypeBetweenThem This method have to be called after parse all datatype.
+    /// This method connect all datatype between them.
+    ///
     void connectDataTypeBetweenThem();
 
     typedef struct ntos2010 : HLAntos_t {
