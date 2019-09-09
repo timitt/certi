@@ -125,7 +125,9 @@ set(LEX_WANTED_OUT_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/tokens)
 set(IEEE1516eSRCS
     ieee1516-2010/EncodableDataType.h
     ieee1516-2010/EncodableDataType.cpp
+    ieee1516-2010/ObjectClass1516e.h
     ieee1516-2010/ObjectClassAttribute1516e.h
+    ieee1516-2010/Interaction1516e.h
     ieee1516-2010/Parameter1516e.h
     ieee1516-2010/DataType.h
     ieee1516-2010/BasicDataType.h

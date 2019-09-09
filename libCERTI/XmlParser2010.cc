@@ -26,7 +26,9 @@
 #include "RoutingSpace.hh"
 #include "XmlParser.hh"
 #include "XmlParser2010.hh"
+#include "ieee1516-2010/ObjectClass1516e.h"
 #include "ieee1516-2010/ObjectClassAttribute1516e.h"
+#include "ieee1516-2010/Interaction1516e.h"
 #include "ieee1516-2010/Parameter1516e.h"
 #include "ieee1516-2010/EncodableDataType.h"
 #include "ieee1516-2010/BasicDataType.h"
@@ -100,7 +102,7 @@ void XmlParser2010::parseClass(ObjectClass *parent)
         throw CouldNotOpenFED("Current node Name is nullptr!!");
     }
 
-    auto current = new ObjectClass(name, root->getFreeObjectClassHandle());
+    auto current = new certi::ObjectClass1516e(name, root->getFreeObjectClassHandle());
 
     try {
         root->addObjectClass(current, parent);
@@ -109,7 +111,7 @@ void XmlParser2010::parseClass(ObjectClass *parent)
         if (my_is_parsing_module) {
             // The class already exists. point to it and do not add attributes
             class_already_exists = true;
-            current = root->getObjectClass(root->ObjectClasses->getObjectClassHandle(name));
+            current = static_cast<certi::ObjectClass1516e*>(root->getObjectClass(root->ObjectClasses->getObjectClassHandle(name)));
         }
         else {
             throw;
@@ -167,6 +169,8 @@ void XmlParser2010::parseClass(ObjectClass *parent)
                 std::string dataTypeStr((const char*)objClassProp.dataType);
                 if(_predefinedDataType.count(dataTypeStr) > 0)
                     attr->setType(_predefinedDataType.at(dataTypeStr));
+                else if(dataTypeStr != "NA")
+                    throw certi::DataTypeException("The datatype have to be defined in the FOM");
 
                 // Attribute complete, adding to the class
                 current->addAttribute(attr);
@@ -226,7 +230,7 @@ void XmlParser2010::parseInteraction(Interaction *parent)
         cerr << "warning: No order provided, defaulting to TSO" << endl;
     }
 
-    Interaction* current = new Interaction(
+    Interaction1516e* current = new Interaction1516e(
         reinterpret_cast<char*>(intClassProp.name), root->getFreeInteractionClassHandle(), transport, order);
 
     // Routing space
@@ -251,8 +255,8 @@ void XmlParser2010::parseInteraction(Interaction *parent)
         if (my_is_parsing_module) {
             // The interaction already exists. point to it and do not add parameters
             interaction_already_exists = true;
-            current = root->getInteractionClass(
-                root->Interactions->getInteractionClassHandle(reinterpret_cast<char*>(intClassProp.name)));
+            current = static_cast<certi::Interaction1516e*>(root->getInteractionClass(
+                root->Interactions->getInteractionClassHandle(reinterpret_cast<char*>(intClassProp.name))));
         }
         else {
             throw;
@@ -295,7 +299,6 @@ void XmlParser2010::parseDataType()
 
         if(cur != nullptr) {
             std::string curName((const char*)cur->name);
-            std::cout << "Cur name : " << curName << std::endl;
         }
 
         xmlNodePtr prev = cur;

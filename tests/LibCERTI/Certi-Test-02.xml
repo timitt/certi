@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE objectModel SYSTEM "hla.dtd"><objectModel DTDversion="1516.2" name="Certi Test FOM - Object handles" type="FOM" version="1.0" date="2010-04-19" other="Created with Visual OMT 1516">
+<objects>
+    <objectClass name="HLAobjectRoot" sharing="Neither">
+        <name>HLAobjectRoot</name>
+        <sharing>Neither</sharing>
+        <attribute>
+            <name>HLAprivilegeToDeleteObject</name>
+            <dataType>NA</dataType>
+            <updateType>NA</updateType>
+            <updateCondition>NA</updateCondition>
+            <ownership>DivestAcquire</ownership>
+            <sharing>PublishSubscribe</sharing>
+            <dimensions>NA</dimensions>
+            <transportation>HLAreliable</transportation>
+            <order>TimeStamp</order>
+        </attribute>
+        <objectClass name="TestObjectClass" sharing="PublishSubscribe">
+            <name>TestObjectClass</name>
+            <sharing>PublishSubscribe</sharing>
+            <attribute> 
+                <name>Data</name>
+                <dataType>TestInteger64LE</dataType>
+                <transportation>HLAreliable</transportation>
+                <order>TimeStamp</order>
+            </attribute>
+        </objectClass>    
+        <objectClass>
+            <name>TestObjectClassR</name>
+            <sharing>PublishSubscribe</sharing>
+            <attribute>
+                <name>DataR</name>
+                <dataType>TestInteger64LE</dataType>
+                <transportation>HLAreliable</transportation>
+                <order>Receive</order>
+            </attribute>
+        </objectClass>        
+    </objectClass>
+</objects>
+<interactions>
+    <interactionClass>
+        <name>HLAinteractionRoot</name>
+        <sharing>Neither</sharing>
+        <dimensions>NA</dimensions>
+        <transportation>HLAreliable</transportation>
+        <order>Receive</order>        
+        <interactionClass>
+            <name>Msg</name>
+            <sharing>PublishSubscribe</sharing>
+            <dimensions>NA</dimensions>
+            <transportation>HLAreliable</transportation>
+            <order>TimeStamp</order>
+            <parameter> 
+                <name>MsgData</name>
+                <dataType>HLAbyte</dataType>
+            </parameter>
+        </interactionClass>
+        <interactionClass>
+            <name>MsgR</name>
+            <sharing>PublishSubscribe</sharing>
+            <dimensions>NA</dimensions>
+            <transportation>HLAreliable</transportation>
+            <order>Receive</order>
+            <parameter>
+                <name>MsgDataR</name>
+                <dataType>HLAbyte</dataType>
+            </parameter>
+        </interactionClass>
+    </interactionClass>
+</interactions>
+<synchronizations>
+    <synchronization label="First" dataType="NA" capability="RegisterAchieve"/>
+    <synchronization label="Second" dataType="NA" capability="RegisterAchieve"/>
+</synchronizations>
+</objectModel>

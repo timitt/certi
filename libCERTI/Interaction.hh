@@ -246,11 +246,13 @@ private:
     SecurityLevelID id; //!< The default Security Level for new parameters
     SpaceHandle space;
 
-    //! List of this Interaction Class' Parameters.
-    HandleParameterMap _handleParameterMap;
-
     typedef std::set<FederateHandle> PublishersList;
     PublishersList publishers;
+
+protected:
+
+    //! List of this Interaction Class' Parameters.
+    HandleParameterMap _handleParameterMap;
 };
 
 } // namespace

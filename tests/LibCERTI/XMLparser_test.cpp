@@ -65,7 +65,7 @@ TEST(XMLparserTest, CreateFederationTest)
 
     certi::XmlParser2010 parser(&rootObject);
 
-    std::string fomPath = std::string(SOURCE_DIR) + "/tests/LibCERTI/Base.xml";
+    std::string fomPath = std::string(SOURCE_DIR) + "/tests/LibCERTI/Certi-Test-02.xml";
     std::cout << "PATH : " << fomPath << std::endl;
 
     std::ifstream try_to_open(fomPath);
@@ -79,7 +79,7 @@ TEST(XMLparserTest, CreateFederationTest)
         for(auto classAttributes : objectClass->getHandleClassAttributeMap()) {
             std::cout << "\tAttributes handle : " << classAttributes.first << std::endl;
 
-            auto classAttribute = objectClass->getAttribute1516e(classAttributes.first);
+            certi::ObjectClassAttribute1516e* classAttribute = objectClass->getAttribute1516e(classAttributes.first);
             std::cout << "\tAttributes name : " << classAttribute->getName() << std::endl;
 
             if(classAttribute->getType()->category() == certi::EncodableDataType::CATEGORY::BasicDataType) {

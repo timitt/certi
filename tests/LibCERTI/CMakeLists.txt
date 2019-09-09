@@ -34,6 +34,7 @@ add_executable(TestLibCERTI
                Base.xml
                HLAstandardMIM.xml
                RPR-FOM2D18.xml
+               Certi-Test-02.xml
 
                )
 

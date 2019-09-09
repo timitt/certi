@@ -238,7 +238,7 @@ private:
     /// private default constructor with no code one should not call it.
     ObjectClass() = delete;
 
-    void addInheritedClassAttributes(ObjectClass* child);
+    virtual void addInheritedClassAttributes(ObjectClass* child);
 
     void sendToFederate(NetworkMessage* msg, FederateHandle theFederate);
 
@@ -285,9 +285,6 @@ private:
     /// The security level ID attached to this object class. default level for non inherited attributes.
     SecurityLevelID securityLevelId;
 
-    /// All attributes, indexed by handle.
-    HandleClassAttributeMap _handleClassAttributeMap;
-
     /// All objects of this class, indexed by handle.
     HandleObjectMap _handleObjectMap;
 
@@ -299,6 +296,10 @@ private:
 
     /// The message buffer used to send Network messages
     libhla::MessageBuffer NM_msgBufSend;
+
+protected:
+    /// All attributes, indexed by handle.
+    HandleClassAttributeMap _handleClassAttributeMap;
 };
 
 } // namespace certi

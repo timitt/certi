@@ -1,6 +1,6 @@
 #include "EncodableDataType.h"
 
-certi::EncodableDataType* certi::EncodableDataType::_pEncodableDataType=nullptr;
+certi::EncodableDataType* certi::EncodableDataType::_pEncodableDataType = nullptr;
 
 std::__cxx11::string certi::EncodableDataType::toString(const certi::EncodableDataType::TYPE &a_type) {
     _pEncodableDataType->initTypeMapFromTYPE();
@@ -52,7 +52,7 @@ certi::EncodableDataType* certi::EncodableDataType::getInstance()
 
 certi::EncodableDataType::~EncodableDataType()
 {
-    if(_pEncodableDataType) {
+    if(_pEncodableDataType != nullptr) {
         delete _pEncodableDataType;
         _pEncodableDataType = nullptr;
     }
