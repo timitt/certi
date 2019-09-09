@@ -1,4 +1,4 @@
-/*
+
 #include <gtest/gtest.h>
 #include <RTI/encoding/EncodingExceptions.h>
 #include <RTI/time/HLAfloat64Time.h>
@@ -400,4 +400,4 @@ TEST(HLATimeTypesTest, TestHLAintegerTimeFactory)
     std::auto_ptr<rti1516e::LogicalTimeInterval> time_7 = factory.decodeLogicalTimeInterval(ptr1, 9);
     ASSERT_EQ(time_7->toString(), hLAinteger64IntervalestEncode4.toString());
 }
-*/
+
