@@ -10,7 +10,9 @@
 #include <RTI/Enums.h>
 #include <RTI/NullFederateAmbassador.h>
 #include <RTI/RTI1516fedTime.h>
+#include <RTI/encoding/BasicDataElements.h>
 
+using ::rti1516e::HLAfloat64LE;
 
 
 using namespace std;
@@ -244,10 +246,12 @@ public:
       {
 	if (it->first == DataHandle)
 	  {
-	    memcpy (&d, (it->second).data (), (it->second).size ());
+	    
+      HLAfloat64LE hlaFloat64LE;
+      hlaFloat64LE.decode(it->second);
 	    wcout << "                for the handle " << (it->
 							   first).toString ()
-	      << " value = " << d << endl;
+	      << " value = " << hlaFloat64LE << endl;
 	  }
       }
   }
@@ -276,9 +280,10 @@ public:
       {
 	if (it->first == DataRHandle)
 	  {
-	    memcpy (&d, (it->second).data (), (it->second).size ());
+		HLAfloat64LE hlaFloat64LE;
+		hlaFloat64LE.decode(it->second);
 	    wcout << " for the handle " << (it->first).toString ()
-	      << " value = " << d << endl;
+	      << " value = " << hlaFloat64LE << endl;
 	  }
       }
 
@@ -1152,7 +1157,7 @@ Federe_Interactif::callCFE ()
   try
   {
     rtiAmb->createFederationExecution (L"Federation_Interactive",
-				       L"Certi-Test-02.xml");
+				       L"Certi-Test-02-1516e.xml");
   }
 
   catch (rti1516e::Exception & e)
@@ -1689,8 +1694,9 @@ Federe_Interactif::callUAV ()
 
   wcout << "Donner la valeur de la donnee (double) : ";
   cin >> d;
-  rti1516e::VariableLengthData varData (&d, sizeof (d));
-
+  HLAfloat64LE hlaFloat64LE(d);
+  rti1516e::VariableLengthData varData = hlaFloat64LE.encode();
+  
   theUserSuppliedTag.setData (testString.c_str (), testString.size () + 1);
 
   while (1)
