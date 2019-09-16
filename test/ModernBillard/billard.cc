@@ -8,6 +8,11 @@
 
 #include "MessageBuffer.hh"
 
+#include <RTI/encoding/BasicDataElements.h>
+
+using ::rti1516e::HLAfloat64LE;
+
+
 #ifndef X_DISPLAY_MISSING
 #include "../libgraphc/graph_c.hh"
 #endif
@@ -149,7 +154,7 @@ void Billard::createOrJoin()
 {
     debug() << __func__ << endl;
     try {
-        my_ambassador->createFederationExecution(my_federation_name, L"Base.xml");
+        my_ambassador->createFederationExecution(my_federation_name, L"Base1516e.xml");
         has_created = true;
         debug() << "Created federation\n";
     }
@@ -158,10 +163,10 @@ void Billard::createOrJoin()
 
     std::vector<std::wstring> modules;
     if (has_created) {
-        modules.emplace_back(L"Create.xml");
+        modules.emplace_back(L"Create1516e.xml");
     }
     else {
-        modules.emplace_back(L"Join.xml");
+        modules.emplace_back(L"Join1516e.xml");
     }
 
     my_handle = my_ambassador->joinFederationExecution(my_federate_name, L"ModernBillard", my_federation_name, modules);
@@ -365,21 +370,16 @@ void Billard::sendCollision(const Ball& other, const LogicalTime& time)
     static const auto param_dx_handle = my_ambassador->getParameterHandle(collision_handle, L"DX");
     static const auto param_dy_handle = my_ambassador->getParameterHandle(collision_handle, L"DY");
 
-    libhla::MessageBuffer buffer;
 
     ParameterHandleValueMap parameters;
 
     parameters[param_ball_handle] = other.getHandle().encode();
 
-    buffer.reset();
-    buffer.write_double(my_ball.getDX());
-    buffer.updateReservedBytes();
-    parameters[param_dx_handle] = VariableLengthData(static_cast<char*>(buffer(0)), buffer.size());
+    HLAfloat64LE hlaDX(my_ball.getDX());
+    parameters[param_dx_handle] = hlaDX.encode();
 
-    buffer.reset();
-    buffer.write_double(my_ball.getDY());
-    buffer.updateReservedBytes();
-    parameters[param_dy_handle] = VariableLengthData(static_cast<char*>(buffer(0)), buffer.size());
+    HLAfloat64LE hlaDY(my_ball.getDY());
+    parameters[param_dy_handle] = hlaDY.encode();
 
     std::wstring tag{L""};
     my_ambassador->sendInteraction(collision_handle, parameters, {tag.c_str(), tag.size()}, time);
@@ -391,19 +391,13 @@ void Billard::sendNewPosition(const LogicalTime& time)
     static const auto attribute_pos_x_handle = my_ambassador->getAttributeHandle(ball_handle, L"PositionX");
     static const auto attribute_pos_y_handle = my_ambassador->getAttributeHandle(ball_handle, L"PositionY");
 
-    libhla::MessageBuffer buffer;
 
     AttributeHandleValueMap attributes;
 
-    buffer.reset();
-    buffer.write_double(my_ball.getX());
-    buffer.updateReservedBytes();
-    attributes[attribute_pos_x_handle] = VariableLengthData(static_cast<char*>(buffer(0)), buffer.size());
-
-    buffer.reset();
-    buffer.write_double(my_ball.getY());
-    buffer.updateReservedBytes();
-    attributes[attribute_pos_y_handle] = VariableLengthData(static_cast<char*>(buffer(0)), buffer.size());
+    HLAfloat64LE hlaX(my_ball.getX());
+    attributes[attribute_pos_x_handle] = hlaX.encode();
+    HLAfloat64LE hlaY(my_ball.getY());
+    attributes[attribute_pos_y_handle] = hlaY.encode();
 
     debug() << "SEND::" << attributes << endl;
 
@@ -514,25 +508,18 @@ void Billard::receiveInteraction(rti1516e::InteractionClassHandle theInteraction
         try {
             auto handle = theParameterValues.at(param_ball_handle);
             if (std::memcmp(handle.data(), my_ball.getHandle().encode().data(), handle.size()) == 0) {
-                libhla::MessageBuffer mb;
 
                 auto param_dx = theParameterValues.at(param_dx_handle);
 
-                mb.resize(param_dx.size());
-                mb.reset();
-                std::memcpy(static_cast<char*>(mb(0)), param_dx.data(), param_dx.size());
-                mb.assumeSizeFromReservedBytes();
-
-                my_ball.setDX(mb.read_double());
+                HLAfloat64LE hlaDX;
+                hlaDX.decode(param_dx);
+                my_ball.setDX(hlaDX);
 
                 auto param_dy = theParameterValues.at(param_dx_handle);
 
-                mb.resize(param_dy.size());
-                mb.reset();
-                std::memcpy(static_cast<char*>(mb(0)), param_dy.data(), param_dy.size());
-                mb.assumeSizeFromReservedBytes();
-
-                my_ball.setDY(mb.read_double());
+                HLAfloat64LE hlaDY;
+                hlaDY.decode(param_dy);
+                my_ball.setDY(hlaDY);
 
                 debug() << "[" << my_local_time.toString() << "] New ball position: x=" << my_ball.getX()
                         << ", y=" << my_ball.getY() << std::endl;
@@ -605,12 +592,9 @@ void Billard::reflectAttributeValues(rti1516e::ObjectInstanceHandle theObject,
             }
 
             if (fun) {
-                libhla::MessageBuffer mb;
-                mb.resize(kv.second.size());
-                mb.reset();
-                std::memcpy(static_cast<char*>(mb(0)), kv.second.data(), kv.second.size());
-                mb.assumeSizeFromReservedBytes();
-                (otherBall.*fun)(mb.read_double());
+                HLAfloat64LE hlaFun;
+                hlaFun.decode(kv.second);
+                (otherBall.*fun)(hlaFun);
                 otherBall.setActive();
             }
         }
