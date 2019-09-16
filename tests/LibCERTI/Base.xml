@@ -120,10 +120,6 @@
          </interactionClass>
       </interactionClass>
    </interactions>
-   <!--<routingSpace name="Geo">
-      <dimension name="X" />
-      <dimension name="Y" />
-   </routingSpace>-->
    <routingSpace>
       <name>Geo</name>
       <dimension>
