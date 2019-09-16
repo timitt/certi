@@ -130,6 +130,8 @@ void XmlParser2010::parseClass(ObjectClass *parent)
                 objClassProp.space = nullptr;
                 objClassProp.dataType = nullptr;
                 parseNTOS(&objClassProp);
+                if(objClassProp.dataType == nullptr)
+                    throw certi::DataTypeException("Attribute must have a datatype defined in the FOM");
 
                 AttributeHandle attributeHandle = current->getHandleClassAttributeMap().size() + 1;
                 ObjectClassAttribute1516e* attr = new ObjectClassAttribute1516e((const char*) objClassProp.name, attributeHandle);
@@ -170,7 +172,8 @@ void XmlParser2010::parseClass(ObjectClass *parent)
                 if(_predefinedDataType.count(dataTypeStr) > 0)
                     attr->setType(_predefinedDataType.at(dataTypeStr));
                 else if(dataTypeStr != "NA")
-                    throw certi::DataTypeException("The datatype have to be defined in the FOM");
+                    cerr << "warning: The datatype have to be defined in the FOM" << endl;
+//                    throw certi::DataTypeException("The datatype have to be defined in the FOM");
 
                 // Attribute complete, adding to the class
                 current->addAttribute(attr);
@@ -204,6 +207,7 @@ void XmlParser2010::parseInteraction(Interaction *parent)
     intClassProp.space = nullptr;
     intClassProp.dataType = nullptr;
     parseNTOS(&intClassProp);
+
     // Name
 
     // Transportation
@@ -272,13 +276,17 @@ void XmlParser2010::parseInteraction(Interaction *parent)
                 xmlNodePtr tempNode = cur->children;
                 while (tempNode != NULL) {
                     if ((!xmlStrcmp(tempNode->name, NODE_DATATYPE))) {
-                        std::string dataTypeStr((const char*)getText(tempNode));
+                        intClassProp.dataType = getText(tempNode);
+                        std::string dataTypeStr((const char*)intClassProp.dataType);
                         if(_predefinedDataType.count(dataTypeStr) > 0)
                             param->setType(_predefinedDataType.at(dataTypeStr));
+                        else if(dataTypeStr != "NA")
+                            cerr << "warning: The datatype have to be defined in the FOM" << endl;
                     }
                     tempNode = tempNode->next;
                 }
-
+                if(intClassProp.dataType == nullptr)
+                    throw certi::DataTypeException("Parameter must have a datatype defined in the FOM");
                 current->addParameter(param);
             }
         }
@@ -286,8 +294,41 @@ void XmlParser2010::parseInteraction(Interaction *parent)
         if ((!xmlStrcmp(cur->name, NODE_INTERACTION_CLASS))) {
             this->parseInteraction(current);
         }
+
         cur = cur->next;
     }
+
+    cur = prev;
+}
+
+void XmlParser2010::parseRoutingSpace()
+{
+    Debug(D, pdTrace) << "New Routing Space" << endl;
+
+    xmlNodePtr prev = cur;
+    RoutingSpace current;
+    current.setHandle(root->getFreeSpaceHandle());
+    std::string tmpName = getName();
+    current.setName(tmpName);
+
+    // Dimensions
+    cur = cur->xmlChildrenNode;
+    while (cur != nullptr) {
+        if ((!xmlStrcmp(cur->name, NODE_DIMENSION))) {
+            Dimension dimension(root->getFreeDimensionHandle());
+            std::string tmpName = getName();
+            dimension.setName(tmpName);
+            current.addDimension(dimension);
+        }
+        cur = cur->next;
+    }
+    // Routing Space should be added after the
+    // Dimension has been added since addRoutingSpace store a copy
+    // of the object and not a reference
+    // see bug #19534
+    // https://savannah.nongnu.org/bugs/?19534
+    root->addRoutingSpace(current);
+
     cur = prev;
 }
 

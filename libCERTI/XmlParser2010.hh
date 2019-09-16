@@ -86,7 +86,7 @@ private:
     /** 
      * Parse a routing space from current node.
      */
-//    void parseRoutingSpace(void) override;
+    void parseRoutingSpace(void) override;
 
     ///
     /// \brief parseDataType Parse all datatypes
