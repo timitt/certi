@@ -176,6 +176,8 @@ public:
     void
     isReady(FederateHandle federate_handle, const std::vector<ParameterHandle>& parameter_list, uint16_t list_size);
 
+    bool checkSizeData(Parameter &parameter, const AttributeValue_t &data) const;
+
     std::pair<InteractionBroadcastList*, Responses> sendInteraction(FederateHandle federate_handle,
                                                                     const std::vector<ParameterHandle>& parameter_list,
                                                                     const std::vector<ParameterValue_t>& value_list,

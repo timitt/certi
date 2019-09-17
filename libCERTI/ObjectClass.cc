@@ -825,6 +825,14 @@ ObjectClass::updateAttributeValues(FederateHandle the_federate,
     ObjectAttribute* oa;
     for (int i = 0; i < the_size; i++) {
         oa = object->getAttribute(the_attributes[i]);
+
+        // Check size of dataType value is the same than the size declared in the FOM
+        bool isGoodSize = checkSizeData(*oa, the_values[i]);
+        if(!isGoodSize) {
+//            throw certi::DataTypeException("The data size does not correspond to the FOM.");
+            std::cerr << "warning: The data size does not correspond to the FOM." << endl;
+        }
+
         if (oa->getOwner() != the_federate)
             throw AttributeNotOwned("Federate <" + std::to_string(the_federate) + "> is not owner of attribute <"
                                     + std::to_string(oa->getHandle())
@@ -883,9 +891,11 @@ ObjectClass::updateAttributeValues(FederateHandle the_federate,
     for (int i = 0; i < the_size; i++) {
         oa = object->getAttribute(the_attributes[i]);
 
+        // Check size of dataType value is the same than the size declared in the FOM
         bool isGoodSize = checkSizeData(*oa, the_values[i]);
         if(!isGoodSize) {
-            throw certi::DataTypeException("The data size does not correspond to the FOM.");
+//            throw certi::DataTypeException("The data size does not correspond to the FOM.");
+            std::cerr << "warning: The data size does not correspond to the FOM." << endl;
         }
         if (oa->getOwner() != the_federate) {
             throw AttributeNotOwned("Attribute #" + std::to_string(the_attributes[i]) + " is not owned by federate #"

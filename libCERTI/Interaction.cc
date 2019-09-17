@@ -27,6 +27,7 @@
 #include "NM_Classes.hh"
 #include "PrettyDebug.hh"
 #include "ieee1516-2010/Parameter1516e.h"
+#include "ieee1516-2010/SimpleDataType.h"
 
 #include <assert.h>
 #include <iostream>
@@ -361,6 +362,22 @@ void Interaction::unpublish(FederateHandle the_handle)
     }
 }
 
+bool Interaction::checkSizeData(Parameter &parameter, const AttributeValue_t &data) const
+{
+    Parameter1516e* interactionParameter = dynamic_cast<Parameter1516e*>(&parameter);
+    if(interactionParameter != nullptr) {
+        if(interactionParameter->getType()->category() == EncodableDataType::CATEGORY::BasicDataType) {
+            BasicDataType* basicDataType = static_cast<BasicDataType*>(interactionParameter->getType().get());
+            return basicDataType->size() == data.size()*8;
+        }
+        else if(interactionParameter->getType()->category() == EncodableDataType::CATEGORY::SimpleDataType) {
+            SimpleDataType* simpleDataType = static_cast<SimpleDataType*>(interactionParameter->getType().get());
+            return simpleDataType->representation()->size() == data.size()*8;
+        }
+    }
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 /*! Called by RTIG in order to start the broadcasting of an Interaction
   Message(to all federates who subscribed to this Interaction Class).
@@ -383,6 +400,16 @@ Interaction::sendInteraction(FederateHandle federate_handle,
     // Pre-conditions checking
     if (!isPublishing(federate_handle))
         throw FederateNotPublishing("");
+
+    // Check size of dataType value is the same than the size declared in the FOM
+    for(uint16_t i=0; i < list_size; i++) {
+        Parameter *parameter = this->getParameterByHandle(parameter_list[i]);
+        bool isGoodSize = this->checkSizeData(*parameter, value_list[i]);
+        if(!isGoodSize) {
+//            throw certi::DataTypeException("The data size does not correspond to the FOM.");
+            std::cerr << "warning: The data size does not correspond to the FOM." << endl;
+        }
+    }
 
     // Prepare and Broadcast message for this class
     if (server != NULL) {
@@ -439,6 +466,16 @@ Interaction::sendInteraction(FederateHandle federate_handle,
     // Pre-conditions checking
     if (!isPublishing(federate_handle))
         throw FederateNotPublishing("");
+
+    // Check size of dataType value is the same than the size declared in the FOM
+    for(uint16_t i=0; i < list_size; i++) {
+        Parameter *parameter = this->getParameterByHandle(parameter_list[i]);
+        bool isGoodSize = this->checkSizeData(*parameter, value_list[i]);
+        if(!isGoodSize) {
+//            throw certi::DataTypeException("The data size does not correspond to the FOM.");
+            std::cerr << "warning: The data size does not correspond to the FOM." << endl;
+        }
+    }
 
     // Prepare and Broadcast message for this class
     if (server != NULL) {
