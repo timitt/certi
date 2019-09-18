@@ -35,7 +35,22 @@ int main(int argc, char **argv)
   myFederate.createFederationExecution(federationName,FOMpath);
   myFederate.joinFederationExecution();
   myFederate.getHandles();
+  myFederate.subscribeObjectClassAttribute();
+  myFederate.publishObjectClassAttribute();
+  myFederate.subscribreInteractionClass();
+  myFederate.publishInteractionClass();
+  myFederate.TAR();
+  myFederate.TARA();
+  myFederate.evoke();
+  myFederate.enableTR();
+  myFederate.enableAD();
 
+  myFederate.disableAD();
+  myFederate.disableTR();
+  myFederate.unsubscribeObjectClassAttribute();
+  myFederate.unpublishObjectClassAttribute();
+  myFederate.unsubscribreInteractionClass();
+  myFederate.unpublishInteractionClass();
   myFederate.resignFederationExecution();
   // Destroy the federation
   myFederate.destroyFederationExecution();

@@ -44,7 +44,7 @@ set(testFederate_SRCS
   ${testFederate_SRCS_generated}
   )
 install(FILES  
-  testFederation.fed testFederation.xml
+  testFederation.fed testFederation.xml testFederation1516-2010.xml
   DESTINATION share/federations)
 
 ## HLA 1.3 specific code follows
