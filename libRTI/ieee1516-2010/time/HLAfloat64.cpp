@@ -83,7 +83,8 @@ throw (rti1516e::CouldNotEncode)
     rti1516e::HLAfloat64BE encoder(_time);
     std::vector<Octet> bytes;
     encoder.encodeInto(bytes);
-    std::memcpy(buffer, &bytes[0], bytes.size());
+    if(bytes.size() > 0)
+        std::memcpy(buffer, &bytes[0], bytes.size());
     return encoder.getEncodedLength();
 }
 
@@ -97,7 +98,8 @@ throw (rti1516e::InternalError,
     rti1516e::HLAfloat64BE decoder;
     std::vector<Octet> bytes;
     bytes.resize(bufferSize);
-    std::memcpy(&bytes[0], buffer, bufferSize);
+    if(bytes.size() > 0)
+        std::memcpy(&bytes[0], buffer, bufferSize);
     decoder.decodeFrom(bytes, 0);
     _time = decoder.get();
 }

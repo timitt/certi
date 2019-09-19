@@ -97,7 +97,6 @@ TEST(HLAComplexeTypesTest, TestHLAvariableArray)
         FAIL() << e.what();
     }
 
-
 //    HLA3Byte hla3Byte_1(16);
 //    HLA3Byte hla3Byte_2(32);
 //    HLA3Byte hla3Byte_3(64);

@@ -51,7 +51,8 @@ throw (EncoderException)
 {
     std::vector<Octet> buffer;
     encodeInto(buffer);
-    inData.setData(&buffer[0], buffer.size());
+    if(buffer.size() > 0)
+        inData.setData(&buffer[0], buffer.size());
 }
 
 void HLAopaqueData::encodeInto(std::vector<Octet> &buffer) const
@@ -64,7 +65,8 @@ void HLAopaqueData::decode(const VariableLengthData &inData)
 throw (EncoderException)
 {
     std::vector<Octet> buffer(inData.size());
-    std::memcpy(&buffer[0], inData.data(), inData.size());
+    if(buffer.size() > 0)
+        std::memcpy(&buffer[0], inData.data(), inData.size());
     decodeFrom(buffer, 0);
 }
 

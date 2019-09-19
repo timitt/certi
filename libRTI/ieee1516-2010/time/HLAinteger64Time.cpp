@@ -163,8 +163,10 @@ rti1516e::VariableLengthData HLAinteger64Time::encode() const
 {
     VariableLengthData vlData;
     std::vector<Octet> buffer(encodedLength());
-    encode(&buffer[0], buffer.size());
-    vlData.setData(&buffer[0], buffer.size());
+    if(buffer.size() > 0) {
+        encode(&buffer[0], buffer.size());
+        vlData.setData(&buffer[0], buffer.size());
+    }
     return vlData;
 }
 
@@ -184,8 +186,10 @@ void HLAinteger64Time::decode(rti1516e::VariableLengthData const & VariableLengt
           rti1516e::CouldNotDecode)
 {
     std::vector<Octet> buffer(VariableLengthData.size());
-    std::memcpy(&buffer[0], VariableLengthData.data(), VariableLengthData.size());
-    decode(&buffer[0], buffer.size());
+    if(buffer.size() > 0) {
+        std::memcpy(&buffer[0], VariableLengthData.data(), VariableLengthData.size());
+        decode(&buffer[0], buffer.size());
+    }
 }
 
 void HLAinteger64Time::decode(void* buffer, size_t bufferSize)

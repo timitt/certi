@@ -69,7 +69,9 @@ void HLAvariableArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) co
         a_buffer.push_back(octet);
     }
 
-    uint PElement = this->calculPaddingAfterEachElements(*_vectorpDataElement[0]);
+    uint PElement = 0;
+    if(_vectorpDataElement.size() > 0)
+        PElement = this->calculPaddingAfterEachElements(*_vectorpDataElement[0]);
 
     for(uint i=0; i<_vectorpDataElement.size(); i++)
     {
@@ -83,7 +85,8 @@ void HLAvariableArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) co
             }
         }
     }
-    PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
+    if(a_buffer.size() > 0)
+        PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
 }
 
 //\brief decode elements from a Byte buffer
@@ -101,13 +104,16 @@ size_t HLAvariableArrayImplementation::decodeFrom(const std::vector<Octet> &a_bu
     for(int i=0; i<nbElements.get(); i++) {
         _vectorpDataElement.push_back(_pDataElementPrototype->clone().release());
     }
-    size_t paddingEachElem = this->calculPaddingAfterEachElements(*_vectorpDataElement[0]);
+    size_t paddingEachElem = 0;
+    if(_vectorpDataElement.size() > 0)
+        paddingEachElem = this->calculPaddingAfterEachElements(*_vectorpDataElement[0]);
     for(auto it = _vectorpDataElement.begin(); it != _vectorpDataElement.end(); it++) {
         a_index = (*it)->decodeFrom(a_buffer, a_index);
         if(it+1 != _vectorpDataElement.end())
             a_index += paddingEachElem;
     }
-    PrintInfo<>(Encode::decode, &a_buffer[0], a_buffer.size());
+    if(a_buffer.size() > 0)
+        PrintInfo<>(Encode::decode, &a_buffer[0], a_buffer.size());
     return a_index;
 }
 
