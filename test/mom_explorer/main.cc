@@ -34,7 +34,7 @@
 #include <RTI/RTI1516.h>
 #include <RTI/RTI1516fedTime.h>
 
-#include "momcli.h"
+#include "momcli1516e.h"
 #include "momfederateambassador.h"
 
 #include "make_unique.hh"
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
             }
         }
         else {
-            MomCli c(*ambassador, federation_name);
+            MomCli1516e c(*ambassador, federation_name);
 
             c.execute();
 

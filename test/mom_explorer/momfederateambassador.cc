@@ -4,6 +4,7 @@
 #include <iterator>
 #include <algorithm>
 #include <iomanip>
+#include <RTI/encoding/BasicDataElements.h>
 
 namespace {
 
@@ -186,6 +187,7 @@ std::wstring decode(const std::wstring& object, const std::wstring& attribute, c
 
     return ret;
 }
+
 }
 
 // ostream types
