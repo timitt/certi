@@ -42,8 +42,7 @@ throw (EncoderException)
 {
     std::vector<Octet> buffer;
     encodeInto(buffer);
-    if(buffer.size() > 0)
-        inData.setData(&buffer[0], buffer.size());
+    inData.setData(&buffer[0], buffer.size());
 }
 
 void HLAvariantRecord::encodeInto(std::vector<Octet> &buffer) const
@@ -56,8 +55,7 @@ void HLAvariantRecord::decode(const VariableLengthData &inData)
 throw (EncoderException)
 {
     std::vector<Octet> buffer(inData.size());
-    if(buffer.size() > 0)
-        std::memcpy(&buffer[0], inData.data(), inData.size());
+    std::memcpy(&buffer[0], inData.data(), inData.size());
     decodeFrom(buffer, 0);
 }
 

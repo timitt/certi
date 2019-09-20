@@ -206,10 +206,8 @@ VariableLengthData HLAfloat64Interval::encode() const
 {
     VariableLengthData vlData;
     std::vector<Octet> buffer(encodedLength());
-    if(buffer.size() > 0) {
-        encode(&buffer[0], buffer.size());
-        vlData.setData(&buffer[0], buffer.size());
-    }
+    encode(&buffer[0], buffer.size());
+    vlData.setData(&buffer[0], buffer.size());
     return vlData;
 }
 
@@ -224,10 +222,8 @@ void HLAfloat64Interval::decode(VariableLengthData const & encodedValue)
           CouldNotDecode)
 {
     std::vector<Octet> buffer(encodedValue.size());
-    if(buffer.size() > 0) {
-        std::memcpy(&buffer[0], encodedValue.data(), encodedValue.size());
-        decode(&buffer[0], buffer.size());
-    }
+    std::memcpy(&buffer[0], encodedValue.data(), encodedValue.size());
+    decode(&buffer[0], buffer.size());
 }
 
 void HLAfloat64Interval::decode(void* buffer, size_t bufferSize)

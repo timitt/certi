@@ -62,8 +62,7 @@ void EncodableDataType::encode(VariableLengthData& inData) const                
 {                                                                                                                   \
     std::vector<Octet> buffer;                                                                                      \
     encodeInto(buffer);\
-    if(buffer.size() > 0)\
-        inData.setData(&buffer[0], buffer.size());                                                                      \
+    inData.setData(&buffer[0], buffer.size());                                                                      \
 }                                                                                                                   \
                                                                                                                     \
 void EncodableDataType::encodeInto(std::vector<Octet>& buffer) const                                                \
@@ -76,10 +75,8 @@ void EncodableDataType::decode(VariableLengthData const & inData)               
   throw (EncoderException)                                                                                          \
 {                                                                                                                   \
     std::vector<Octet> buffer(inData.size());                                                                       \
-    if(buffer.size() > 0)\
-        std::memcpy(&buffer[0], inData.data(), inData.size());                                                          \
-    decodeFrom(buffer, 0);\
-                                                                                              \
+    std::memcpy(&buffer[0], inData.data(), inData.size());                                                          \
+    decodeFrom(buffer, 0);                                                                                          \
 }                                                                                                                   \
                                                                                                                     \
 size_t EncodableDataType::decodeFrom(std::vector<Octet> const & buffer, size_t index)                               \

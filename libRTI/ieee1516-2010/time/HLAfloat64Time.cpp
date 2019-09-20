@@ -165,10 +165,8 @@ VariableLengthData HLAfloat64Time::encode() const
 {
     VariableLengthData vlData;
     std::vector<Octet> buffer(encodedLength());
-    if(buffer.size() > 0) {
-        encode(&buffer[0], buffer.size());
-        vlData.setData(&buffer[0], buffer.size());
-    }
+    encode(&buffer[0], buffer.size());
+    vlData.setData(&buffer[0], buffer.size());
     return vlData;
 }
 
@@ -188,10 +186,8 @@ throw (InternalError,
        CouldNotDecode)
 {
     std::vector<Octet> buffer(VariableLengthData.size());
-    if(buffer.size() > 0) {
-        std::memcpy(&buffer[0], VariableLengthData.data(), VariableLengthData.size());
-        decode(&buffer[0], buffer.size());
-    }
+    std::memcpy(&buffer[0], VariableLengthData.data(), VariableLengthData.size());
+    decode(&buffer[0], buffer.size());
 }
 
 void HLAfloat64Time::decode(void *buffer, size_t bufferSize)

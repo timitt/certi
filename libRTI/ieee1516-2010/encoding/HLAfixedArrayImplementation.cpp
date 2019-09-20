@@ -64,8 +64,7 @@ void HLAfixedArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) const
             }
         }
     }
-    if(a_buffer.size() > 0)
-        PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
+    PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
 }
 
 //\brief decode elements from a Byte buffer
@@ -88,8 +87,7 @@ size_t HLAfixedArrayImplementation::decodeFrom(const std::vector<Octet> &a_buffe
         if(it+1 != _vectorpDataElement.end())
             a_index += paddingEachElem;
     }
-    if(a_buffer.size() > 0)
-        PrintInfo<>(Encode::decode, &a_buffer[0], a_buffer.size());
+    PrintInfo<>(Encode::decode, &a_buffer[0], a_buffer.size());
     return a_index;
 }
 

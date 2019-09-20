@@ -271,8 +271,8 @@ throw(EncoderException)
     }
 
     this->c_at(*_pDataElementDiscriminent).second->encodeInto(a_buffer);
-    if(a_buffer.size() > 0)
-        PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
+
+    PrintInfo<>(Encode::encode, &a_buffer[0], a_buffer.size());
 }
 
 //\brief decode elements from a Byte buffer
