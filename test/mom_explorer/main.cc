@@ -113,7 +113,7 @@ int main(int argc, char** argv)
             }
         }
         else {
-            MomCli1516e c(*ambassador, federation_name);
+            MomCli c(*ambassador, federation_name);
 
             c.execute();
 
