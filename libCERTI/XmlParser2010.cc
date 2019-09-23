@@ -64,6 +64,11 @@ RootObject *XmlParser2010::parse(std::__cxx11::string pathToXmlFile)
 }
 
 #ifdef HAVE_XML
+///
+/// \brief getText get the text inside a node
+/// \param node
+/// \return the text inside the node
+///
 xmlChar* getText(xmlNodePtr node)
 {
     if (node->children && node->children->content) {
@@ -74,6 +79,10 @@ xmlChar* getText(xmlNodePtr node)
     }
 }
 
+///
+/// \brief XmlParser2010::getName get the name of the node (The name have to be inside a child node which name is "name"
+/// \return The name of the node
+///
 std::string XmlParser2010::getName()
 {
     xmlNodePtr tempNode = cur->children;
@@ -86,6 +95,10 @@ std::string XmlParser2010::getName()
     return std::string();
 }
 
+///
+/// \brief XmlParser2010::parseClass parse an objectClass
+/// \param parent This is the objectClass node parent. If it's the root objectClass, objectClass is a nullptr pointer
+///
 void XmlParser2010::parseClass(ObjectClass *parent)
 {
     parseDataType();
@@ -131,7 +144,7 @@ void XmlParser2010::parseClass(ObjectClass *parent)
                 objClassProp.dataType = nullptr;
                 parseNTOS(&objClassProp);
                 if(objClassProp.dataType == nullptr)
-                    throw certi::DataTypeException("Attribute must have a datatype defined in the FOM");
+                    throw certi::DataTypeException("Attribute " + std::string((const char*) objClassProp.name) + " must have a datatype defined in the FOM");
 
                 AttributeHandle attributeHandle = current->getHandleClassAttributeMap().size() + 1;
                 ObjectClassAttribute1516e* attr = new ObjectClassAttribute1516e((const char*) objClassProp.name, attributeHandle);
@@ -164,7 +177,7 @@ void XmlParser2010::parseClass(ObjectClass *parent)
                         attr->setSpace(h);
                     }
                     catch (Exception& e) {
-                        cerr << "warning: Incorrect space name for attribute" << endl;
+                        cerr << "warning: Incorrect space name for attribute " << (const char*) objClassProp.name << " in parent " << name << endl;
                     }
                 }
 
@@ -172,8 +185,7 @@ void XmlParser2010::parseClass(ObjectClass *parent)
                 if(_predefinedDataType.count(dataTypeStr) > 0)
                     attr->setType(_predefinedDataType.at(dataTypeStr));
                 else if(dataTypeStr != "NA")
-                    cerr << "warning: The datatype have to be defined in the FOM" << endl;
-//                    throw certi::DataTypeException("The datatype have to be defined in the FOM");
+                    cerr << "warning: The datatype " << dataTypeStr  << " in the attribute " << (const char*) objClassProp.name  << " of the objectClass " << name << " have to be defined in the FOM " << endl;
 
                 // Attribute complete, adding to the class
                 current->addAttribute(attr);
@@ -188,6 +200,10 @@ void XmlParser2010::parseClass(ObjectClass *parent)
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseInteraction parse an interactionClass
+/// \param parent This is the interactionClass node parent. If it's the root interactionClass, objectClass is a nullptr pointer
+///
 void XmlParser2010::parseInteraction(Interaction *parent)
 {
     parseDataType();
@@ -196,7 +212,7 @@ void XmlParser2010::parseInteraction(Interaction *parent)
 
     bool interaction_already_exists = false;
 
-    std::string name; // FIXME never used?
+    std::string name = getName(); // FIXME never used?
 
     xmlNodePtr prev = cur;
 
@@ -219,7 +235,7 @@ void XmlParser2010::parseInteraction(Interaction *parent)
         transport = BEST_EFFORT;
     }
     else {
-        cerr << "warning: No transportation provided, defaulting to reliable" << endl;
+        cerr << "warning: The transportation in the interactionClass " << name << " have to be defined in the FOM " << endl;
     }
 
     // Order
@@ -231,7 +247,7 @@ void XmlParser2010::parseInteraction(Interaction *parent)
         order = RECEIVE;
     }
     else {
-        cerr << "warning: No order provided, defaulting to TSO" << endl;
+        cerr << "warning: The order in the interactionClass " << name << " have to be defined in the FOM " << endl;
     }
 
     Interaction1516e* current = new Interaction1516e(
@@ -245,7 +261,7 @@ void XmlParser2010::parseInteraction(Interaction *parent)
             current->setSpace(h);
         }
         catch (Exception& e) {
-            cerr << "warning: Incorrect space name for interaction" << endl;
+            cerr << "warning: The space name " << space  << " in the interactionClass " << name << " have to be defined in the FOM " << endl;
         }
     }
     xmlFree(space);
@@ -281,12 +297,12 @@ void XmlParser2010::parseInteraction(Interaction *parent)
                         if(_predefinedDataType.count(dataTypeStr) > 0)
                             param->setType(_predefinedDataType.at(dataTypeStr));
                         else if(dataTypeStr != "NA")
-                            cerr << "warning: The datatype have to be defined in the FOM" << endl;
+                            cerr << "warning: The datatype " << dataTypeStr  << " in the parameter " << tmpName  << " of the interactionClass " << name << " have to be defined in the FOM " << endl;
                     }
                     tempNode = tempNode->next;
                 }
                 if(intClassProp.dataType == nullptr)
-                    throw certi::DataTypeException("Parameter must have a datatype defined in the FOM");
+                    throw certi::DataTypeException("Parameter " + tmpName + " of the interactionClass " + name + " must have a datatype defined in the FOM");
                 current->addParameter(param);
             }
         }
@@ -301,6 +317,9 @@ void XmlParser2010::parseInteraction(Interaction *parent)
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseRoutingSpace parse a routing space
+///
 void XmlParser2010::parseRoutingSpace()
 {
     Debug(D, pdTrace) << "New Routing Space" << endl;
@@ -322,16 +341,14 @@ void XmlParser2010::parseRoutingSpace()
         }
         cur = cur->next;
     }
-    // Routing Space should be added after the
-    // Dimension has been added since addRoutingSpace store a copy
-    // of the object and not a reference
-    // see bug #19534
-    // https://savannah.nongnu.org/bugs/?19534
     root->addRoutingSpace(current);
 
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseDataType Parse all datatypes in the node dataTypes of the FOM
+///
 void XmlParser2010::parseDataType()
 {
     if(_predefinedDataType.size() == 0) {
@@ -402,6 +419,9 @@ void XmlParser2010::parseDataType()
 
 }
 
+///
+/// \brief XmlParser2010::parseBasicData Parse basicDataType nodes
+///
 void XmlParser2010::parseBasicData()
 {
     xmlNodePtr prev = cur;
@@ -440,6 +460,9 @@ void XmlParser2010::parseBasicData()
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseSimpleData Parse simpleDataType in the FOM
+///
 void XmlParser2010::parseSimpleData()
 {
     xmlNodePtr prev = cur;
@@ -486,6 +509,9 @@ void XmlParser2010::parseSimpleData()
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseEnumeratedData Parse enumrate dataTYpes
+///
 void XmlParser2010::parseEnumeratedData()
 {
     xmlNodePtr prev = cur;
@@ -530,6 +556,9 @@ void XmlParser2010::parseEnumeratedData()
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseArrayData Parse Static and Dynamic Array in the FOM
+///
 void XmlParser2010::parseArrayData()
 {
     xmlNodePtr prev = cur;
@@ -565,6 +594,9 @@ void XmlParser2010::parseArrayData()
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseFixedRecordData Parse fixedRecodDatatYpe in the FOM
+///
 void XmlParser2010::parseFixedRecordData()
 {
     xmlNodePtr prev = cur;
@@ -611,6 +643,9 @@ void XmlParser2010::parseFixedRecordData()
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::parseVariantRecordData Parse variantRecordDataType in the FOM
+///
 void XmlParser2010::parseVariantRecordData()
 {
     xmlNodePtr prev = cur;
@@ -661,6 +696,9 @@ void XmlParser2010::parseVariantRecordData()
     cur = prev;
 }
 
+///
+/// \brief XmlParser2010::connectDataTypeBetweenThem Connect all Datatype between them. (Example. FixedRecordDataType have to be link with DataType inside it)
+///
 void XmlParser2010::connectDataTypeBetweenThem()
 {
     for(auto itDataType = _predefinedDataType.begin(); itDataType != _predefinedDataType.end(); itDataType++)
@@ -822,6 +860,10 @@ void XmlParser2010::connectDataTypeBetweenThem()
     }
 }
 
+///
+/// \brief XmlParser2010::parseNTOS Parse name, transportation, order and space inside a node
+/// \param ntos_p A struct which map all name, transportation, order and space informations. It is an out variable.
+///
 void XmlParser2010::parseNTOS(HLAntos_t* ntos_p)
 {
     HLAntos_t2010* ntos_p2010 = static_cast<HLAntos_t2010*>(ntos_p);
@@ -847,16 +889,6 @@ void XmlParser2010::parseNTOS(HLAntos_t* ntos_p)
     }
 }
 
-#else // !HAVE_XML
-
-void XmlParser2010::parseNTOS(HLAntos_t* /*ntos_p*/)
-{
-}
-
-std::string XmlParser2010::getName()
-{
-    return std::string("");
-}
 #endif // HAVE_XML
 
 } // namespace certi
