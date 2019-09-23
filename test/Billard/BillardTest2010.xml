@@ -2,25 +2,28 @@
 <objectModel>
     <objects>
         <objectClass>
-                <name>Bille</name>
+            <name>Bille</name>
+            <attribute>
+                <name>PositionX</name>
+                <dataType>NA</dataType>
+                <transportation>HLAreliable</transportation>
+                <order>TimeStamp</order>
+            </attribute>
+            <attribute>
+                <name>PositionY</name>
+                <dataType>NA</dataType>
+                <transportation>HLAreliable</transportation>"
+                <order>TimeStamp</order>
+            </attribute>
+            <objectClass>
+                <name>Boule</name>
                 <attribute>
-                    <name>PositionX</name>
+                    <dataType>NA</dataType>
+                    <name>Color</name>
                     <transportation>HLAreliable</transportation>
                     <order>TimeStamp</order>
                 </attribute>
-                <attribute>
-                    <name>PositionY</name>
-                    <transportation>HLAreliable</transportation>"
-                    <order>TimeStamp</order>
-                    <objectClass>
-                        <name>Boule</name>
-                        <attribute>
-                            <name>Color</name>
-                            <transportation>HLAreliable</transportation>
-                            <order>TimeStamp</order>
-                        </attribute>
-                    </objectClass>
-                </attribute>
+            </objectClass>
         </objectClass>
     </objects>
     <interactions>
@@ -30,12 +33,15 @@
             <order>TimeStamp</order>
             <parameter>
                 <name>BoulNum</name>
+                <dataType>NA</dataType>
             </parameter>
             <parameter>
                 <name>DX</name>
+                <dataType>NA</dataType>
             </parameter>
             <parameter>
               <name>DY</name>
+              <dataType>NA</dataType>
             </parameter>
         </interactionClass>
     </interactions>
