@@ -146,7 +146,7 @@ namespace rti1516e
       // Interval implementation must have access to time implementation
       // in order to calculate difference
       //-----------------------------------------------------------------
-      friend class HLAinteger64Interval;;
+      friend class HLAinteger64Interval;
 
       //-----------------------------------------------------------------
       // Pointer to internal implementation
