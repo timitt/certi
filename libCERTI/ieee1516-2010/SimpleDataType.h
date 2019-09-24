@@ -14,27 +14,14 @@ public:
     ///
     /// \brief SimpleDataType
     ///
-    SimpleDataType() : DataType(EncodableDataType::CATEGORY::SimpleDataType, EncodableDataType::TYPE::HLAunknown, EncodableDataType::toString(EncodableDataType::TYPE::HLAunknown))
+    SimpleDataType() : DataType(EncodableDataType::CATEGORY::SimpleDataType, EncodableDataType::TYPE::HLAunknown, "HLAunknown")
                         , _representation(), _units("NA"), _resolution("NA"), _accuracy("NA") {}
-
-    ///
-    /// \brief SimpleDataType
-    /// \param a_name Name of the DataType
-    /// \param a_representation Representation of the datatype which is neccessary a BasicDataType
-    /// \param a_units Units of the SimpleDatatype
-    /// \param a_resolution Resolution of the SimpleDatatype
-    /// \param a_accuracy Accuracy of the SimpleDatatType
-    ///
-    SimpleDataType(const EncodableDataType::TYPE &a_name, std::shared_ptr<BasicDataType> a_representation, const std::string &a_units,
-                   const std::string &a_resolution, const std::string &a_accuracy)
-        : DataType(EncodableDataType::CATEGORY::SimpleDataType, a_name, EncodableDataType::toString(a_name)), _representation(a_representation), _units(a_units), _resolution(a_resolution),
-                    _accuracy(a_accuracy) {}
 
     ///
     /// \brief SimpleDataType Copy constructor
     /// \param a_rhs
     ///
-    SimpleDataType(const SimpleDataType &a_rhs) : DataType(a_rhs.category(), a_rhs.name(), a_rhs.nameStr()),
+    SimpleDataType(const SimpleDataType &a_rhs) : DataType(a_rhs),
         _representation(a_rhs._representation), _units(a_rhs._units), _resolution(a_rhs._resolution),
         _accuracy(a_rhs._accuracy) {}
 

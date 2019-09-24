@@ -123,8 +123,6 @@ set(LEX_OUT_PREFIX        ${CMAKE_CURRENT_BINARY_DIR}/tokens_yy)
 set(LEX_WANTED_OUT_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/tokens)
 
 set(IEEE1516eSRCS
-    ieee1516-2010/EncodableDataType.h
-    ieee1516-2010/EncodableDataType.cpp
     ieee1516-2010/ObjectClass1516e.h
     ieee1516-2010/ObjectClassAttribute1516e.h
     ieee1516-2010/Interaction1516e.h
@@ -136,6 +134,7 @@ set(IEEE1516eSRCS
     ieee1516-2010/FixedRecordDataType.h
     ieee1516-2010/EnumeratedDataType.h
     ieee1516-2010/VariantRecordDataType.h
+    ieee1516-2010/EncodableDataType.h
     )
 
 #Exec Lex

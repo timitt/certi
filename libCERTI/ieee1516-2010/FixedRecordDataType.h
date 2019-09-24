@@ -129,25 +129,14 @@ public:
     ///
     /// \brief FixedRecordDataType
     ///
-    FixedRecordDataType() : DataType(EncodableDataType::CATEGORY::FixedRecordDataType, EncodableDataType::TYPE::HLAunknown, EncodableDataType::toString(EncodableDataType::TYPE::HLAunknown)),
+    FixedRecordDataType() : DataType(EncodableDataType::CATEGORY::FixedRecordDataType, EncodableDataType::TYPE::HLAunknown, "HLAunknown"),
                         _encoding(""), _semantics(""), _fields() {}
-
-    ///
-    /// \brief FixedRecordDataType
-    /// \param a_name Name of the FixedRecordDataType, it's an EncodableDataType::TYPE enumerator
-    /// \param a_encoding Encoding of the FixedRecordDataType
-    /// \param a_semantics Semantics of the FixedRecordDataType
-    /// \param a_fields Vector of Fields
-    ///
-    FixedRecordDataType(const EncodableDataType::TYPE &a_name, const std::string &a_encoding, const std::string &a_semantics, const std::vector<Field> &a_fields) :
-                        DataType(EncodableDataType::CATEGORY::FixedRecordDataType, a_name, EncodableDataType::toString(a_name)), _encoding(a_encoding), _semantics(a_semantics)
-                        , _fields(a_fields) {}
 
     ///
     /// \brief FixedRecordDataType
     /// \param a_rhs
     ///
-    FixedRecordDataType(const FixedRecordDataType &a_rhs) : DataType(a_rhs.category(), a_rhs.name(), a_rhs.nameStr()), _encoding(a_rhs._encoding), _semantics(a_rhs._semantics)
+    FixedRecordDataType(const FixedRecordDataType &a_rhs) : DataType(a_rhs), _encoding(a_rhs._encoding), _semantics(a_rhs._semantics)
       , _fields(a_rhs._fields) {}
 
     ///

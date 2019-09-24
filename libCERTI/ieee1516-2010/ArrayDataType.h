@@ -13,7 +13,7 @@ public:
     ///
     /// \brief ArrayDataType Default constructor
     ///
-    ArrayDataType() : DataType(EncodableDataType::CATEGORY::ArrayDataType, EncodableDataType::TYPE::HLAunknown, EncodableDataType::toString(EncodableDataType::TYPE::HLAunknown)),
+    ArrayDataType() : DataType(EncodableDataType::CATEGORY::ArrayDataType, EncodableDataType::TYPE::HLAunknown, "HLAunknown"),
         _typeElements(), _cardinality("0"), _encoding(""), _semantics(""), _typeElementsTemp("") {
 
         _typeElements = std::make_shared<BasicDataType>(); //By default datatype will be unknown
@@ -21,23 +21,11 @@ public:
     }
 
     ///
-    /// \brief ArrayDataType Constructor with paramters
-    /// \param a_name Name of the ArrayDataType. It's a EncodableDataType::TYPE enumerator
-    /// \param a_typeElements Type of each elements contained in the array
-    /// \param a_cardinality Number of elements for static array. If i'ts a dynamic array, the value must be "Dynamic"
-    /// \param a_encoding Name of the encoding
-    /// \param a_semantics Semantic of the datatype
-    ///
-    ArrayDataType(const EncodableDataType::TYPE &a_name, std::shared_ptr<DataType> a_typeElements, std::string a_cardinality, std::string a_encoding, std::string a_semantics) :
-        DataType(EncodableDataType::CATEGORY::ArrayDataType, a_name, EncodableDataType::toString(a_name)), _typeElements(a_typeElements), _cardinality(a_cardinality),
-        _encoding(a_encoding), _semantics(a_semantics), _typeElementsTemp("") {}
-
-    ///
     /// \brief ArrayDataType Copy constructor
     /// \param a_rhs Right hand side which have to be copy
     ///
     ArrayDataType(const ArrayDataType &a_rhs) :
-        DataType(a_rhs.category(), a_rhs.name(), a_rhs.nameStr()), _typeElements(a_rhs.typeElements()), _cardinality(a_rhs.cardinality()), _encoding(a_rhs.encoding()),
+        DataType(a_rhs), _typeElements(a_rhs.typeElements()), _cardinality(a_rhs.cardinality()), _encoding(a_rhs.encoding()),
         _semantics(a_rhs.semantics()), _typeElementsTemp(a_rhs.typeElementsTemp()) {}
 
 

@@ -165,7 +165,7 @@ public:
     ///
     /// \brief VariantRecordDataType
     ///
-    VariantRecordDataType() : DataType(EncodableDataType::CATEGORY::VariantRecordDataType, EncodableDataType::TYPE::HLAunknown, EncodableDataType::toString(EncodableDataType::TYPE::HLAunknown)),
+    VariantRecordDataType() : DataType(EncodableDataType::CATEGORY::VariantRecordDataType, EncodableDataType::TYPE::HLAunknown, "HLAunknown"),
                                 _discriminantName(""), _discriminantType(), _alternatives(), _discriminantTypeTemp("")
     {
         _discriminantType = std::make_shared<EnumeratedDataType>(); //By default datatype will be unknown
@@ -176,7 +176,7 @@ public:
     /// \brief VariantRecordDataType Copy constructor
     /// \param a_rhs
     ///
-    VariantRecordDataType(const VariantRecordDataType &a_rhs) : DataType(a_rhs.category(), a_rhs.name(), a_rhs.nameStr()),
+    VariantRecordDataType(const VariantRecordDataType &a_rhs) : DataType(a_rhs),
                                                                 _discriminantName(a_rhs.discriminantName()), _discriminantType(a_rhs.discriminantType()),
                                                                 _alternatives(a_rhs.calternatives()), _discriminantTypeTemp(a_rhs._discriminantTypeTemp)
     {

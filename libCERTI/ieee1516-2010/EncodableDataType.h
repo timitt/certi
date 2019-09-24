@@ -52,47 +52,191 @@ public:
         NA
     };
 
-    static std::string toString(const TYPE &a_type);
+//    std::string toStringType(const certi::EncodableDataType::TYPE &&a_type) ;
 
-    static TYPE toType(const std::string &a_type);
+//    TYPE toType(const std::string &a_type) ;
 
-    static std::string toString(const ENDIAN &a_endian);
+//    std::string toString(const ENDIAN &a_endian) ;
 
-    static ENDIAN toEndian(const std::string &a_endian);
+//    ENDIAN toEndian(const std::string &a_endian) ;
 
-    static std::string toString(const CATEGORY &a_category);
+//    std::string toString(const CATEGORY &a_category) ;
 
-    static CATEGORY toCategory(const std::string &a_category);
+//    CATEGORY toCategory(const std::string &a_category) ;
 
-    static EncodableDataType* getInstance();
+//    static EncodableDataType* getInstance();
 
-private:
+    std::string toStringType(const TYPE &&a_type) {
+        initTypeMapFromTYPE();
+        return _mapTypeFromTYPE.at(a_type);
+    }
+
+    TYPE toType(const std::__cxx11::string &a_type) {
+        initTypeMapFromString();
+        if(_mapTypeFromString.find(a_type) != _mapTypeFromString.end())
+            return _mapTypeFromString.at(a_type);
+        else
+            return _mapTypeFromString.at("HLAunknown");
+    }
+
+    std::__cxx11::string toString(const ENDIAN &a_endian) {
+        initEndianMapFromENDIAN();
+        return _mapEndianFromENDIAN.at(a_endian);
+    }
+
+    ENDIAN toEndian(const std::__cxx11::string &a_endian) {
+        initEndianMapFromString();
+        if(_mapEndianFromString.find(a_endian) != _mapEndianFromString.end())
+            return _mapEndianFromString.at(a_endian);
+        else
+            return _mapEndianFromString.at("NA");
+    }
+
+    std::__cxx11::string toString(const CATEGORY &a_category) {
+        initCategoryMapFromCATEGORY();
+        return _mapCategoryFromCATEGORY.at(a_category);
+    }
+
+    CATEGORY toCategory(const std::__cxx11::string &a_category) {
+        initCategoryMapFromString();
+        if(_mapCategoryFromString.find(a_category.c_str()) != _mapCategoryFromString.end())
+            return _mapCategoryFromString.at(a_category.c_str());
+        else
+            return _mapCategoryFromString.at("NA");
+    }
 
     EncodableDataType(){}
 
-    virtual ~EncodableDataType();
+    virtual ~EncodableDataType(){}
 
-    void initPairType();
+private:   
 
-    void initTypeMapFromTYPE();
+//    void initPairType();
 
-    void initTypeMapFromString();
+//    void initTypeMapFromTYPE();
 
-    void initPairEndian();
+//    void initTypeMapFromString();
 
-    void initEndianMapFromENDIAN();
+//    void initPairEndian();
 
-    void initEndianMapFromString();
+//    void initEndianMapFromENDIAN();
 
-    void initPairCategory();
+//    void initEndianMapFromString();
 
-    void initCategoryMapFromCATEGORY();
+//    void initPairCategory();
 
-    void initCategoryMapFromString();
+//    void initCategoryMapFromCATEGORY();
+
+//    void initCategoryMapFromString();
+
+    void initPairType() {
+        if(_pairType.size() == 0) {
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAunknown, "HLAunknown"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAASCIIchar, "HLAASCIIchar"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAASCIIstring, "HLAASCIIstring"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAboolean, "HLAboolean"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAbyte, "HLAbyte"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAfloat32BE, "HLAfloat32BE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAfloat32LE, "HLAfloat32LE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAfloat64BE, "HLAfloat64BE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAfloat64LE, "HLAfloat64LE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAinteger16LE, "HLAinteger16LE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAinteger16BE, "HLAinteger16BE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAinteger32LE, "HLAinteger32LE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAinteger32BE, "HLAinteger32BE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAinteger64LE, "HLAinteger64LE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAinteger64BE, "HLAinteger64BE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAoctet, "HLAoctet"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAoctetPairLE, "HLAoctetPairLE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAoctetPairBE, "HLAoctetPairBE"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAunicodeChar, "HLAunicodeChar"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAunicodeString, "HLAunicodeString"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAinteger64Time, "HLAinteger64Time"));
+            _pairType.push_back(std::pair<TYPE, std::string>(TYPE::HLAfloat64Time, "HLAfloat64Time"));
+        }
+    }
+
+    void initTypeMapFromTYPE() {
+        initPairType();
+        if(_mapTypeFromTYPE.size() == 0) {
+            for(auto pair : _pairType) {
+                _mapTypeFromTYPE.emplace(pair.first, pair.second);
+            }
+        }
+    }
+
+    void initTypeMapFromString() {
+        initPairType();
+        if(_mapTypeFromString.size() == 0) {
+            for(auto pair : _pairType) {
+                _mapTypeFromString.emplace(pair.second, pair.first);
+            }
+        }
+    }
+
+    void initPairEndian() {
+        if(_pairEndian.size() == 0) {
+            _pairEndian.push_back(std::pair<ENDIAN, std::string>(ENDIAN::Big, "Big"));
+            _pairEndian.push_back(std::pair<ENDIAN, std::string>(ENDIAN::Little, "Little"));
+            _pairEndian.push_back(std::pair<ENDIAN, std::string>(ENDIAN::NA, "NA"));
+        }
+    }
+
+    void initEndianMapFromENDIAN() {
+        initPairEndian();
+        if(_mapEndianFromENDIAN.size() == 0) {
+            for(auto pair : _pairEndian) {
+                _mapEndianFromENDIAN.emplace(pair.first, pair.second);
+            }
+        }
+    }
+
+    void initEndianMapFromString() {
+        initPairEndian();
+        if(_mapEndianFromString.size() == 0) {
+            for(auto pair : _pairEndian) {
+                _mapEndianFromString.emplace(pair.second, pair.first);
+            }
+        }
+    }
+
+    void initPairCategory() {
+        std::pair<CATEGORY, const char*> test(CATEGORY::BasicDataType, "basicDataRepresentations");
+        test.second = "test";
+        std::pair<CATEGORY, int> test2(CATEGORY::BasicDataType, 10);
+        test2.second = 20;
+        if(_pairCategory.size() == 0) {
+            _pairCategory.push_back(std::pair<CATEGORY, const char*>(CATEGORY::BasicDataType, "basicDataRepresentations"));
+            _pairCategory.push_back(std::pair<CATEGORY, const char*>(CATEGORY::SimpleDataType, "simpleDataTypes"));
+            _pairCategory.push_back(std::pair<CATEGORY, const char*>(CATEGORY::EnumeratedDataType, "enumeratedDataTypes"));
+            _pairCategory.push_back(std::pair<CATEGORY, const char*>(CATEGORY::ArrayDataType, "arrayDataTypes"));
+            _pairCategory.push_back(std::pair<CATEGORY, const char*>(CATEGORY::FixedRecordDataType, "fixedRecordDataTypes"));
+            _pairCategory.push_back(std::pair<CATEGORY, const char*>(CATEGORY::VariantRecordDataType, "variantRecordDataTypes"));
+            _pairCategory.push_back(std::pair<CATEGORY, const char*>(CATEGORY::NA, "NA"));
+        }
+    }
+
+    void initCategoryMapFromCATEGORY() {
+        initPairCategory();
+        if(_mapCategoryFromCATEGORY.size() == 0) {
+            for(auto pair : _pairCategory) {
+                _mapCategoryFromCATEGORY.emplace(pair.first, pair.second);
+            }
+        }
+    }
+
+    void initCategoryMapFromString() {
+        initPairCategory();
+        if(_mapCategoryFromString.size() == 0) {
+            for(auto pair : _pairCategory) {
+                _mapCategoryFromString.emplace(pair.second, pair.first);
+            }
+        }
+    }
 
 private:
 
-    static EncodableDataType *_pEncodableDataType;
+//    static EncodableDataType *_pEncodableDataType;
 
     std::vector<std::pair<TYPE, std::string>> _pairType;
     std::map<TYPE, std::string> _mapTypeFromTYPE;

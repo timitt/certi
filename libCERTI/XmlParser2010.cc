@@ -363,17 +363,19 @@ void XmlParser2010::parseDataType()
 
         cur = cur->parent;
 
-        std::string basicDataString = EncodableDataType::toString(EncodableDataType::CATEGORY::BasicDataType);
+        EncodableDataType encodableDataType;
+
+        std::string basicDataString = encodableDataType.toString(EncodableDataType::CATEGORY::BasicDataType);
         const xmlChar* basicDataTypeNode = (const xmlChar*)(basicDataString.c_str());
-        std::string simpleDataString = EncodableDataType::toString(EncodableDataType::CATEGORY::SimpleDataType);
+        std::string simpleDataString = encodableDataType.toString(EncodableDataType::CATEGORY::SimpleDataType);
         const xmlChar* simpleDataTypeNode = (const xmlChar*)(simpleDataString.c_str());
-        std::string arrayDataString = EncodableDataType::toString(EncodableDataType::CATEGORY::ArrayDataType);
+        std::string arrayDataString = encodableDataType.toString(EncodableDataType::CATEGORY::ArrayDataType);
         const xmlChar* arrayDataTypeNode = (const xmlChar*)(arrayDataString.c_str());
-        std::string fixedRecordDataString = EncodableDataType::toString(EncodableDataType::CATEGORY::FixedRecordDataType);
+        std::string fixedRecordDataString = encodableDataType.toString(EncodableDataType::CATEGORY::FixedRecordDataType);
         const xmlChar* fixedRecordDataTypeNode = (const xmlChar*)(fixedRecordDataString.c_str());
-        std::string enumeratedDataString = EncodableDataType::toString(EncodableDataType::CATEGORY::EnumeratedDataType);
+        std::string enumeratedDataString = encodableDataType.toString(EncodableDataType::CATEGORY::EnumeratedDataType);
         const xmlChar* enumeratedDataTypeNode = (const xmlChar*)(enumeratedDataString.c_str());
-        std::string variantRecordDataString = EncodableDataType::toString(EncodableDataType::CATEGORY::VariantRecordDataType);
+        std::string variantRecordDataString = encodableDataType.toString(EncodableDataType::CATEGORY::VariantRecordDataType);
         const xmlChar* variantRecordDataTypeNode = (const xmlChar*)(variantRecordDataString.c_str());
 
         while (cur != nullptr) {
@@ -446,7 +448,7 @@ void XmlParser2010::parseBasicData()
                 }
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"endian")) {
                     std::string endianStr((const char*)getText(tempNode));
-                    basicDataType->setEndian(EncodableDataType::toEndian(endianStr));
+                    basicDataType->setEndian(basicDataType->encodableDataType().toEndian(endianStr));
                 }
                 else if(!xmlStrcmp(tempNode->name, (const xmlChar*)"encoding")) {
                     basicDataType->setEncoding((const char*)(getText(tempNode)));

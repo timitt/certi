@@ -11,27 +11,15 @@ public:
     ///
     /// \brief BasicDataType
     ///
-    BasicDataType() : DataType(EncodableDataType::CATEGORY::BasicDataType, EncodableDataType::TYPE::HLAunknown, EncodableDataType::toString(EncodableDataType::TYPE::HLAunknown))
+    BasicDataType() : DataType(EncodableDataType::CATEGORY::BasicDataType, EncodableDataType::TYPE::HLAunknown, "HLAunknown")
                         , _size(0), _endian(), _interpretation(""), _encoding(""){}
-
-    ///
-    /// \brief BasicDataType
-    /// \param a_name Name of the Datatype, it's a EncodableDataType::TYPE enumerator
-    /// \param a_endian Endian, it's a EncodableDataType::ENDIAN enumerator
-    /// \param a_interpretation Interpretation
-    /// \param a_encoding Encoding
-    ///
-    BasicDataType(const EncodableDataType::TYPE &a_name, const EncodableDataType::ENDIAN &a_endian,
-                  const std::string &a_interpretation, const std::string &a_encoding)
-        : DataType(EncodableDataType::CATEGORY::BasicDataType, a_name, EncodableDataType::toString(a_name)), _endian(a_endian),
-          _interpretation(a_interpretation), _encoding(a_encoding) {}
 
     ///
     /// \brief BasicDataType Copy constructor
     /// \param a_rhs Right hand side BasicDataType which have to be copied
     ///
     BasicDataType(const BasicDataType &a_rhs)
-        : DataType(a_rhs.category(), a_rhs.name(), a_rhs.nameStr()), _endian(a_rhs.endian()),
+        : DataType(a_rhs), _endian(a_rhs.endian()),
           _interpretation(a_rhs.interpretation()), _encoding(a_rhs.encoding()) {}
 
     ///

@@ -34,7 +34,7 @@ public:
     ///
     /// \brief This constructor initializes all attributes with defaults values
     ///
-    DataType():_category(EncodableDataType::CATEGORY::NA), _name(EncodableDataType::TYPE::HLAunknown), _nameUnknown(""), _totalSize(0){}
+    DataType():_category(EncodableDataType::CATEGORY::NA), _name(EncodableDataType::TYPE::HLAunknown), _nameUnknown(""), _totalSize(0), _encodableDataType(){}
 
     ///
     /// \brief DataType Constructor with attributes initialized by parameter
@@ -44,13 +44,13 @@ public:
     ///         In this case EncodableDataType::TYPE::HLAunknown have to be passed in the second paramter
     ///
     DataType(const EncodableDataType::CATEGORY &a_category, const EncodableDataType::TYPE &a_name, const std::string& a_nameUnknown) :
-        _category(a_category), _name(a_name), _nameUnknown(a_nameUnknown), _totalSize(0) {}
+        _category(a_category), _name(a_name), _nameUnknown(a_nameUnknown), _totalSize(0), _encodableDataType() {}
 
     ///
     /// \brief DataType Copy constructor
     /// \param a_rhs The right hand side Datatype to copy
     ///
-    DataType(const DataType &a_rhs) : _category(a_rhs._category), _name(a_rhs._name), _nameUnknown(a_rhs._nameUnknown), _totalSize(a_rhs._totalSize) {}
+    DataType(const DataType &a_rhs) : _category(a_rhs._category), _name(a_rhs._name), _nameUnknown(a_rhs._nameUnknown), _totalSize(a_rhs._totalSize), _encodableDataType(a_rhs._encodableDataType) {}
 
     ///
     /// \brief ~DataType
@@ -88,12 +88,12 @@ public:
     /// \brief: Get the String shape of the name
     /// \return If the name is HLAunknown the string _nameUnkonwn is returned,
     ///              in other case we get the String traduction of the enumerate
-    std::string nameStr() const
+    std::string nameStr()
     {
         if(_name == EncodableDataType::TYPE::HLAunknown)
             return _nameUnknown;
         else
-            return EncodableDataType::toString(_name);
+            return _encodableDataType.toStringType(std::move(_name));
     }
 
     ///
@@ -103,7 +103,7 @@ public:
     ///
     void setName(const std::string &&name)
     {
-        _name = EncodableDataType::toType(name);
+        _name = _encodableDataType.toType(name);
         if(_name == EncodableDataType::TYPE::HLAunknown)
             _nameUnknown = name;
     }
@@ -123,12 +123,20 @@ public:
     ///
     virtual size_t calTotalSize() = 0;
 
+    EncodableDataType encodableDataType()
+    {
+        return _encodableDataType;
+    }
+
 protected:
     EncodableDataType::CATEGORY _category;
     EncodableDataType::TYPE _name;
     std::string _nameUnknown;
     size_t _totalSize;
+    EncodableDataType _encodableDataType;
 };
+
+
 
 
 

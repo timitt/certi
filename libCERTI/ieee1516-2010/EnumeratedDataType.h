@@ -103,7 +103,7 @@ public:
     ///
     /// \brief EnumeratedDataType Default constructor
     ///
-    EnumeratedDataType() : DataType(EncodableDataType::CATEGORY::EnumeratedDataType, EncodableDataType::TYPE::HLAunknown, EncodableDataType::toString(EncodableDataType::TYPE::HLAunknown)),
+    EnumeratedDataType() : DataType(EncodableDataType::CATEGORY::EnumeratedDataType, EncodableDataType::TYPE::HLAunknown, "HLAunknown"),
                                     _representation(), _semantics(""), _enumerators(), _representationTemp("")
     {
         _representation = std::make_shared<BasicDataType>(); //By default datatype will be unknown
@@ -111,24 +111,10 @@ public:
     }
 
     ///
-    /// \brief EnumeratedDataType Constructor
-    /// \param a_name name of the data type. It's a EncodableDataType::TYPE enumerator.
-    /// \param representation Representation of the Enumerated Datatype.
-    /// \param semantics Semantics of the Enumerated datatype.
-    /// \param enumerators Map of shared pointer to Enumerator
-    ///
-    EnumeratedDataType(const EncodableDataType::TYPE &a_name, std::shared_ptr<DataType> representation, const std::string &semantics, const std::map<std::string, std::shared_ptr<Enumerator>> &enumerators) :
-                                DataType(EncodableDataType::CATEGORY::EnumeratedDataType, a_name, EncodableDataType::toString(a_name)),
-                                _representation(representation), _semantics(semantics), _enumerators(enumerators), _representationTemp("")
-    {
-
-    }
-
-    ///
     /// \brief EnumeratedDataType Copy constructor
     /// \param a_rhs Right hand side copy constructor
     ///
-    EnumeratedDataType(const EnumeratedDataType &a_rhs) : DataType(EncodableDataType::CATEGORY::EnumeratedDataType, a_rhs.name(), a_rhs.nameStr()),
+    EnumeratedDataType(const EnumeratedDataType &a_rhs) : DataType(a_rhs),
                                 _representation(a_rhs.representation()), _semantics(a_rhs.semantics()), _enumerators(a_rhs.enumerators()), _representationTemp(representationTemp())
     {
 
