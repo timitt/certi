@@ -407,7 +407,7 @@ Interaction::sendInteraction(FederateHandle federate_handle,
         bool isGoodSize = this->checkSizeData(*parameter, value_list[i]);
         if(!isGoodSize) {
 //            throw certi::DataTypeException("The data size does not correspond to the FOM.");
-            std::cerr << "warning: The data size does not correspond to the FOM." << endl;
+            std::cerr << "warning: The data size does not match to the FOM for the parameter: " << parameter->getName() << endl;
         }
     }
 
@@ -473,7 +473,7 @@ Interaction::sendInteraction(FederateHandle federate_handle,
         bool isGoodSize = this->checkSizeData(*parameter, value_list[i]);
         if(!isGoodSize) {
 //            throw certi::DataTypeException("The data size does not correspond to the FOM.");
-            std::cerr << "warning: The data size does not correspond to the FOM." << endl;
+            std::cerr << "warning: The data size does not match to the FOM for the parameter: " << parameter->getName() << endl;
         }
     }
 
