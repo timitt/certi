@@ -19,7 +19,7 @@ public:
     /// \param a_rhs Right hand side BasicDataType which have to be copied
     ///
     BasicDataType(const BasicDataType &a_rhs)
-        : DataType(a_rhs), _endian(a_rhs.endian()),
+        : DataType(a_rhs), _size(a_rhs.size()), _endian(a_rhs.endian()),
           _interpretation(a_rhs.interpretation()), _encoding(a_rhs.encoding()) {}
 
     ///
