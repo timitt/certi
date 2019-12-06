@@ -86,6 +86,8 @@ public:
   void
   callambF ();
   void
+  calldambF ();  
+  void
   callCFE ();
   void
   callDFE ();
@@ -130,10 +132,20 @@ public:
   void
   callNMR ();
   void
+  callQLT (); 
+  void
   callCIOT ();
 
 
   // CALLBACKS
+  // Declaration management
+  void 
+  startRegistrationForObjectClass (rti1516e::ObjectClassHandle theClass) 
+  throw(rti1516e::FederateInternalError)
+  {
+    wcout << endl << "     <----- startRegistrationForObjectClass className =  "
+     << rtiAmb->getObjectClassName (theClass) << endl;	  
+  }  
   // Object management
   void
   discoverObjectInstance (rti1516e::ObjectInstanceHandle theObject,
@@ -448,6 +460,8 @@ main (int argc, char **argv)
 	myInteractifFederate->callGetObjInstanceHandleName ();
       else if (commande == "amb")
 	myInteractifFederate->callambF ();
+      else if (commande == "damb")
+	myInteractifFederate->calldambF ();	
       else if (commande == "cfe")
 	myInteractifFederate->callCFE ();
       else if (commande == "dfe")
@@ -493,6 +507,8 @@ main (int argc, char **argv)
       //else if (commande=="tara") myInteractifFederate->callTARA();
       else if (commande == "nmr")
 	myInteractifFederate->callNMR ();
+      else if (commande == "qlt")
+	myInteractifFederate->callQLT ();	
       //else if (commande=="nera") myInteractifFederate->callNERA();
       //else if (commande=="ead") myInteractifFederate->callEAD();
       //else if (commande=="dad") myInteractifFederate->callDAD();
@@ -554,6 +570,7 @@ print_menu (void)
 	case 2:
 	  cout << "\t2- Federation Management\n" << endl;
 	  cout << "amb => create ambassador" << endl;
+	  cout << "damb => deletete ambassador" << endl;	  
 	  cout << "cfe => create federation execution" << endl;
 	  cout << "dfe => destroy federation execution" << endl;
 	  cout << "jfe => join federation execution" << endl;
@@ -563,6 +580,7 @@ print_menu (void)
 	case 3:
 	  cout << "\t3- Declaration Management\n" << endl;
 	  cout << "poca    => Publish Object Class Attributes" << endl;
+	  cout << "soca    => Sunscribe Object Class Attributes" << endl;	  
 	  cout << "uoc     => Unpublish Object Class" << endl;
 	  cout << "uoca    => Unpublish Object Class Attributes" << endl;
 	  cout << "pic     => Publish Interaction Class" << endl;
@@ -585,7 +603,8 @@ print_menu (void)
 	  cout << "etc => Enable Time Constrained" << endl;
 	  cout << "etr => Enable Time Regulator" << endl;
 	  cout << "tar => Time Advance Request" << endl;
-	  cout << "ner => Next Event Request" << endl;
+	  cout << "nmr => Next Message Request" << endl;
+	  cout << "qlt => Query Logical Time" << endl;	  
 	  cout << ".. => ..." << endl;
 	  break;
 
@@ -1138,6 +1157,24 @@ Federe_Interactif::callambF ()
            std::wcout << L"RTIambassador connect caught Error " << e.what() <<std::endl;
       }
   }
+  
+}
+
+//deleteAmbassador
+void
+Federe_Interactif::calldambF ()
+{
+	
+   try {
+        rtiAmb->disconnect();
+        cout << "* Ambassador disconnected" << endl << endl;     
+   } 
+   catch (rti1516e::Exception& e) {
+        std::wcout << L"RTIambassador disconnect caught Error " << e.what() <<std::endl;
+   }	
+
+  delete rtiAmb;
+  cout << "* Ambassador deleted" << endl << endl;
   
 }
 
@@ -1883,7 +1920,7 @@ Federe_Interactif::callTAR ()
 {
   float d;
   bool test = true;
-  wcout << endl << "t=" << tps->toString () <<
+  wcout << endl << "t=" << theTime.toString () <<
     " : Donner la date a laquelle vous souhaitez avancer : ";
   cin >> d;
   RTI1516fedTime fedTime (d);
@@ -2001,6 +2038,26 @@ void callDAD (void)
     else
        cout << "disableAsynchronousDelivery has failed" << endl;
 }*/
+
+// queryLogivalTime
+void
+Federe_Interactif::callQLT (void)
+{
+    int test = 1;
+    RTI1516fedTime t{0.0};
+    try {
+       rtiAmb->queryLogicalTime(t);
+    }
+    catch (rti1516e::Exception& e) {
+        test = 0;
+        std::wcerr << L"* Error : " << e.what () << std::endl;       
+    }
+    if (test)
+       std::cout << endl << "Logical Time =" << t.getFedTime() << endl;
+    else
+       std::cout << "queryLogicalTime has failed" << endl;
+}
+
 
 /*// queryLBTS
 void callQLBTS (void)
