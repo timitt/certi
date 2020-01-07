@@ -57,7 +57,7 @@ XmlParser2010::~XmlParser2010()
     _predefinedDataType.clear();
 }
 
-RootObject *XmlParser2010::parse(std::__cxx11::string pathToXmlFile)
+RootObject *XmlParser2010::parse(std::string pathToXmlFile)
 {
     XmlParser::parse(pathToXmlFile);
     return root;
@@ -772,7 +772,7 @@ void XmlParser2010::connectDataTypeBetweenThem()
         else if(itDataType->second->category() == EncodableDataType::CATEGORY::FixedRecordDataType) {
             std::shared_ptr<FixedRecordDataType> fixedRecordDataType = std::dynamic_pointer_cast<FixedRecordDataType>(itDataType->second);
 
-            for(uint i = 0; i < fixedRecordDataType->fields().size(); i++)
+            for(unsigned int i = 0; i < fixedRecordDataType->fields().size(); i++)
             {
                 auto it = _predefinedDataType.find(fixedRecordDataType->fields()[i].typeElemTemp());
                 if(it != _predefinedDataType.end())
@@ -820,7 +820,7 @@ void XmlParser2010::connectDataTypeBetweenThem()
                 throw EnumerateException(std::string("The enumerate type ") + variantRecordDataType->discriminantTypeTemp() + std::string(" does not exist"));
 
             std::shared_ptr<EnumeratedDataType> enumDataType = variantRecordDataType->discriminantType();
-            for(uint i=0; i<variantRecordDataType->alternatives().size(); i++)
+            for(unsigned int i=0; i<variantRecordDataType->alternatives().size(); i++)
             {
                 std::shared_ptr<Enumerator> enumerator = enumDataType->getEnumerator(variantRecordDataType->alternatives()[i].enumeratorTemp());
                 variantRecordDataType->alternatives()[i].setEnumerator(enumerator);

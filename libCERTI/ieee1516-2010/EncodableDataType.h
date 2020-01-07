@@ -71,7 +71,7 @@ public:
         return _mapTypeFromTYPE.at(a_type);
     }
 
-    TYPE toType(const std::__cxx11::string &a_type) {
+    TYPE toType(const std::string &a_type) {
         initTypeMapFromString();
         if(_mapTypeFromString.find(a_type) != _mapTypeFromString.end())
             return _mapTypeFromString.at(a_type);
@@ -79,12 +79,12 @@ public:
             return _mapTypeFromString.at("HLAunknown");
     }
 
-    std::__cxx11::string toString(const ENDIAN &a_endian) {
+    std::string toString(const ENDIAN &a_endian) {
         initEndianMapFromENDIAN();
         return _mapEndianFromENDIAN.at(a_endian);
     }
 
-    ENDIAN toEndian(const std::__cxx11::string &a_endian) {
+    ENDIAN toEndian(const std::string &a_endian) {
         initEndianMapFromString();
         if(_mapEndianFromString.find(a_endian) != _mapEndianFromString.end())
             return _mapEndianFromString.at(a_endian);
@@ -92,12 +92,12 @@ public:
             return _mapEndianFromString.at("NA");
     }
 
-    std::__cxx11::string toString(const CATEGORY &a_category) {
+    std::string toString(const CATEGORY &a_category) {
         initCategoryMapFromCATEGORY();
         return _mapCategoryFromCATEGORY.at(a_category);
     }
 
-    CATEGORY toCategory(const std::__cxx11::string &a_category) {
+    CATEGORY toCategory(const std::string &a_category) {
         initCategoryMapFromString();
         if(_mapCategoryFromString.find(a_category.c_str()) != _mapCategoryFromString.end())
             return _mapCategoryFromString.at(a_category.c_str());

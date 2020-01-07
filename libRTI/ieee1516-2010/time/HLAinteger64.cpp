@@ -66,7 +66,7 @@ void HLAinteger64::setTime(Integer64 value)
 
 //\brief String representation of the HLAinteger64
 //@return the time in string format
-std::__cxx11::wstring HLAinteger64::toString() const
+std::wstring HLAinteger64::toString() const
 {
     return std::to_wstring(_time);
 }

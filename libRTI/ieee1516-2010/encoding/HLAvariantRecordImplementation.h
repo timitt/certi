@@ -45,7 +45,7 @@ public:
 private:
     std::pair<DataElement*, DataElement*> at(const DataElement &a_dataElementIndex) throw(EncoderException);
     const std::pair<DataElement*, DataElement*> c_at(const DataElement &a_dataElementIndex) const throw(EncoderException);
-    uint calculPaddingAfterDiscriminant() const;
+    unsigned int calculPaddingAfterDiscriminant() const;
 
 private:
     DataElement *_pDataElementDiscriminent;

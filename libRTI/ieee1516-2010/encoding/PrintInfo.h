@@ -23,13 +23,13 @@ public:
 
     PrintInfo()=delete;
 
-    PrintInfo(const Encode &a_encode, const char *a_octets, const uint &a_nbOctets)
+    PrintInfo(const Encode &a_encode, const char *a_octets, const unsigned int &a_nbOctets)
         : _value(NULL), _octets(a_octets), _nbOctets(a_nbOctets)
     {
         reshow(a_encode);
     }
 
-    PrintInfo(const Encode &a_encode, const I &a_int, const char *a_octets, const uint &a_nbOctets)
+    PrintInfo(const Encode &a_encode, const I &a_int, const char *a_octets, const unsigned int &a_nbOctets)
         : _value(&a_int), _octets(a_octets), _nbOctets(a_nbOctets)
     {
         reshow(a_encode);
@@ -89,5 +89,5 @@ public:
 private:
     const I *_value;
     const char *_octets;
-    const uint &_nbOctets;
+    const unsigned int &_nbOctets;
 };

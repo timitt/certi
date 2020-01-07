@@ -28,8 +28,8 @@ public:
     bool isSameTypeAs(const HLAarrayImplementation& a_rhs);
 
 protected:
-    uint calculPaddingAfterNbElements() const;
-    uint calculPaddingAfterEachElements(const DataElement &a_dataElement) const;
+    unsigned int calculPaddingAfterNbElements() const;
+    unsigned int calculPaddingAfterEachElements(const DataElement &a_dataElement) const;
 
 protected:
     std::unique_ptr<DataElement> _pDataElementPrototype;

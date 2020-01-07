@@ -61,24 +61,24 @@ void HLAvariableArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) co
     HLAinteger32BE nbElements(Integer32(this->size()));
     nbElements.encodeInto(a_buffer);
 
-    uint P = this->calculPaddingAfterNbElements();
+    unsigned int P = this->calculPaddingAfterNbElements();
 
-    for(uint i = 0; i < P; i++)
+    for(unsigned int i = 0; i < P; i++)
     {
         const Octet octet(0);
         a_buffer.push_back(octet);
     }
 
-    uint PElement = 0;
+    unsigned int PElement = 0;
     if(_vectorpDataElement.size() > 0)
         PElement = this->calculPaddingAfterEachElements(*_vectorpDataElement[0]);
 
-    for(uint i=0; i<_vectorpDataElement.size(); i++)
+    for(unsigned int i=0; i<_vectorpDataElement.size(); i++)
     {
         _vectorpDataElement[i]->encodeInto(a_buffer);
         if(i != _vectorpDataElement.size()-1)
         {
-            for(uint j = 0; j < PElement; j++)
+            for(unsigned int j = 0; j < PElement; j++)
             {
                 const Octet octet(0);
                 a_buffer.push_back(octet);
@@ -97,7 +97,7 @@ size_t HLAvariableArrayImplementation::decodeFrom(const std::vector<Octet> &a_bu
 {
     HLAinteger32BE nbElements;
     a_index = nbElements.decodeFrom(a_buffer, a_index);
-    uint P = this->calculPaddingAfterNbElements();
+    unsigned int P = this->calculPaddingAfterNbElements();
     a_index += P;
     _vectorpDataElement.reserve(nbElements.get());
     for(int i=0; i<nbElements.get(); i++) {

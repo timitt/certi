@@ -127,7 +127,7 @@ public:
         if(_cardinality == "Dynamic")
             _totalSize = 0;
         else {
-            uint P = padding::HlaArray::calculPaddingAfterEachElements(_typeElements->calTotalSize(), _typeElements->calTotalSize());
+            unsigned int P = padding::HlaArray::calculPaddingAfterEachElements(_typeElements->calTotalSize(), _typeElements->calTotalSize());
             _totalSize = P * (_typeElements->calTotalSize() - 1);
         }
         return _totalSize;

@@ -17,7 +17,7 @@ public:
     bool isFinal() const;
     Integer64 getTime() const;
     void setTime(Integer64 value);
-    std::__cxx11::wstring toString() const;
+    std::wstring toString() const;
 
     size_t encode(void *buffer, size_t bufferSize) const
         throw (rti1516e::CouldNotEncode);

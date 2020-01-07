@@ -141,7 +141,7 @@ size_t HLAfixedRecordImplementation::getEncodedLength() const
 //@return The octet boundary
 unsigned int HLAfixedRecordImplementation::getOctetBoundary() const
 {
-    uint maxBoundarySize = 0;
+    unsigned int maxBoundarySize = 0;
     for(auto it = _vectorpDataElement.begin(); it != _vectorpDataElement.end(); it++)
     {
         maxBoundarySize = std::max((*it)->getOctetBoundary(), maxBoundarySize);
@@ -157,16 +157,16 @@ void HLAfixedRecordImplementation::encodeInto(std::vector<Octet> &a_buffer) cons
     if(_vectorpDataElement.size() == 0)
         throw EncoderException(L"HlaFixedRecord is empty");
 
-    uint offset = 0;
-    for(uint i=0; i<_vectorpDataElement.size(); i++)
+    unsigned int offset = 0;
+    for(unsigned int i=0; i<_vectorpDataElement.size(); i++)
     {
         if(!_vectorpDataElement[i])
             throw EncoderException(L"DataElement is a NULL pointer");
         _vectorpDataElement[i]->encodeInto(a_buffer);
-        uint PElement = this->calculPaddingAfterEachElements(offset, i);
+        unsigned int PElement = this->calculPaddingAfterEachElements(offset, i);
         if(i != _vectorpDataElement.size()-1)
         {
-            for(uint j = 0; j < PElement; j++)
+            for(unsigned int j = 0; j < PElement; j++)
             {
                 const Octet octet(0);
                 a_buffer.push_back(octet);
@@ -188,7 +188,7 @@ size_t HLAfixedRecordImplementation::decodeFrom(const std::vector<Octet> &a_buff
     if(_vectorpDataElement[0] == NULL)
         throw EncoderException(L"HlaFixedRecord first element is NULL");
 
-    uint offset = 0;
+    unsigned int offset = 0;
     for(size_t i = 0; i < _vectorpDataElement.size(); i++) {
         a_index = _vectorpDataElement[i]->decodeFrom(a_buffer, a_index);
         size_t paddingEachElem = this->calculPaddingAfterEachElements(offset, i);
@@ -199,14 +199,14 @@ size_t HLAfixedRecordImplementation::decodeFrom(const std::vector<Octet> &a_buff
     return a_index;
 }
 
-uint HLAfixedRecordImplementation::calculPaddingAfterEachElements(uint &a_offset, const uint a_index) const
+unsigned int HLAfixedRecordImplementation::calculPaddingAfterEachElements(unsigned int &a_offset, const unsigned int a_index) const
 {
-    uint P = 0;
+    unsigned int P = 0;
     if(a_index < _vectorpDataElement.size() - 1) {
 //        //Calcul padding after each element which depends on the encoded lenght of the element
 //        size_t sizeElement = _vectorpDataElement[a_index]->getEncodedLength();
-//        uint V = _vectorpDataElement[a_index + 1]->getOctetBoundary();
-//        uint R = (a_offset+sizeElement+P)%V;
+//        unsigned int V = _vectorpDataElement[a_index + 1]->getOctetBoundary();
+//        unsigned int R = (a_offset+sizeElement+P)%V;
 //        //R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask instead classic modulo
 //        P = (R == 0) ? 0:(V-R);
 //        a_offset += (sizeElement + P);

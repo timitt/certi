@@ -88,7 +88,7 @@ void HLAarrayImplementation::setElementPointer(size_t a_index, DataElement *a_da
 //@return the max octet boundary between each element of the array
 unsigned int HLAarrayImplementation::getOctetBoundary() const
 {
-    uint maxBoundarySize = 0;
+    unsigned int maxBoundarySize = 0;
     for(auto it = _vectorpDataElement.begin(); it != _vectorpDataElement.end(); it++)
     {
         maxBoundarySize = std::max((*it)->getOctetBoundary(), maxBoundarySize);
@@ -117,33 +117,33 @@ bool HLAarrayImplementation::isSameTypeAs(const HLAarrayImplementation &a_rhs)
 
 //\brief Calcul padding after NbElements
 //@return the number of padding Bytes
-uint HLAarrayImplementation::calculPaddingAfterNbElements() const
+unsigned int HLAarrayImplementation::calculPaddingAfterNbElements() const
 {
     //Calcul padding after nbElements indication
-//    uint P = 0;
-//    uint V = std::max(_pDataElementPrototype->getOctetBoundary(), 4u);
-//    uint R = (4+P)%V;
+//    unsigned int P = 0;
+//    unsigned int V = std::max(_pDataElementPrototype->getOctetBoundary(), 4u);
+//    unsigned int R = (4+P)%V;
 ////    R = (4+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
 //    P = (R == 0) ? 0:(V-R);
 
-    uint P = padding::HlaArray::calculPaddingAfterNbElements(_pDataElementPrototype->getOctetBoundary());
+    unsigned int P = padding::HlaArray::calculPaddingAfterNbElements(_pDataElementPrototype->getOctetBoundary());
 
     return P;
 }
 
 //\brief Calcul padding after Each elements
 //@return the number of padding Bytes after each elements
-uint HLAarrayImplementation::calculPaddingAfterEachElements(const DataElement &a_dataElement) const
+unsigned int HLAarrayImplementation::calculPaddingAfterEachElements(const DataElement &a_dataElement) const
 {
     //Calcul padding after each element which depends on the encoded lenght of the element
 //    size_t sizeElement = a_dataElement.getEncodedLength();
-//    uint V = std::max(a_dataElement.getOctetBoundary(), 4u);
-//    uint P = 0;
-//    uint R = (sizeElement+P)%V;
+//    unsigned int V = std::max(a_dataElement.getOctetBoundary(), 4u);
+//    unsigned int P = 0;
+//    unsigned int R = (sizeElement+P)%V;
 ////    R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
 //    P = (R == 0) ? 0:(V-R);
 
-    uint P = padding::HlaArray::calculPaddingAfterEachElements(a_dataElement.getEncodedLength(), a_dataElement.getOctetBoundary());
+    unsigned int P = padding::HlaArray::calculPaddingAfterEachElements(a_dataElement.getEncodedLength(), a_dataElement.getOctetBoundary());
 
     return P;
 }

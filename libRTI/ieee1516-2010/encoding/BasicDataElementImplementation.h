@@ -93,7 +93,7 @@ private:
     private:                                                                                                        \
         template<typename I>                                                                                        \
         size_t decode(std::vector<Octet> const & a_buffer, size_t a_index, Endian a_endianRepresentation            \
-            , const uint a_nbOctet = sizeof(_data))                                                                 \
+            , const unsigned int a_nbOctet = sizeof(_data))                                                                 \
         {                                                                                                           \
             union {                                                                                                 \
                 I intValue;                                                                                         \
@@ -101,7 +101,7 @@ private:
                 char charValue[8];                                                                                  \
             } val;                                                                                                  \
                                                                                                                     \
-            for(uint i=0; i<a_nbOctet; i++)                                                                         \
+            for(unsigned int i=0; i<a_nbOctet; i++)                                                                         \
             {                                                                                                       \
                 val.charValue[i] = a_buffer[a_index + i];                                                           \
             }                                                                                                       \
@@ -115,7 +115,7 @@ private:
                                                                                                                     \
         template<typename I>                                                                                        \
         void encode(std::vector<Octet>& a_buffer, Endian a_endianRepresentation                                     \
-                , const uint a_nbOctet = sizeof(_data)) const                                                       \
+                , const unsigned int a_nbOctet = sizeof(_data)) const                                                       \
         {                                                                                                           \
             union {                                                                                                 \
                 I intValue;                                                                                         \
@@ -126,7 +126,7 @@ private:
             PrintInfo<I> info(Encode::encode_before_swap, val.intValue, val.charValue, a_nbOctet);          \
             Swap<I>(val.intValue, a_endianRepresentation);                                                          \
             info.reshow(Encode::encode_after_swap);                                                                 \
-            for(uint i=0; i < a_nbOctet; i++)                                                                       \
+            for(unsigned int i=0; i < a_nbOctet; i++)                                                                       \
             {                                                                                                       \
                 a_buffer.push_back(val.charValue[i]);                                                               \
             }                                                                                                       \
@@ -646,7 +646,7 @@ namespace rti1516e
             char charValue[nbOctet];
         } val;
 
-        for(uint i=0; i<nbOctet; i++)
+        for(unsigned int i=0; i<nbOctet; i++)
         {
             val.charValue[i] = a_buffer[a_index + i];
         }
@@ -663,7 +663,7 @@ namespace rti1516e
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        const uint nbOctet = 2;
+        const unsigned int nbOctet = 2;
         union {
             uint16_t intValue;
             char charValue[nbOctet];
@@ -674,7 +674,7 @@ namespace rti1516e
         PrintInfo info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet);
         Swap<uint16_t>(val.intValue, Endian::little);
         info.reshow(Encode::encode_after_swap);
-        for(uint i=0; i < nbOctet; i++)
+        for(unsigned int i=0; i < nbOctet; i++)
         {
             a_buffer.push_back(val.charValue[i]);
         }
@@ -706,13 +706,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        const uint nbOctet = 2;
+        const unsigned int nbOctet = 2;
         union {
             uint16_t intValue;
             char charValue[nbOctet];
         } val;
 
-        for(uint i=0; i<nbOctet; i++)
+        for(unsigned int i=0; i<nbOctet; i++)
         {
             val.charValue[i] = a_buffer[a_index + i];
         }
@@ -729,7 +729,7 @@ namespace rti1516e
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        const uint nbOctet = 2;
+        const unsigned int nbOctet = 2;
         union {
             uint16_t intValue;
             char charValue[nbOctet];
@@ -740,7 +740,7 @@ namespace rti1516e
         PrintInfo info(Encode::encode_before_swap, val.intValue, val.charValue, nbOctet);
         Swap<uint16_t>(val.intValue, Endian::big);
         info.reshow(Encode::encode_after_swap);
-        for(uint i=0; i < nbOctet; i++)
+        for(unsigned int i=0; i < nbOctet; i++)
         {
             a_buffer.push_back(val.charValue[i]);
         }
@@ -780,7 +780,7 @@ namespace rti1516e
             char char4Value[4];
         } val;
 
-        for(uint i=0; i<2; i++)
+        for(unsigned int i=0; i<2; i++)
         {
             val.charValue[i] = a_buffer[a_index + i];
         }
@@ -833,7 +833,7 @@ namespace rti1516e
         Swap<uint16_t>(val.intValue, Endian::big);
         info16.reshow(Encode::encode_after_swap);
         info32.reshow(Encode::encode_after_swap);
-        for(uint i=0; i < 2; i++)
+        for(unsigned int i=0; i < 2; i++)
         {
             a_buffer.push_back(val.charValue[i]);
         }
@@ -912,7 +912,7 @@ namespace rti1516e
 //            char charValue[4];
 //        } val;
 
-//        for(uint i=0; i<3; i++)
+//        for(unsigned int i=0; i<3; i++)
 //        {
 //            val.charValue[i] = a_buffer[a_index + i];
 //        }
@@ -958,7 +958,7 @@ namespace rti1516e
 //        PrintInfo<uint32_t> info32(Encode::encode_before_swap, val.int32Value, val.charValue, 3);
 //        Swap<uint16_t>(val.intValue, Endian::little);
 //        info32.reshow(Encode::encode_after_swap);
-//        for(uint i=0; i < 3; i++)
+//        for(unsigned int i=0; i < 3; i++)
 //        {
 //            a_buffer.push_back(val.charValue[i]);
 //        }

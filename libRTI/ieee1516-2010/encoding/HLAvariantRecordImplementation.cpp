@@ -262,9 +262,9 @@ throw(EncoderException)
 {
     _pDataElementDiscriminent->encodeInto(a_buffer);
 
-    uint P = this->calculPaddingAfterDiscriminant();
+    unsigned int P = this->calculPaddingAfterDiscriminant();
 
-    for(uint i = 0; i < P; i++)
+    for(unsigned int i = 0; i < P; i++)
     {
         const Octet octet(0);
         a_buffer.push_back(octet);
@@ -283,7 +283,7 @@ size_t HLAvariantRecordImplementation::decodeFrom(const std::vector<Octet> &a_bu
 throw(EncoderException)
 {
     a_index += _pDataElementDiscriminent->decodeFrom(a_buffer, a_index);
-    uint P = this->calculPaddingAfterDiscriminant();
+    unsigned int P = this->calculPaddingAfterDiscriminant();
     a_index += P;
     DataElement *pElemValue = this->at(*_pDataElementDiscriminent).second;
     pElemValue->decodeFrom(a_buffer, a_index);
@@ -324,17 +324,17 @@ throw(EncoderException)
     return std::pair<DataElement*, DataElement*>(NULL, NULL);
 }
 
-uint HLAvariantRecordImplementation::calculPaddingAfterDiscriminant() const
+unsigned int HLAvariantRecordImplementation::calculPaddingAfterDiscriminant() const
 {
     //Calcul padding after nbElements indication
-//    uint P = 0;
-//    uint V = this->getOctetBoundary();
-//    uint S = _pDataElementDiscriminent->getEncodedLength();
-//    uint R = (S+P)%V;
+//    unsigned int P = 0;
+//    unsigned int V = this->getOctetBoundary();
+//    unsigned int S = _pDataElementDiscriminent->getEncodedLength();
+//    unsigned int R = (S+P)%V;
 ////    R = (S+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
 //    P = (R == 0) ? 0:(V-R);
 
-    uint P = padding::VariantRecord::calculPaddingAfterDiscriminant(_pDataElementDiscriminent->getEncodedLength(), this->getOctetBoundary());
+    unsigned int P = padding::VariantRecord::calculPaddingAfterDiscriminant(_pDataElementDiscriminent->getEncodedLength(), this->getOctetBoundary());
     return P;
 }
 

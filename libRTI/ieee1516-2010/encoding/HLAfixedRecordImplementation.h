@@ -28,7 +28,7 @@ public:
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index) throw (EncoderException);
 
 private:
-    uint calculPaddingAfterEachElements(uint &a_offset, const uint a_index) const;
+    unsigned int calculPaddingAfterEachElements(unsigned int &a_offset, const unsigned int a_index) const;
 
 private:
     std::vector<DataElement*> _vectorpDataElement;

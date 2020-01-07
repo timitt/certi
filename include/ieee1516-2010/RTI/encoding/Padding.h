@@ -28,8 +28,8 @@ namespace padding {
         static unsigned int calculPaddingAfterDiscriminant(const unsigned long &sizeDiscriminent, const unsigned int &V) {
 
             //Calcul padding after nbElements indication
-            uint P = 0;
-            uint R = (sizeDiscriminent+P)%V;
+            unsigned int P = 0;
+            unsigned int R = (sizeDiscriminent+P)%V;
         //    R = (S+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
             P = (R == 0) ? 0:(V-R);
 
@@ -42,9 +42,9 @@ namespace padding {
     public:
 
         static unsigned int calculPaddingAfterNbElements(const unsigned int &octetBoundary) {
-            uint P = 0;
-            uint V = std::max(octetBoundary, 4u);
-            uint R = (4+P)%V;
+            unsigned int P = 0;
+            unsigned int V = std::max(octetBoundary, 4u);
+            unsigned int R = (4+P)%V;
         //    R = (4+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
             P = (R == 0) ? 0:(V-R);
 
@@ -52,9 +52,9 @@ namespace padding {
         }
 
         static unsigned int calculPaddingAfterEachElements(const unsigned long &sizeElement, const unsigned int &octetBoundary) {
-            uint V = std::max(octetBoundary, 4u);
-            uint P = 0;
-            uint R = (sizeElement+P)%V;
+            unsigned int V = std::max(octetBoundary, 4u);
+            unsigned int P = 0;
+            unsigned int R = (sizeElement+P)%V;
         //    R = (sizeElement+P)&(V-1); //Use this code to replace the modulo calculation by mask intead classic modulo
             P = (R == 0) ? 0:(V-R);
             return P;

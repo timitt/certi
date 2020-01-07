@@ -48,16 +48,16 @@ void HLAfixedArrayImplementation::encodeInto(std::vector<Octet> &a_buffer) const
     else if(_vectorpDataElement[0] == NULL)
         throw EncoderException(L"HlaFixedArray first element is NULL");
 
-    uint PElement = 0;
+    unsigned int PElement = 0;
     if(_vectorpDataElement.size() > 0)
         PElement = this->calculPaddingAfterEachElements(*_vectorpDataElement[0]);
 
-    for(uint i=0; i<_vectorpDataElement.size(); i++)
+    for(unsigned int i=0; i<_vectorpDataElement.size(); i++)
     {
         _vectorpDataElement[i]->encodeInto(a_buffer);
         if(i != _vectorpDataElement.size()-1)
         {
-            for(uint j = 0; j < PElement; j++)
+            for(unsigned int j = 0; j < PElement; j++)
             {
                 const Octet octet(0);
                 a_buffer.push_back(octet);

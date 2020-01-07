@@ -66,7 +66,7 @@ void HLAfloat64::setTime(double value)
 
 //\brief String representation of the HLAfloat64
 //@return the time in string format
-std::__cxx11::wstring HLAfloat64::toString() const
+std::wstring HLAfloat64::toString() const
 {
     return std::to_wstring(_time);
 }

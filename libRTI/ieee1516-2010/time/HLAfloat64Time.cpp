@@ -197,12 +197,12 @@ throw (InternalError,
     _impl->decode(buffer, bufferSize);
 }
 
-std::__cxx11::wstring HLAfloat64Time::toString() const
+std::wstring HLAfloat64Time::toString() const
 {
     return _impl->toString();
 }
 
-std::__cxx11::wstring HLAfloat64Time::implementationName() const
+std::wstring HLAfloat64Time::implementationName() const
 {
     const std::wstring implName(L"HLAfloat64Time");
     return implName;
