@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-MomCli1516e::MomCli1516e(rti1516e::RTIambassador &amb, const std::__cxx11::wstring &federation_name)
+MomCli1516e::MomCli1516e(rti1516e::RTIambassador &amb, const std::wstring &federation_name)
     : MomCli(amb, federation_name)
 {
 
