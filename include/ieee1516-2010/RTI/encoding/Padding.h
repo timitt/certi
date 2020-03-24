@@ -1,6 +1,7 @@
 #ifndef PADDING_H
 #define PADDING_H
 
+#include <algorithm>
 
 namespace padding {
 

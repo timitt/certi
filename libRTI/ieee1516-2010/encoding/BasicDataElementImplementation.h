@@ -93,7 +93,7 @@ private:
     private:                                                                                                        \
         template<typename I>                                                                                        \
         size_t decode(std::vector<Octet> const & a_buffer, size_t a_index, Endian a_endianRepresentation            \
-            , const unsigned int a_nbOctet = sizeof(_data))                                                                 \
+            , const unsigned int a_nbOctet/* = sizeof(_data)*/)                                                                 \
         {                                                                                                           \
             union {                                                                                                 \
                 I intValue;                                                                                         \
@@ -115,7 +115,7 @@ private:
                                                                                                                     \
         template<typename I>                                                                                        \
         void encode(std::vector<Octet>& a_buffer, Endian a_endianRepresentation                                     \
-                , const unsigned int a_nbOctet = sizeof(_data)) const                                                       \
+                , const unsigned int a_nbOctet/* = sizeof(_data)*/) const                                                       \
         {                                                                                                           \
             union {                                                                                                 \
                 I intValue;                                                                                         \
@@ -294,14 +294,14 @@ namespace rti1516e
     DEFINE_ENCODING_HELPER_IMPLEMENTATION_CLASS(HLAfloat32BE, float,
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
-    {
-        return decode<uint32_t>(a_buffer, a_index, Endian::big);
+    {   
+        return decode<uint32_t>(a_buffer, a_index, Endian::big, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        encode<uint32_t>(a_buffer, Endian::big);
+        encode<uint32_t>(a_buffer, Endian::big, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -324,13 +324,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint32_t>(a_buffer, a_index, Endian::little);
+        return decode<uint32_t>(a_buffer, a_index, Endian::little, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
     {
-        encode<uint32_t>(a_buffer, Endian::little);
+        encode<uint32_t>(a_buffer, Endian::little, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -358,13 +358,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint64_t>(a_buffer, a_index, Endian::big);
+        return decode<uint64_t>(a_buffer, a_index, Endian::big, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint64_t>(a_buffer, Endian::big);
+    { 
+        encode<uint64_t>(a_buffer, Endian::big, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -392,13 +392,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint64_t>(a_buffer, a_index, Endian::little);
+        return decode<uint64_t>(a_buffer, a_index, Endian::little, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint64_t>(a_buffer, Endian::little);
+    { 
+        encode<uint64_t>(a_buffer, Endian::little, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -426,13 +426,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint16_t>(a_buffer, a_index, Endian::little);
+        return decode<uint16_t>(a_buffer, a_index, Endian::little, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint16_t>(a_buffer, Endian::little);
+    { 
+        encode<uint16_t>(a_buffer, Endian::little, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -455,13 +455,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint16_t>(a_buffer, a_index, Endian::big);
+        return decode<uint16_t>(a_buffer, a_index, Endian::big, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint16_t>(a_buffer, Endian::big);
+    { 
+        encode<uint16_t>(a_buffer, Endian::big, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -484,13 +484,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint32_t>(a_buffer, a_index, Endian::little);
+        return decode<uint32_t>(a_buffer, a_index, Endian::little, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint32_t>(a_buffer, Endian::little);
+    { 
+        encode<uint32_t>(a_buffer, Endian::little, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -513,13 +513,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint32_t>(a_buffer, a_index, Endian::big);
+        return decode<uint32_t>(a_buffer, a_index, Endian::big, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint32_t>(a_buffer, Endian::big);
+    { 
+        encode<uint32_t>(a_buffer, Endian::big, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -542,13 +542,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint64_t>(a_buffer, a_index, Endian::little);
+        return decode<uint64_t>(a_buffer, a_index, Endian::little, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint64_t>(a_buffer, Endian::little);
+    { 
+        encode<uint64_t>(a_buffer, Endian::little, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -571,13 +571,13 @@ namespace rti1516e
     size_t decodeFrom(std::vector<Octet> const & a_buffer, size_t a_index)
     throw (EncoderException)
     {
-        return decode<uint64_t>(a_buffer, a_index, Endian::big);
+        return decode<uint64_t>(a_buffer, a_index, Endian::big, sizeof(_data));
     }
 
     void encodeInto(std::vector<Octet>& a_buffer) const
     throw (EncoderException)
-    {
-        encode<uint64_t>(a_buffer, Endian::big);
+    { 
+        encode<uint64_t>(a_buffer, Endian::big, sizeof(_data));
     }
 
     size_t getEncodedLength() const
@@ -626,12 +626,6 @@ namespace rti1516e
 
     Integer64 hash() const
     {
-//        union {
-//            Integer64 intValue;
-//            char charValue;
-//        } val;
-//        val.charValue = _data;
-//        return val.intValue;
         return Integer64(_data);
     }
     )

@@ -24,7 +24,7 @@
 
 namespace libhla {
 
-__HLAbuffer::BufferList __HLAbuffer::gBuffers;
+//__HLAbuffer::BufferList __HLAbuffer::gBuffers;
 
 bool __HLAbuffer::__is_big_endian()
 {
