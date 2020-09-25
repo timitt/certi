@@ -1,0 +1,496 @@
+<?xml version="1.0"?>
+<objectModel>
+   <objects>
+      <objectClass>
+         <name>HLAobjectRoot</name>
+         <objectClass>
+               <name>ActiveSonarBeam</name>
+               <sharing>PublishSubscribe</sharing>
+               <semantics>A sector of concentrated energy from a device that radiates an active sonar signal.</semantics>
+               <attribute>
+                  <name>ActiveEmissionParameterIndex</name>
+                  <dataType>HLAinteger16LE</dataType>
+                  <updateType>Conditional</updateType>
+                  <updateCondition>On change</updateCondition>
+                  <ownership>NoTransfer</ownership>
+                  <sharing>PublishSubscribe</sharing>
+                  <dimensions/>
+                  <transportation>HLAbestEffort</transportation>
+                  <order>Receive</order>
+                  <semantics>An index into the database of active (intentional) underwater acoustics emissions.</semantics>
+               </attribute>
+               <attribute>
+                  <name>BeamIdentifier</name>
+                  <dataType>HLAbyte</dataType>
+                  <updateType>Static</updateType>
+                  <updateCondition>N/A</updateCondition>
+                  <ownership>NoTransfer</ownership>
+                  <sharing>PublishSubscribe</sharing>
+                  <dimensions/>
+                  <transportation>HLAbestEffort</transportation>
+                  <order>Receive</order>
+                  <semantics>The identification of the active sonar beam, which must be unique on the active sonar system.</semantics>
+               </attribute>
+               <attribute>
+                  <name>HLAfederateName</name>
+                  <dataType>HLAunicodeString</dataType>
+                  <updateType>Static</updateType>
+                  <updateCondition>NA</updateCondition>
+                  <ownership>NoTransfer</ownership>
+                  <sharing>Publish</sharing>
+                  <dimensions>
+                     <dimension>HLAfederate</dimension>
+                  </dimensions>
+                  <transportation>HLAreliable</transportation>
+                  <order>Receive</order>
+                  <semantics>
+                     Name of the joined federate supplied to a successful Join Federation Execution service invocation
+                  </semantics>
+               </attribute>
+               <attribute>
+                  <name>HLAfederateRecord</name>
+                  <dataType>HLAinteractionSubscription</dataType>
+                  <updateType>Static</updateType>
+                  <updateCondition>NA</updateCondition>
+                  <ownership>NoTransfer</ownership>
+                  <sharing>Publish</sharing>
+                  <dimensions>
+                     <dimension>HLAfederate</dimension>
+                  </dimensions>
+                  <transportation>HLAreliable</transportation>
+                  <order>Receive</order>
+                  <semantics>
+                     Name of the joined federate supplied to a successful Join Federation Execution service invocation
+                  </semantics>
+               </attribute>
+               <attribute>
+                    <name>ScanPattern</name>
+                    <dataType>ActiveSonarScanPatternEnum16</dataType>
+                    <updateType>Conditional</updateType>
+                    <updateCondition>On change</updateCondition>
+                    <ownership>NoTransfer</ownership>
+                    <sharing>PublishSubscribe</sharing>
+                    <dimensions/>
+                    <transportation>HLAbestEffort</transportation>
+                    <order>Receive</order>
+                    <semantics>The pattern that describes the movement of the sonar beam of the emitter.</semantics>
+                </attribute>
+                <attribute>
+                  <name notes="real-time_platform_reference_fom_77">RelativeSpatial</name>
+                  <dataType>SpatialStruct</dataType>
+                  <updateType>Conditional</updateType>
+                  <updateCondition></updateCondition>
+                  <ownership>NoTransfer</ownership>
+                  <sharing>PublishSubscribe</sharing>
+                  <dimensions/>
+                  <transportation>HLAbestEffort</transportation>
+                  <order>Receive</order>
+                  <semantics>Relative spatial state stored in one variant record attribute</semantics>
+                </attribute>
+         </objectClass>
+      </objectClass>
+   </objects>
+   <interactions>
+      <interactionClass>
+         <name>HLAinteractionRoot</name>
+         <sharing>Neither</sharing>
+         <transportation>HLAreliable</transportation>
+         <order>TimeStamp</order>
+         <interactionClass>
+            <name>HLAsetTiming</name>
+            <sharing>Subscribe</sharing>
+            <transportation>HLAreliable</transportation>
+            <order>Receive</order>
+            <semantics>Adjust the time period between updates of the HLAmanager.HLAfederate object instance for
+               the specified joined federate. If this interaction is never sent, the RTI shall not perform
+               periodic updates
+            </semantics>
+            <parameter>
+               <name>HLAreportingState</name>
+               <dataType>HLAinteger32BE</dataType>
+               <semantics>Whether the RTI should report service invocations (default = HLAfalse)
+               </semantics>
+            </parameter>
+            <parameter>
+               <name>HLAreportingChar</name>
+               <dataType>HLAASCIIchar</dataType>
+               <semantics>Whether the RTI should report service invocations (default = HLAfalse)
+               </semantics>
+            </parameter>
+         </interactionClass>
+      </interactionClass>
+   </interactions>
+   <routingSpace>
+      <name>Geo</name>
+      <dimension>
+        <name>X</name>
+      </dimension>
+      <dimension>
+        <name>Y</name>
+      </dimension>
+   </routingSpace>
+   <synchronizations>
+      <synchronization label="Init" dataType="NA" capability="RegisterAchieve"/>
+      <synchronization label="Start" dataType="NA" capability="RegisterAchieve"/>
+   </synchronizations>
+   <transportations>
+      <transportation name="HLAreliable" description="Provide reliable delivery of data in the sense that TCP/IP delivers its data reliably"/>
+      <transportation name="HLAbestEffort" description="Make an effort to deliver data in the sense that UDP provides best-effort delivery"/>
+   </transportations>
+   <dataTypes>
+      <basicDataRepresentations>
+         <basicData>
+            <name>HLAinteger16BE</name>
+            <size>16</size>
+            <interpretation>Integer in the range [-2^15, 2^15 - 1]</interpretation>
+            <endian>Big</endian>
+            <encoding>16-bit two's complement signed integer. The most significant bit contains the sign.</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAinteger32BE</name>
+            <size>32</size>
+            <interpretation>Integer in the range [-2^31, 2^31 - 1]</interpretation>
+            <endian>Big</endian>
+            <encoding>32-bit two's complement signed integer. The most significant bit contains the sign.</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAinteger64BE</name>
+            <size>64</size>
+            <interpretation>Integer in the range [-2^63, 2^63 - 1]</interpretation>
+            <endian>Big</endian>
+            <encoding>64-bit two's complement signed integer first. The most significant bit contains the sign.
+            </encoding>
+         </basicData>
+         <basicData>
+            <name>HLAfloat32BE</name>
+            <size>32</size>
+            <interpretation>Single-precision floating point number</interpretation>
+            <endian>Big</endian>
+            <encoding>32-bit IEEE normalized single-precision format. See IEEE Std 754-1985</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAfloat64BE</name>
+            <size>64</size>
+            <interpretation>Double-precision floating point number</interpretation>
+            <endian>Big</endian>
+            <encoding>64-bit IEEE normalized double-precision format. See IEEE Std 754-1985</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAoctetPairBE</name>
+            <size>16</size>
+            <interpretation>16-bit value</interpretation>
+            <endian>Big</endian>
+            <encoding>Assumed to be portable among devices.</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAinteger16LE</name>
+            <size>16</size>
+            <interpretation>Integer in the range [-2^15, 2^15 - 1]</interpretation>
+            <endian>Little</endian>
+            <encoding>16-bit two's complement signed integer. The most significant bit contains the sign.</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAinteger32LE</name>
+            <size>32</size>
+            <interpretation>Integer in the range [-2^31, 2^31 - 1]</interpretation>
+            <endian>Little</endian>
+            <encoding>32-bit two's complement signed integer. The most significant bit contains the sign.</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAinteger64LE</name>
+            <size>64</size>
+            <interpretation>Integer in the range [-2^63, 2^63 - 1]</interpretation>
+            <endian>Little</endian>
+            <encoding>64-bit two's complement signed integer first. The most significant bit contains the sign.
+            </encoding>
+         </basicData>
+         <basicData>
+            <name>HLAfloat32LE</name>
+            <size>32</size>
+            <interpretation>Single-precision floating point number</interpretation>
+            <endian>Little</endian>
+            <encoding>32-bit IEEE normalized single-precision format. See IEEE Std 754-1985</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAfloat64LE</name>
+            <size>64</size>
+            <interpretation>Double-precision floating point number</interpretation>
+            <endian>Little</endian>
+            <encoding>64-bit IEEE normalized double-precision format. See IEEE Std 754-1985</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAoctetPairLE</name>
+            <size>16</size>
+            <interpretation>16-bit value</interpretation>
+            <endian>Little</endian>
+            <encoding>Assumed to be portable among hardware devices.</encoding>
+         </basicData>
+         <basicData>
+            <name>HLAoctet</name>
+            <size>8</size>
+            <interpretation>8-bit value</interpretation>
+            <endian>Big</endian>
+            <encoding>Assumed to be portable among hardware devices.</encoding>
+         </basicData>
+      </basicDataRepresentations>
+      <simpleDataTypes>
+         <simpleData>
+            <name>HLAASCIIchar</name>
+            <representation>HLAoctet</representation>
+            <units>NA</units>
+            <resolution>NA</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>Standard ASCII character (see ANSI Std x3.4-1986)</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAunicodeChar</name>
+            <representation>HLAoctetPairBE</representation>
+            <units>NA</units>
+            <resolution>NA</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>Unicode UTF-16 character (see The Unicode Standard, Version 3.0)</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAbyte</name>
+            <representation>HLAoctet</representation>
+            <units>Byte</units>
+            <resolution>1</resolution>
+            <accuracy>8</accuracy>
+            <semantics>Uninterpreted 8-bit byte</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAcount</name>
+            <representation>HLAinteger32BE</representation>
+            <units>NA</units>
+            <resolution>NA</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>NA</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAseconds</name>
+            <representation>HLAinteger32BE</representation>
+            <units>s</units>
+            <resolution>NA</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>NA</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAmsec</name>
+            <representation>HLAinteger32BE</representation>
+            <units>ms</units>
+            <resolution>NA</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>NA</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAnormalizedFederateHandle</name>
+            <representation>HLAinteger32BE</representation>
+            <units>NA</units>
+            <resolution>NA</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>The type of the normalized value of a federate handle as returned by the Normalize Federate
+               Handle service. The value is appropriate for defining the range of the HLAfederate dimension for regions
+               with this dimension.
+            </semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAindex</name>
+            <representation>HLAinteger32BE</representation>
+            <units>NA</units>
+            <resolution>NA</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>NA</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAinteger64Time</name>
+            <representation>HLAinteger64BE</representation>
+            <units>NA</units>
+            <resolution>1</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>Standardized 64 bit integer time</semantics>
+         </simpleData>
+         <simpleData>
+            <name>HLAfloat64Time</name>
+            <representation>HLAfloat64BE</representation>
+            <units>NA</units>
+            <resolution>4.9E-308</resolution>
+            <accuracy>NA</accuracy>
+            <semantics>Standardized 64 bit float time</semantics>
+         </simpleData>
+      </simpleDataTypes>
+      <enumeratedDataTypes>
+         <enumeratedData>
+               <name notes="real-time_platform_reference_fom_9">ActiveSonarScanPatternEnum16</name>
+               <representation>HLAinteger16BE</representation>
+               <semantics>-NULL-</semantics>
+               <enumerator>
+                  <name>ScanPatternNotUsed</name>
+                  <value>0</value>
+               </enumerator>
+               <enumerator>
+                  <name>Conical</name>
+                  <value>1</value>
+               </enumerator>
+               <enumerator>
+                  <name>Helical</name>
+                  <value>2</value>
+               </enumerator>
+               <enumerator>
+                  <name>Raster</name>
+                  <value>3</value>
+               </enumerator>
+               <enumerator>
+                  <name>SectorSearch</name>
+                  <value>4</value>
+               </enumerator>
+               <enumerator>
+                  <name>ContinuousSearch</name>
+                  <value>5</value>
+               </enumerator>
+         </enumeratedData>
+      </enumeratedDataTypes>
+      <arrayDataTypes>
+         <arrayData>
+            <name>HLAASCIIstring</name>
+            <dataType>HLAASCIIchar</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>ASCII string representation</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAunicodeString</name>
+            <dataType>HLAunicodeChar</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>Unicode string representation</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAopaqueData</name>
+            <dataType>HLAbyte</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>Uninterpreted sequence of bytes</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAtoken</name>
+            <dataType>HLAbyte</dataType>
+            <cardinality>0</cardinality>
+            <encoding>HLAfixedArray</encoding>
+         </arrayData>
+         <arrayData>
+            <name>HLAhandle</name>
+            <dataType>HLAbyte</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>Encoded value of a handle. The encoding is based on the type of handle</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAtransportationName</name>
+            <dataType>HLAunicodeChar</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>String whose legal value shall be a name from any row in the OMT transportation table (IEEE Std
+               1516.2-2010)
+            </semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAupdateRateName</name>
+            <dataType>HLAunicodeChar</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>String whose legal value shall be a name from any row in the OMT update rate table (IEEE Std
+               1516.2-2010)
+            </semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAlogicalTime</name>
+            <dataType>HLAbyte</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>An encoded logical time. An empty array shall indicate that the values is not defined
+            </semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAtimeInterval</name>
+            <dataType>HLAbyte</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>An encoded logical time interval. An empty array shall indicate that the values is not defined
+            </semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAhandleList</name>
+            <dataType>HLAhandle</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>List of encoded handles</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAinteractionSubList</name>
+            <dataType>HLAinteractionSubscription</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>List of interaction subscription indicators</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAargumentList</name>
+            <dataType>HLAunicodeString</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>List of arguments</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAsynchPointList</name>
+            <dataType>HLAunicodeString</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>List of names of synchronization points.</semantics>
+         </arrayData>
+         <arrayData>
+            <name>HLAmoduleDesignatorList</name>
+            <dataType>HLAunicodeString</dataType>
+            <cardinality>Dynamic</cardinality>
+            <encoding>HLAvariableArray</encoding>
+            <semantics>List of designators of FOM modules.</semantics>
+         </arrayData>
+      </arrayDataTypes>
+      <fixedRecordDataTypes>
+         <fixedRecordData>
+            <name>HLAinteractionSubscription</name>
+            <encoding>HLAfixedRecord</encoding>
+            <semantics>Interaction subscription information</semantics>
+            <field>
+               <name>HLAinteractionClass</name>
+               <dataType>HLAhandle</dataType>
+               <semantics>Encoded interaction class handle</semantics>
+            </field>
+            <field>
+               <name>HLAactive</name>
+               <dataType>HLAbyte</dataType>
+               <semantics>Whether subscription is active (HLAtrue=active)</semantics>
+            </field>
+         </fixedRecordData>
+      </fixedRecordDataTypes>
+      <variantRecordDataTypes>
+         <variantRecordData>
+            <name>SpatialStruct</name>
+            <discriminant>DeadReckoningAlgorithm</discriminant>
+            <dataType>ActiveSonarScanPatternEnum16</dataType>
+            <alternative>
+               <enumerator>ScanPatternNotUsed</enumerator>
+               <name>SpatialStatic</name>
+               <dataType>HLAinteractionSubscription</dataType>
+               <semantics>-NULL-</semantics>
+            </alternative>
+            <alternative>
+               <enumerator>Conical</enumerator>
+               <name>SpatialFPW</name>
+               <dataType>HLAcount</dataType>
+               <semantics>-NULL-</semantics>
+            </alternative>
+         </variantRecordData>
+      </variantRecordDataTypes>
+   </dataTypes>
+</objectModel>
+
+

@@ -51,6 +51,9 @@ else(BIG_ENDIAN)
    message(STATUS "Target is Little Endian")
 endif(BIG_ENDIAN)
 
+if(DEBUG_ENCODE)
+    add_definitions(-DDEBUG_ENCODE_DECODE)
+endif(DEBUG_ENCODE)
 # default behaviour is to build library as shared on all platform
 option(BUILD_SHARED
        "Build libraries as shared library" ON)

@@ -594,7 +594,8 @@ rti1516::VariableLengthData RTI1516fedTimeInterval::encode() const
 {
     uint64_t value;
 #ifdef HOST_IS_BIG_ENDIAN
-    memcpy(&value, &_fedTime, sizeof(double));
+//    memcpy(&value, &_fedTime, sizeof(double)); //OLD code
+    memcpy(&value, &_fedInterval, sizeof(double));
 #else
     value = CERTI_ENCODE_DOUBLE_TO_UINT64BE(&_fedInterval);
 #endif

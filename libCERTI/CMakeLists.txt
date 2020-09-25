@@ -122,6 +122,21 @@ set(LEX_SRC               ${CMAKE_CURRENT_SOURCE_DIR}/tokens.ll)
 set(LEX_OUT_PREFIX        ${CMAKE_CURRENT_BINARY_DIR}/tokens_yy)
 set(LEX_WANTED_OUT_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/tokens)
 
+set(IEEE1516eSRCS
+    ieee1516-2010/ObjectClass1516e.h
+    ieee1516-2010/ObjectClassAttribute1516e.h
+    ieee1516-2010/Interaction1516e.h
+    ieee1516-2010/Parameter1516e.h
+    ieee1516-2010/DataType.h
+    ieee1516-2010/BasicDataType.h
+    ieee1516-2010/SimpleDataType.h
+    ieee1516-2010/ArrayDataType.h
+    ieee1516-2010/FixedRecordDataType.h
+    ieee1516-2010/EnumeratedDataType.h
+    ieee1516-2010/VariantRecordDataType.h
+    ieee1516-2010/EncodableDataType.h
+    )
+
 #Exec Lex
 add_custom_command(
    OUTPUT  ${LEX_WANTED_OUT_PREFIX}.cc
@@ -169,7 +184,8 @@ add_library(CERTI
     ${CERTI_TIME_SRCS}
     ${CERTI_SUPPORT_SRCS}
     ${CERTI_SOCKET_SRCS}
-    ${CERTI_GENERATED_SRCS}    
+    ${CERTI_GENERATED_SRCS}
+    ${IEEE1516eSRCS}
 )
 
 set_target_properties(CERTI PROPERTIES PROJECT_LABEL LibCERTI)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE objectModel SYSTEM "../../xml/ieee1516-2000/1516_2-2000/HLA.dtd" >
-<objectModel DTDversion="1516.2" appDomain="CERTI testing"
+<objectModel DTDversion="1516-2010" appDomain="CERTI testing"
     appDomainNotes="" date="2014/03/03" dateNotes="" name="testFederation"
     nameNotes="" other="" otherNotes="" pocEmail="eric.noulard@onera.fr"
     pocEmailNotes="" pocName="Eric Noulard" pocNameNotes="" pocOrg="ONERA/DTIM"
@@ -10,14 +10,12 @@
     sponsorNotes="" type="FOM" typeNotes="" version="1.0" versionNotes="">
     <objects>
         <objectClass>
-            <attribute>
             <name>HLAobjectRoot</name>
             <nameNotes></nameNotes>
             <semantics></semantics>
             <semanticsNotes></semanticsNotes>
             <sharing>Neither</sharing>
             <sharingNotes></sharingNotes>
-            </attribute>
             <attribute>
                 <name>HLAprivilegeToDeleteObject</name>
                 <dataType>NA</dataType>
@@ -26,15 +24,23 @@
                 <updateType>NA</updateType>
                 <ownership>NoTransfer</ownership>
                 <transportation>HLAreliable</transportation>
-                <order>Receive</order>
+                <order>TimeStamp</order>
             </attribute>
             <objectClass>
                 <name>RTIprivate</name>
+                <dataType>NA</dataType>
             </objectClass>
             <objectClass>
                 <name>Data</name>
                 <attribute>
                     <name>Attr1</name>
+                    <dataType>NA</dataType>
+                    <order>TimeStamp</order>
+                    <transportation>HLAreliable</transportation>
+                </attribute>
+                <attribute>
+                    <name>Attr2</name>
+                    <dataType>NA</dataType>
                     <order>TimeStamp</order>
                     <transportation>HLAreliable</transportation>
                 </attribute>
@@ -49,16 +55,17 @@
             <semantics></semantics>
             <sharing>Neither</sharing>
             <transportation>HLAreliable</transportation>
-        </interactionClass>
             <interactionClass>
                 <name>Message</name>
-            </interactionClass>
                 <parameter>
                     <name>Param1</name>
+                    <dataType>NA</dataType>
                 </parameter>
-
-
-                <parameter name="Param2" /></interactionClass>
+                <parameter>
+                    <name>Param2</name>
+                    <dataType>NA</dataType>
+                </parameter>
+            </interactionClass>
         </interactionClass>
     </interactions>
     <dimensions>

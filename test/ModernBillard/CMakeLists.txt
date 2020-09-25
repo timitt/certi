@@ -59,5 +59,5 @@ else()
 endif()
 
 install(FILES
-    Base.xml Create.xml Join.xml 
+    Base1516e.xml Create1516e.xml Join1516e.xml
     DESTINATION share/federations)

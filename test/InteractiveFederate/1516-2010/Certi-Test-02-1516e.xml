@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE objectModel SYSTEM "hla.dtd"><objectModel DTDversion="1516.2010" name="Certi Test FOM - Object handles" type="FOM" version="1.0" date="2010-04-19" other="Created with Visual OMT 1516">
+    <objects>
+        <objectClass>
+            <name>HLAobjectRoot</name>
+            <sharing>Neither</sharing>
+            <attribute>
+                <name>HLAprivilegeToDeleteObject</name>
+                <dataType>NA</dataType>
+                <updateType>NA</updateType>
+                <updateCondition>NA</updateCondition>
+                <ownership>DivestAcquire</ownership>
+                <sharing>PublishSubscribe</sharing>
+                <dimensions>NA</dimensions>
+                <transportation>HLAreliable</transportation>
+                <order>TimeStamp</order>
+            </attribute>
+            <objectClass name="TestObjectClass" sharing="PublishSubscribe">
+                <name>TestObjectClass</name>
+                <sharing>PublishSubscribe</sharing>
+                <attribute> 
+                    <name>Data</name>
+                    <dataType>HLAfloat64Time</dataType>
+                    <transportation>HLAreliable</transportation>
+                    <order>TimeStamp</order>
+                </attribute>
+            </objectClass>    
+            <objectClass>
+                <name>TestObjectClassR</name>
+                <sharing>PublishSubscribe</sharing>
+                <attribute>
+                    <name>DataR</name>
+                    <dataType>HLAfloat64LE</dataType>
+                    <transportation>HLAreliable</transportation>
+                    <order>Receive</order>
+                </attribute>
+            </objectClass>        
+        </objectClass>
+    </objects>
+    <interactions>
+        <interactionClass>
+            <name>HLAinteractionRoot</name>
+            <sharing>Neither</sharing>
+            <dimensions>NA</dimensions>
+            <transportation>HLAreliable</transportation>
+            <order>Receive</order>        
+            <interactionClass>
+                <name>Msg</name>
+                <sharing>PublishSubscribe</sharing>
+                <dimensions>NA</dimensions>
+                <transportation>HLAreliable</transportation>
+                <order>TimeStamp</order>
+                <parameter> 
+                    <name>MsgData</name>
+                    <dataType>HLAbyte</dataType>
+                </parameter>
+            </interactionClass>
+            <interactionClass>
+                <name>MsgR</name>
+                <sharing>PublishSubscribe</sharing>
+                <dimensions>NA</dimensions>
+                <transportation>HLAreliable</transportation>
+                <order>Receive</order>
+                <parameter>
+                    <name>MsgDataR</name>
+                    <dataType>HLAbyte</dataType>
+                </parameter>
+            </interactionClass>
+        </interactionClass>
+    </interactions>
+    <synchronizations>
+        <synchronization label="First" dataType="NA" capability="RegisterAchieve"/>
+        <synchronization label="Second" dataType="NA" capability="RegisterAchieve"/>
+    </synchronizations>
+    <dataTypes>
+        <basicDataRepresentations>
+            <basicData>
+                <name>HLAfloat64BE</name>
+                <size>64</size>
+                <interpretation>Double-precision floating point number</interpretation>
+                <endian>Big</endian>
+                <encoding>64-bit IEEE normalized double-precision format. See IEEE Std 754-1985</encoding>
+            </basicData>
+            <basicData>
+                <name>HLAfloat64LE</name>
+                <size>64</size>
+                <interpretation>Double-precision floating point number</interpretation>
+                <endian>Little</endian>
+                <encoding>64-bit IEEE normalized double-precision format. See IEEE Std 754-1985</encoding>
+            </basicData>
+            <basicData>
+                <name>HLAoctet</name>
+                <size>8</size>
+                <interpretation>8-bit value</interpretation>
+                <endian>Big</endian>
+                <encoding>Assumed to be portable among hardware devices.</encoding>
+            </basicData>
+        </basicDataRepresentations>
+        <simpleDataTypes>
+            <simpleData>
+                <name>HLAfloat64Time</name>
+                <representation>HLAfloat64BE</representation>
+                <units>NA</units>
+                <resolution>4.9E-308</resolution>
+                <accuracy>NA</accuracy>
+                <semantics>Standardized 64 bit float time</semantics>
+            </simpleData>
+            <simpleData>
+                <name>HLAbyte</name>
+                <representation>HLAoctet</representation>
+                <units>Byte</units>
+                <resolution>1</resolution>
+                <accuracy>8</accuracy>
+                <semantics>Uninterpreted 8-bit byte</semantics>
+            </simpleData>
+        </simpleDataTypes>
+    </dataTypes>
+</objectModel>

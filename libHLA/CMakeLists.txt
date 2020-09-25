@@ -1,18 +1,20 @@
 set(LIBHLA_EXPORTED_INCLUDES libhla.hh)
 
-set(LIBHLA_TYPES1516_SRCS
-    HLAbuffer.hh HLAbuffer.cc
-)
-list(APPEND LIBHLA_EXPORTED_INCLUDES 
-    HLAtypesIEEE1516.hh
-    HLAbuffer.hh
-    HLAbasicType.hh
-    HLAenumeratedType.hh
-    HLAfixedArray.hh
-    HLAvariableArray.hh
-    HLAfixedRecord.hh
-    HLAvariantRecord.hh)
-source_group("Source Files\\Types1516" FILES ${LIBHLA_TYPES1516_SRCS})
+#set(LIBHLA_TYPES1516_SRCS
+#    HLAbuffer.hh HLAbuffer.cc
+#)
+
+#list(APPEND LIBHLA_EXPORTED_INCLUDES
+##    HLAtypesIEEE1516.hh
+#    HLAbuffer.hh
+##    HLAbasicType.hh
+##    HLAenumeratedType.hh
+##    HLAfixedArray.hh
+##    HLAvariableArray.hh
+##    HLAfixedRecord.hh
+##    HLAvariantRecord.hh
+#)
+#source_group("Source Files\\Types1516" FILES ${LIBHLA_TYPES1516_SRCS})
 
 enable_language(C)
 set(LIBHLA_HASH_SRCS sha1.c MurmurHash2.cpp MurmurHash3.cpp PMurHash.c)

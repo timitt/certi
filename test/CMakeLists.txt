@@ -9,7 +9,7 @@ add_subdirectory(testFederate)
 # bug #55104 Test if rpc include directory is available
 # reason is Fedora removed (in v28) the rpc header from the standard glibc
 set(RPC_DEFAULT_INCLUDE_PATHS
-    ${CMAKE_CURRENT_LIST_DIR}/..     
+    ${CMAKE_CURRENT_LIST_DIR}/.. 
     /usr/local/include
     /usr/include
     /usr/include/tirpc

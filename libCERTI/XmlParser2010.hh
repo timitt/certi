@@ -43,6 +43,9 @@
 
 namespace certi {
 
+class DataType;
+
+
 /**
  * The CERTI 2010 XML federation Object Model parser.
  */
@@ -61,29 +64,52 @@ public:
 	 * @param[in] pathToXmlFile the path to the XML file.
 	 * @return the RootObject resulting from the parse. 
 	 */
-    //RootObject* parse(std::string pathToXmlFile);
+    RootObject* parse(std::string pathToXmlFile) override;
 
-    virtual void parseNTOS(HLAntos_t* ntos_p);
+    virtual void parseNTOS(HLAntos_t* ntos_p) override;
 
-    virtual std::string getName();
+    virtual std::string getName() override;
 
 private:
     /**
 	 * Parse the current class node.
 	 * @param[in,out] parent the parent object class
 	 */
-    //void parseClass(ObjectClass *parent);
+    void parseClass(ObjectClass *parent) override;
 
     /**
      * Parse the current interaction node
      * @param[in,out] parent the parent interaction node
      */
-    //void parseInteraction(Interaction *parent);
+    void parseInteraction(Interaction *parent) override;
 
     /** 
      * Parse a routing space from current node.
      */
-    //void parseRoutingSpace(void);
+    void parseRoutingSpace(void) override;
+
+    ///
+    /// \brief parseDataType Parse all datatypes
+    ///
+    void parseDataType();
+    void parseBasicData();
+    void parseSimpleData();
+    void parseEnumeratedData();
+    void parseArrayData();
+    void parseFixedRecordData();
+    void parseVariantRecordData();
+
+    ///
+    /// \brief connectDataTypeBetweenThem This method have to be called after parse all datatype.
+    /// This method connect all datatype between them.
+    ///
+    void connectDataTypeBetweenThem();
+
+    typedef struct ntos2010 : HLAntos_t {
+        xmlChar* dataType;
+    } HLAntos_t2010;
+
+    std::map<std::string, std::shared_ptr<DataType>> _predefinedDataType;
 };
 
 } // namespace certi

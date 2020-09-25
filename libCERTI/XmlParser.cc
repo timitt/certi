@@ -401,6 +401,9 @@ XmlParser::HLAXmlStdVersion_t XmlParser::version(std::string pathToXmlFile)
         if (!xmlStrcmp(version, VERSION1516)) {
             return XmlParser::XML_IEEE1516_2000;
         }
+        else if(!xmlStrcmp(version, VERSION1516_2010)) {
+            return XmlParser::XML_IEEE1516_2010;
+        }
     }
 
     // If no good, what we do ?
@@ -444,6 +447,30 @@ XmlParser::HLAXmlStdVersion_t XmlParser::version(std::string pathToXmlFile)
                     }
                 }
                 suite = suite->next;
+            }
+        }
+        else if ((!xmlStrcmp(cur->name, NODE_INTERACTIONS))) {
+            xmlNodePtr suite = cur->xmlChildrenNode;
+            while (suite != nullptr) {
+                if ((!xmlStrcmp(suite->name, NODE_INTERACTION_CLASS))) {
+                    xmlChar* name = xmlGetProp(suite, ATTRIBUTE_NAME);
+                    if (name != nullptr) {
+                        return XmlParser::XML_IEEE1516_2000;
+                    }
+                    else {
+                        return XmlParser::XML_IEEE1516_2010;
+                    }
+                }
+                suite = suite->next;
+            }
+        }
+        else if ((!xmlStrcmp(cur->name, NODE_ROUTING_SPACE))) {
+            xmlChar* name = xmlGetProp(cur, ATTRIBUTE_NAME);
+            if (name != nullptr) {
+                return XmlParser::XML_IEEE1516_2000;
+            }
+            else {
+                return XmlParser::XML_IEEE1516_2010;
             }
         }
         cur = cur->next;

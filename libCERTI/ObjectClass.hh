@@ -31,6 +31,7 @@ class ObjectAttribute;
 class ObjectClass;
 class ObjectClassSet;
 class ObjectClassAttribute;
+class ObjectClassAttribute1516e;
 class ObjectClassBroadcastList;
 }
 
@@ -176,6 +177,8 @@ public:
 
     ObjectClassAttribute* getAttribute(AttributeHandle the_handle) const;
 
+    ObjectClassAttribute1516e *getAttribute1516e(AttributeHandle the_handle) const;
+
     bool hasAttribute(AttributeHandle theHandle) const;
 
     // Instance Management
@@ -229,11 +232,13 @@ public:
     bool isFederatePublisher(FederateHandle the_federate) const;
     bool isSubscribed(FederateHandle) const;
 
+    bool checkSizeData(const ObjectAttribute &oa, const AttributeValue_t &data) const;
+
 private:
     /// private default constructor with no code one should not call it.
     ObjectClass() = delete;
 
-    void addInheritedClassAttributes(ObjectClass* child);
+    virtual void addInheritedClassAttributes(ObjectClass* child);
 
     void sendToFederate(NetworkMessage* msg, FederateHandle theFederate);
 
@@ -280,9 +285,6 @@ private:
     /// The security level ID attached to this object class. default level for non inherited attributes.
     SecurityLevelID securityLevelId;
 
-    /// All attributes, indexed by handle.
-    HandleClassAttributeMap _handleClassAttributeMap;
-
     /// All objects of this class, indexed by handle.
     HandleObjectMap _handleObjectMap;
 
@@ -294,6 +296,10 @@ private:
 
     /// The message buffer used to send Network messages
     libhla::MessageBuffer NM_msgBufSend;
+
+protected:
+    /// All attributes, indexed by handle.
+    HandleClassAttributeMap _handleClassAttributeMap;
 };
 
 } // namespace certi

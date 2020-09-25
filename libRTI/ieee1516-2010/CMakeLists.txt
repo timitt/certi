@@ -60,6 +60,59 @@ set(RTI1516e_LIB_SRCS
     RTIHandleFactory.cpp
     RTIHandleFactory.h
     Typedefs.cpp
+    HLAtypesIEEE1516.hh
+    HLAbuffer.hh
+    HLAbuffer.cc
+    HLAbasicType.hh
+    HLAenumeratedType.hh
+    HLAfixedArray.hh
+    HLAvariableArray.hh
+    HLAfixedRecord.hh
+    HLAvariantRecord.hh
+    encoding/BasicDataElement.cpp
+    encoding/BasicDataElementImplementation.cpp
+    encoding/BasicDataElementImplementation.h
+    encoding/DataElement.cpp
+    encoding/EncodingExceptions.cpp
+    encoding/HLAvariableArray.cpp
+    encoding/HLAvariableArrayImplementation.h
+    encoding/HLAvariableArrayImplementation.cpp
+    encoding/PrintInfo.h
+    encoding/HLAarrayImplementation.h
+    encoding/HLAarrayImplementation.cpp
+    encoding/HLAfixedArray.cpp
+    encoding/HLAfixedArrayImplementation.h
+    encoding/HLAfixedArrayImplementation.cpp
+    encoding/HLAfixedRecord.cpp
+    encoding/HLAfixedRecordImplementation.h
+    encoding/HLAfixedRecordImplementation.cpp
+    encoding/HLAopaqueData.cpp
+    encoding/HLAopaqueDataImplementation.h
+    encoding/HLAopaqueDataImplementation.cpp
+    encoding/HLAvariantRecord.cpp
+    encoding/HLAvariantRecordImplementation.h
+    encoding/HLAvariantRecordImplementation.cpp
+    time/HLAfloat64Time.cpp
+    time/HLAfloat64TimeImpl.h
+    time/HLAfloat64TimeImpl.cpp
+    time/HLAfloat64Interval.cpp
+    time/HLAfloat64IntervalImpl.h
+    time/HLAfloat64IntervalImpl.cpp
+    time/HLAfloat64.h
+    time/HLAfloat64.cpp
+    time/HLAinteger64Time.cpp
+    time/HLAinteger64TimeImpl.h
+    time/HLAinteger64TimeImpl.cpp
+    time/HLAinteger64Interval.cpp
+    time/HLAinteger64IntervalImpl.h
+    time/HLAinteger64IntervalImpl.cpp
+    time/HLAinteger64.h
+    time/HLAinteger64.cpp
+    time/HLAfloat64TimeFactory.cpp
+    time/HLAinteger64TimeFactory.cpp
+    time/LogicalTime.cpp
+    time/LogicalTimeInterval.cpp
+    time/LogicalTimeFactory.cpp
    )
 
 set(RTI1516e_LIB_INCLUDE
@@ -78,6 +131,24 @@ set(RTI1516e_LIB_INCLUDE
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/SpecificConfig.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/Typedefs.h
     ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/VariableLengthData.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/BasicDataElements.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAenumerate.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/DataElement.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingExceptions.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/EncodingConfig.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAvariableArray.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAfixedArray.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAfixedRecord.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAopaqueData.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/HLAvariantRecord.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64Time.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64Interval.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAinteger64Time.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAinteger64Interval.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAfloat64TimeFactory.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/time/HLAinteger64TimeFactory.h
+    ${CMAKE_SOURCE_DIR}/include/ieee1516-2010/RTI/encoding/Padding.h
+
 )
 
 add_library(RTI1516e ${RTI1516e_LIB_SRCS} ${RTI1516e_LIB_INCLUDE})

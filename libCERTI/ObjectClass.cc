@@ -26,8 +26,10 @@
 #include "ObjectAttribute.hh"
 #include "ObjectClass.hh"
 #include "ObjectClassAttribute.hh"
+#include "ieee1516-2010/ObjectClassAttribute1516e.h"
 #include "ObjectClassBroadcastList.hh"
 #include "ObjectClassSet.hh"
+#include "ieee1516-2010/SimpleDataType.h"
 
 #include "PrettyDebug.hh"
 #include "SocketTCP.hh"
@@ -483,6 +485,11 @@ ObjectClassAttribute* ObjectClass::getAttribute(AttributeHandle the_handle) cons
                               + ">.");
 }
 
+ObjectClassAttribute1516e *ObjectClass::getAttribute1516e(AttributeHandle the_handle) const
+{
+    return static_cast<ObjectClassAttribute1516e*>(getAttribute(the_handle));
+}
+
 // ----------------------------------------------------------------------------
 //! Return true if the attribute with the given handle is an attribute of this object class
 bool ObjectClass::hasAttribute(AttributeHandle attributeHandle) const
@@ -522,6 +529,22 @@ bool ObjectClass::isSubscribed(FederateHandle fed) const
         }
     }
     return false;
+}
+
+bool ObjectClass::checkSizeData(const ObjectAttribute &oa, const AttributeValue_t &data) const
+{
+    ObjectClassAttribute1516e* classAttribute = dynamic_cast<ObjectClassAttribute1516e*>(oa.getObjectClassAttribute());
+    if(classAttribute != nullptr) {
+        if(classAttribute->getType()->category() == EncodableDataType::CATEGORY::BasicDataType) {
+            BasicDataType* basicDataType = static_cast<BasicDataType*>(classAttribute->getType().get());
+            return basicDataType->size() == data.size()*8;
+        }
+        else if(classAttribute->getType()->category() == EncodableDataType::CATEGORY::SimpleDataType) {
+            SimpleDataType* simpleDataType = static_cast<SimpleDataType*>(classAttribute->getType().get());
+            return simpleDataType->representation()->size() == data.size()*8;
+        }
+    }
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -802,6 +825,14 @@ ObjectClass::updateAttributeValues(FederateHandle the_federate,
     ObjectAttribute* oa;
     for (int i = 0; i < the_size; i++) {
         oa = object->getAttribute(the_attributes[i]);
+
+        // Check size of dataType value is the same than the size declared in the FOM
+        bool isGoodSize = checkSizeData(*oa, the_values[i]);
+        if(!isGoodSize) {
+//            throw certi::DataTypeException("The data size does not correspond to the FOM.");
+            std::cerr << "warning: The data size does not match to the FOM for the attribute: " << oa->getObjectClassAttribute()->getName() << endl;
+        }
+
         if (oa->getOwner() != the_federate)
             throw AttributeNotOwned("Federate <" + std::to_string(the_federate) + "> is not owner of attribute <"
                                     + std::to_string(oa->getHandle())
@@ -860,6 +891,12 @@ ObjectClass::updateAttributeValues(FederateHandle the_federate,
     for (int i = 0; i < the_size; i++) {
         oa = object->getAttribute(the_attributes[i]);
 
+        // Check size of dataType value is the same than the size declared in the FOM
+        bool isGoodSize = checkSizeData(*oa, the_values[i]);
+        if(!isGoodSize) {
+//            throw certi::DataTypeException("The data size does not correspond to the FOM.");
+            std::cerr << "warning: The data size does not match to the FOM for the attribute: " << oa->getObjectClassAttribute()->getName() << endl;
+        }
         if (oa->getOwner() != the_federate) {
             throw AttributeNotOwned("Attribute #" + std::to_string(the_attributes[i]) + " is not owned by federate #"
                                     + std::to_string(the_federate));

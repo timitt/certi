@@ -28,6 +28,7 @@
 namespace certi {
 class InteractionBroadcastList;
 class InteractionSet;
+class Parameter1516e;
 } // namespace certi
 
 // CERTI headers
@@ -175,6 +176,8 @@ public:
     void
     isReady(FederateHandle federate_handle, const std::vector<ParameterHandle>& parameter_list, uint16_t list_size);
 
+    bool checkSizeData(Parameter &parameter, const AttributeValue_t &data) const;
+
     std::pair<InteractionBroadcastList*, Responses> sendInteraction(FederateHandle federate_handle,
                                                                     const std::vector<ParameterHandle>& parameter_list,
                                                                     const std::vector<ParameterValue_t>& value_list,
@@ -214,6 +217,8 @@ public:
 
     bool isPublishing(FederateHandle);
 
+    Parameter1516e *getParameter1516e(ParameterHandle the_handle) const;
+
 private:
     /*
      * private default constructor with no code
@@ -243,11 +248,13 @@ private:
     SecurityLevelID id; //!< The default Security Level for new parameters
     SpaceHandle space;
 
-    //! List of this Interaction Class' Parameters.
-    HandleParameterMap _handleParameterMap;
-
     typedef std::set<FederateHandle> PublishersList;
     PublishersList publishers;
+
+protected:
+
+    //! List of this Interaction Class' Parameters.
+    HandleParameterMap _handleParameterMap;
 };
 
 } // namespace

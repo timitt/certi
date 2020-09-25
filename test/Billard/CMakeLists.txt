@@ -73,7 +73,7 @@ install(TARGETS billard-nogui
     
 ########### install files ###############
 install(FILES
-  Test.fed Test.xml 
+  Test.fed Test.xml BillardTest2010.xml
   DESTINATION share/federations)
   
 install(FILES

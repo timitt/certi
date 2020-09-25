@@ -16,6 +16,8 @@ set(mom_explorer_SRCS
   momfederateambassador.cc
   cli.cc
   momcli.cpp
+  momcli1516e.h
+  momcli1516e.cpp
   )
 
 if(COMPILE_WITH_CXX11)
